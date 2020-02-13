@@ -21,5 +21,8 @@ public:
 
 private:
 	RenderWindow* window;
+
+	Player *player;
+	Texture playerTexture;
 };
 
