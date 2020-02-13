@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player(Texture* texture)
+Player::Player(Texture *texture)
 	:level(1), exp(0), expNext(100),
 	hp(10), hpMax(10), 
 	damage(1), damageMax(2),
@@ -28,7 +28,7 @@ void Player::Update()
 	this->Movement();
 }
 
-void Player::Draw()
+void Player::Draw(RenderTarget &target)
 {
-	
+	target.draw(this->sprite);
 }

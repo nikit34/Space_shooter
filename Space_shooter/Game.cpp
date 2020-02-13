@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(RenderWindow* window)
+Game::Game(RenderWindow *window)
 {
 	this->window = window;
 	this->window->setFramerateLimit(60);
@@ -24,5 +24,9 @@ void Game::Update()
 
 void Game::Draw()
 {
-	player->Draw();
+	window->clear();
+
+	player->Draw(*window);
+
+	window->display();
 }

@@ -16,9 +16,8 @@ int main() {
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape)
 				window.close();
 		}
-
 		game.Update();
-		game.Draw(RenderTarget &target);
+		game.Draw();
 	}
 	return 0;
 }

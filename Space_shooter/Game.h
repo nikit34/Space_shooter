@@ -10,7 +10,7 @@ public:
 	virtual ~Game();
 
 	//Accessors
-	RenderWindow& getWindow() { return *this->window; }
+	RenderWindow &getWindow() { return *this->window; }
 
 	//Setters
 
@@ -20,7 +20,7 @@ public:
 	void Draw();
 
 private:
-	RenderWindow* window;
+	RenderWindow *window;
 
 	Player *player;
 	Texture playerTexture;

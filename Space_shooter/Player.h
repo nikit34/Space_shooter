@@ -11,17 +11,17 @@ using namespace sf;
 class Player
 {
 public:
-	Player(Texture* texture);
+	Player(Texture *texture);
 	virtual ~Player();
 
 	void Movement();
 	void Update();
-	void Draw(RenderTarget& target);
+	void Draw(RenderTarget &target);
 
 private:
 	Sprite sprite;
 	RectangleShape hitBox;
-	Texture* texture;
+	Texture *texture;
 
 	int level;
 	int exp;
