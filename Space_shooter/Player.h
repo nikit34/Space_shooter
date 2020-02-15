@@ -1,9 +1,5 @@
 #pragma once
-
-#include"SFML\Graphics.hpp"
-#include"SFML\System.hpp"
-#include"SFML\Audio.hpp"
-#include<iostream>
+#include"Bullet.h"
 
 using namespace sf;
 
@@ -11,17 +7,30 @@ using namespace sf;
 class Player
 {
 public:
-	Player(Texture *texture);
 	virtual ~Player();
+	Player(Texture *texture,
+		Texture *bulletTextur,
+		int UP = 22, int DOWN = 18, 
+		int LEFT = 0, int RIGHT = 3, 
+		int SHOOT = 57);
 
 	void Movement();
 	void Update();
 	void Draw(RenderTarget &target);
 
+	static unsigned players;
+
 private:
+	unsigned playerNr;
+
 	Sprite sprite;
 	RectangleShape hitBox;
 	Texture *texture;
+
+	Texture *bulletTexture;
+	std::vector<Bullet> bullets;
+
+	int controls[5];
 
 	int level;
 	int exp;

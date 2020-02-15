@@ -22,7 +22,8 @@ public:
 private:
 	RenderWindow *window;
 
-	Player *player;
+	std::vector<Player> players;
 	Texture playerTexture;
+	Texture bulletTexture;
 };
 

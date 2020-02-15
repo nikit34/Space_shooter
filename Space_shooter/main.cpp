@@ -2,7 +2,7 @@
 
 
 int main() {
-	RenderWindow window(VideoMode(800, 600), "SpaceGame", Style::Default);
+	RenderWindow window(VideoMode(1920, 1080), "SpaceGame", Style::Default);
 
 	Game game(&window);
 
