@@ -6,7 +6,7 @@ Game::Game(RenderWindow *window)
 	this->window->setFramerateLimit(60);
 
 	//Init font
-	this->font.loadFromFile("Fonts/play_the_game.ttf");
+	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
 	//Init texture
 	this->playerTexture.loadFromFile("Textures/ship.png");
@@ -14,10 +14,10 @@ Game::Game(RenderWindow *window)
 
 	//Init player
 	this->players.push_back(Player(&playerTexture, &bulletTexture));
-	/*
+	
 	this->players.push_back(Player(&playerTexture, &bulletTexture, 
 		Keyboard::I, Keyboard::K, Keyboard::J, Keyboard::L, Keyboard::RShift));
-	*/
+	
 
 	this->InitUI();
 }
@@ -34,23 +34,32 @@ void Game::InitUI()
 	{
 		//Follow Init Text
 		tempText.setFont(font);
-		tempText.setCharacterSize(12);
+		tempText.setCharacterSize(14);
 		tempText.setFillColor(Color::White);
 		tempText.setString(std::to_string(i));
 		this->followPlayerTexts.push_back(tempText);
 
 		//Static Text Init
 		tempText.setFont(font);
-		tempText.setCharacterSize(12);
+		tempText.setCharacterSize(14);
 		tempText.setFillColor(Color::White);
-		tempText.setString(" ");
+		tempText.setString("");
 		this->staticPlayerTexts.push_back(tempText);
 	}
 }
 
 void Game::UpdateUI()
 {
+	for (size_t i = 0; i < this->followPlayerTexts.size(); i++)
+	{
+		this->followPlayerTexts[i].setPosition(this->players[i].getPosition().x, this->players[i].getPosition().y - 20.f);
+		this->followPlayerTexts[i].setString(std::to_string(i) + "       " + this->players[i].getHpAsString());
 
+	}
+	for (size_t i = 0; i < this->staticPlayerTexts.size(); i++)
+	{
+
+	}
 }
 
 void Game::Update()
