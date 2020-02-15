@@ -27,7 +27,7 @@ void Bullet::Update ()
 	this->Movement();
 }
 
-void Bullet::Draw(RenderTarget& target)
+void Bullet::Draw(RenderTarget &target)
 {
 	target.draw(this->sprite);
 }

@@ -16,7 +16,7 @@ public:
 
 	//Accessors
 	inline std::vector<Bullet> &getBullets() { return this->bullets;  }
-	inline const Vector2f& getPosition() const { return this->sprite.getPosition(); }
+	inline const Vector2f &getPosition() const { return this->sprite.getPosition(); }
 
 	//Functions
 	void Combat();

@@ -80,7 +80,7 @@ void Player::Draw(RenderTarget &target)
 {
 	target.draw(this->sprite);
 
-	for (int i = 0; i < this->bullets.size(); i++)
+	for (size_t i = 0; i < this->bullets.size(); i++)
 	{
 		this->bullets[i].Draw(target);
 	}

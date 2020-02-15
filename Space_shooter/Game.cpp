@@ -18,6 +18,8 @@ Game::Game(RenderWindow *window)
 	this->players.push_back(Player(&playerTexture, &bulletTexture, 
 		Keyboard::I, Keyboard::K, Keyboard::J, Keyboard::L, Keyboard::RShift));
 	*/
+
+	this->InitUI();
 }
 
 Game::~Game()
@@ -25,15 +27,21 @@ Game::~Game()
 	
 }
 
-void Game::UIUpdate()
+void Game::InitUI()
 {
-
 
 }
 
-void Game::CombatUpdate()
+void Game::UpdateUI()
 {
+	for (size_t i = 0; i < this->followPlayerTexts.size(); i++)
+	{
 
+	}
+	for (size_t i = 0; i < this->staticPlayerTexts.size(); i++)
+	{
+
+	}
 }
 
 void Game::Update()
@@ -57,7 +65,7 @@ void Game::Update()
 			//Enemy collision check
 		}
 		//Update UI
-		this->UIUpdate();
+		this->UpdateUI();
 	}
 }
 
@@ -67,7 +75,7 @@ void Game::Draw()
 
 	for (size_t i = 0; i < this->players.size(); i++)
 	{
-		players[i].Draw(*this->window);
+		this->players[i].Draw(*this->window);
 	}
 	
 	this->window->display();
