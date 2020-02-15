@@ -29,19 +29,28 @@ Game::~Game()
 
 void Game::InitUI()
 {
+	Text tempText;
+	for (size_t i = 0; i < this->players.size(); i++)
+	{
+		//Follow Init Text
+		tempText.setFont(font);
+		tempText.setCharacterSize(12);
+		tempText.setFillColor(Color::White);
+		tempText.setString(std::to_string(i));
+		this->followPlayerTexts.push_back(tempText);
 
+		//Static Text Init
+		tempText.setFont(font);
+		tempText.setCharacterSize(12);
+		tempText.setFillColor(Color::White);
+		tempText.setString(" ");
+		this->staticPlayerTexts.push_back(tempText);
+	}
 }
 
 void Game::UpdateUI()
 {
-	for (size_t i = 0; i < this->followPlayerTexts.size(); i++)
-	{
 
-	}
-	for (size_t i = 0; i < this->staticPlayerTexts.size(); i++)
-	{
-
-	}
 }
 
 void Game::Update()
@@ -69,6 +78,18 @@ void Game::Update()
 	}
 }
 
+void Game::DrawUI()
+{
+	for (size_t i = 0; i < this->followPlayerTexts.size(); i++)
+	{
+		this->window->draw(this->followPlayerTexts[i]);
+	}
+	for (size_t i = 0; i < this->staticPlayerTexts.size(); i++)
+	{
+		this->window->draw(this->staticPlayerTexts[i]);
+	}
+}
+
 void Game::Draw()
 {
 	this->window->clear();
@@ -77,6 +98,7 @@ void Game::Draw()
 	{
 		this->players[i].Draw(*this->window);
 	}
-	
+
+	this->DrawUI();
 	this->window->display();
 }
