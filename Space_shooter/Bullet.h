@@ -12,7 +12,8 @@ class Bullet
 {
 public:
 	Bullet(Texture* texture, Vector2f position, 
-		float maxVelocity, Vector2f direction, float acceleration);
+		Vector2f direction, float initialVelocity, 
+		float maxVelocity, float acceleration);
 	virtual ~Bullet();
 
 	// Accessors

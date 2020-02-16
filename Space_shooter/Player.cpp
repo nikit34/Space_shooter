@@ -59,7 +59,11 @@ void Player::Combat()
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHOOT]))
 		&& this->shootTimer >= this->shootTimerMax)
 	{
-		this->bullets.push_back(Bullet(bulletTexture, this->sprite.getPosition(), 25.f, Vector2f(1.f, 0.f), 0.1f));
+		this->bullets.push_back(Bullet(
+			bulletTexture, this->sprite.getPosition(), 
+			Vector2f(1.f, 0.f), 5.f, 
+			25.f, 0.1f
+		));
 		this->shootTimer = 0; //Reset timer
 	}
 }
