@@ -22,6 +22,11 @@ Player::Player(Texture *texture,
 
 	this->mainGunTexture = mainGunTexture;
 	this->mainGunSprite.setTexture(*this->mainGunTexture);
+	this->mainGunSprite.setOrigin(
+		this->mainGunSprite.getGlobalBounds().width / 2, 
+		this->mainGunSprite.getGlobalBounds().height / 2
+	);
+	this->mainGunSprite.setRotation(90);
 
 	this->shootTimerMax = 25;
 	this->shootTimer = this->shootTimerMax;
@@ -49,10 +54,7 @@ Player::~Player()
 
 void Player::UpdateAccessories()
 {
-	this->mainGunSprite.setPosition(
-		this->playerCenter.x - this->mainGunSprite.getGlobalBounds().width / 2,
-		this->playerCenter.y - this->mainGunSprite.getGlobalBounds().height / 2
-	);
+	this->mainGunSprite.setPosition(this->playerCenter);
 }
 
 void Player::Movement()
