@@ -34,8 +34,6 @@ private:
 	std::vector<Player> players;
 	
 	//Textures
-	Texture playerTexture;
-	Texture bulletTexture;
-	Texture gunTexture01;
+	std::vector<Texture> textures;
 };
 

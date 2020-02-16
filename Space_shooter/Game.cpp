@@ -1,5 +1,8 @@
 #include "Game.h"
 
+
+enum textures { player = 0, missile01, mainGun01 };
+
 Game::Game(RenderWindow *window)
 {
 	this->window = window;
@@ -9,14 +12,17 @@ Game::Game(RenderWindow *window)
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
 	//Init textures
-	this->playerTexture.loadFromFile("Textures/ship.png");
-	this->bulletTexture.loadFromFile("Textures/Guns/bullet.png");
-	this->gunTexture01.loadFromFile("Textures/Guns/gun01.png");
+	this->textures.push_back(Texture());
+	this->textures[player].loadFromFile("Textures/ship.png");
+	this->textures.push_back(Texture());
+	this->textures[missile01].loadFromFile("Textures/Guns/bullet.png");
+	this->textures.push_back(Texture());
+	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
 
 	//Init players
-	this->players.push_back(Player(&playerTexture, &bulletTexture, &gunTexture01));
+	this->players.push_back(Player(this->textures));
 	
-	this->players.push_back(Player(&playerTexture, &bulletTexture, &gunTexture01, 
+	this->players.push_back(Player(this->textures, 
 		Keyboard::I, Keyboard::K, Keyboard::J, Keyboard::L, Keyboard::RShift));
 	
 

@@ -1,15 +1,15 @@
 #pragma once
+
 #include"Bullet.h"
 
-using namespace sf;
 
+using namespace sf;
 
 class Player
 {
 public:
 	virtual ~Player();
-	Player(Texture *texture,
-		Texture *bulletTextur, Texture *mainGunTexture,
+	Player(std::vector<Texture> &textures,
 		int UP = 22, int DOWN = 18, 
 		int LEFT = 0, int RIGHT = 3, 
 		int SHOOT = 57);
@@ -40,14 +40,12 @@ private:
 
 	Sprite sprite;
 	RectangleShape hitBox;
-	Texture *texture;
 
 	//Accessories
-	Texture *mainGunTexture;
 	Sprite mainGunSprite;
 
-	Texture *bulletTexture;
 	std::vector<Bullet> bullets;
+	Texture *bulletTexture;
 
 	int controls[5];
 	Vector2f currentVelocity;
