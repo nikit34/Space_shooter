@@ -36,5 +36,6 @@ private:
 	//Textures
 	Texture playerTexture;
 	Texture bulletTexture;
+	Texture gunTexture01;
 };
 

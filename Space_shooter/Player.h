@@ -9,7 +9,7 @@ class Player
 public:
 	virtual ~Player();
 	Player(Texture *texture,
-		Texture *bulletTextur,
+		Texture *bulletTextur, Texture *mainGunTexture,
 		int UP = 22, int DOWN = 18, 
 		int LEFT = 0, int RIGHT = 3, 
 		int SHOOT = 57);
@@ -20,6 +20,7 @@ public:
 	inline const String getHpAsString() const { return std::to_string(this->hp) + "/" + std::to_string(this->hpMax); }
 
 	//Functions
+	void UpdateAccessories();
 	void Combat();
 	void Movement();
 	void Update(Vector2u windowBounds);
@@ -40,6 +41,10 @@ private:
 	Sprite sprite;
 	RectangleShape hitBox;
 	Texture *texture;
+
+	//Accessories
+	Texture *mainGunTexture;
+	Sprite mainGunSprite;
 
 	Texture *bulletTexture;
 	std::vector<Bullet> bullets;

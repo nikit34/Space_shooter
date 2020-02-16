@@ -10,12 +10,13 @@ Game::Game(RenderWindow *window)
 
 	//Init textures
 	this->playerTexture.loadFromFile("Textures/ship.png");
-	this->bulletTexture.loadFromFile("Textures/bullet.png");
+	this->bulletTexture.loadFromFile("Textures/Guns/bullet.png");
+	this->gunTexture01.loadFromFile("Textures/Guns/gun01.png");
 
 	//Init players
-	this->players.push_back(Player(&playerTexture, &bulletTexture));
+	this->players.push_back(Player(&playerTexture, &bulletTexture, &gunTexture01));
 	
-	this->players.push_back(Player(&playerTexture, &bulletTexture, 
+	this->players.push_back(Player(&playerTexture, &bulletTexture, &gunTexture01, 
 		Keyboard::I, Keyboard::K, Keyboard::J, Keyboard::L, Keyboard::RShift));
 	
 

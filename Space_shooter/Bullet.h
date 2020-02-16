@@ -17,12 +17,12 @@ public:
 	);
 	virtual ~Bullet();
 
-	// Accessors
+	//Accessors
 	inline const FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline const Vector2f getPosition() const { return this->sprite.getPosition(); }
 
 	
-	// Functions
+	//Functions
 	void Movement();
 	void Update();
 	void Draw(RenderTarget &target);
