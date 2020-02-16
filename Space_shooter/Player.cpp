@@ -30,6 +30,10 @@ Player::Player(Texture *texture, Texture *bulletTexture,
 	this->controls[controls::RIGHT] = RIGHT;
 	this->controls[controls::SHOOT] = SHOOT;
 
+	this->maxVelocity = 30.f;
+	this->acceleration = 1.f;
+	this->stabilizerForce = 0.2f;
+
 	this->playerNr = Player::players;
 	Player::players++;
 }
@@ -41,17 +45,67 @@ Player::~Player()
 
 void Player::Movement()
 {
+	//UP
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::UP])))
-		this->sprite.move(0.f, -10.f);
-	
+	{
+		this->direction.x = 0.f;
+		this->direction.y = -1.f;
+		if(this->currentVelocity.y > -this->maxVelocity && this->direction.y < 0)
+			this->currentVelocity.y += this->direction.y * this->acceleration;
+	}
+	//DOWN
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::DOWN])))
-		this->sprite.move(0.f, 10.f);
-
+	{
+		this->direction.x = 0.f;
+		this->direction.y = 1.f;
+		if (this->currentVelocity.y < this->maxVelocity && this->direction.y > 0)
+			this->currentVelocity.y += this->direction.y * this->acceleration;
+	}
+	//LEFT
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::LEFT])))
-		this->sprite.move(-10.f, 0.f);
-
+	{
+		this->direction.x = -1.f;
+		this->direction.y = 0.f;
+		if (this->currentVelocity.x > -this->maxVelocity && this->direction.x < 0)
+			this->currentVelocity.x += this->direction.x * this->acceleration;
+	}
+	//RIGHT
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::RIGHT])))
-		this->sprite.move(10.f, 0.f);
+	{
+		this->direction.x = 1.f;
+		this->direction.y = 0.f;
+		if (this->currentVelocity.x < this->maxVelocity && this->direction.x > 0)
+			this->currentVelocity.x += this->direction.x * this->acceleration; 
+	}
+
+	//Drag force
+	if (this->currentVelocity.x > 0)
+	{
+		this->currentVelocity.x -= this->stabilizerForce;
+		if (this->currentVelocity.x < 0)
+			this->currentVelocity.x = 0;
+	}
+	else if (this->currentVelocity.x < 0)
+	{
+		this->currentVelocity.x += this->stabilizerForce;
+		if (this->currentVelocity.x > 0)
+			this->currentVelocity.x = 0;
+	}
+	if (this->currentVelocity.y > 0)
+	{
+		this->currentVelocity.y -= this->stabilizerForce;
+		if (this->currentVelocity.y < 0)
+			this->currentVelocity.y = 0;
+	}
+	else if (this->currentVelocity.y < 0)
+	{
+		this->currentVelocity.y += this->stabilizerForce;
+		if (this->currentVelocity.y > 0)
+			this->currentVelocity.y = 0;
+	}
+
+	//Final move
+	this->sprite.move(this->currentVelocity);
 }
 
 void Player::Combat()
@@ -60,9 +114,9 @@ void Player::Combat()
 		&& this->shootTimer >= this->shootTimerMax)
 	{
 		this->bullets.push_back(Bullet(
-			bulletTexture, this->sprite.getPosition(), 
-			Vector2f(1.f, 0.f), 5.f, 
-			25.f, 0.1f
+			bulletTexture, this->playerCenter, 
+			Vector2f(1.f, 0.f), 2.f, 
+			50.f, 1.f
 		));
 		this->shootTimer = 0; //Reset timer
 	}
@@ -75,6 +129,11 @@ void Player::Update(Vector2u windowBounds)
 
 	if (this->damageTimer < this->damageTimerMax)
 		this->damageTimer++;
+
+	this->playerCenter.x = this->sprite.getPosition().x +
+		this->sprite.getGlobalBounds().width / 2;
+	this->playerCenter.y = this->sprite.getPosition().y +
+		this->sprite.getGlobalBounds().height / 2;
 
 	this->Movement();
 	this->Combat();

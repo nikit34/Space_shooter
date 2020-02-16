@@ -8,11 +8,11 @@ Game::Game(RenderWindow *window)
 	//Init font
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
-	//Init texture
+	//Init textures
 	this->playerTexture.loadFromFile("Textures/ship.png");
 	this->bulletTexture.loadFromFile("Textures/bullet.png");
 
-	//Init player
+	//Init players
 	this->players.push_back(Player(&playerTexture, &bulletTexture));
 	
 	this->players.push_back(Player(&playerTexture, &bulletTexture, 

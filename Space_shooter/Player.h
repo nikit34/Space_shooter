@@ -30,6 +30,8 @@ public:
 private:
 	unsigned playerNr;
 
+	Vector2f playerCenter;
+
 	int shootTimer;
 	int shootTimerMax;
 	int damageTimer;
@@ -43,6 +45,11 @@ private:
 	std::vector<Bullet> bullets;
 
 	int controls[5];
+	Vector2f currentVelocity;
+	float maxVelocity;
+	float acceleration;
+	Vector2f direction;
+	float stabilizerForce;
 
 	int level;
 	int exp;
