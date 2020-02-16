@@ -1,15 +1,18 @@
+#pragma once
+
 #include"SFML\Graphics.hpp"
 #include"SFML\System.hpp"
 #include"SFML\Audio.hpp"
 #include<iostream>
+#include<vector>
 
 using namespace sf;
 
 class Bullet
 {
 public:
-	Bullet(Texture *texture, Vector2f position, 
-		Vector2f maxVelocity = Vector2f(15.f, 0.f));
+	Bullet(Texture* texture, Vector2f position, 
+		float maxVelocity, Vector2f direction, float acceleration);
 	virtual ~Bullet();
 
 	// Accessors
@@ -26,6 +29,9 @@ private:
 	Texture *texture;
 	Sprite sprite;
 
-	Vector2f maxVelocity;
+	Vector2f currentVelocity;
+	float maxVelocity;
+	float acceleration;
+	Vector2f direction;
 };
  
