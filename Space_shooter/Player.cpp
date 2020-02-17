@@ -60,7 +60,12 @@ Player::Player(std::vector<Texture> &textures,
 	this->stabilizerForce = 0.4f;
 
 	//Guns
-	this->currentWeapon = LASER;
+	this->currentWeapon = MISSILE01;
+
+	//Upgrades
+	this->mainGunLevel = 0;//mainGunLevel;
+	this->dualMissiles01 = true;//dualMissiles01;
+	this->dualMissiles02 = false;//dualMissiles02;
 
 	//Add number to players for coop
 	this->playerNr = Player::players;
@@ -172,12 +177,23 @@ void Player::Combat()
 	{
 		if (this->currentWeapon == LASER)
 		{
-			//Create bullet
-			this->bullets.push_back(Bullet(
-				laserTexture, Vector2f(this->playerCenter.x, this->playerCenter.y),
-				Vector2f(1.f, 0.f), 2.f,
-				50.f, 1.f
-			));
+			if (this->mainGunLevel == 0)
+			{
+				//Create bullet
+				this->bullets.push_back(Bullet(laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y), Vector2f(0.125f, 0.075f),
+					Vector2f(1.f, 0.f), 2.f,
+					70.f, 2.f
+				));
+			}
+			else if (this->mainGunLevel == 1)
+			{
+
+			}
+			else if (this->mainGunLevel == 2)
+			{
+
+			}
 			//Animate gun
 			this->mainGunSprite.move(-30.f, 0.f);
 		}
@@ -185,14 +201,28 @@ void Player::Combat()
 		{
 			//Create bullet
 			this->bullets.push_back(Bullet(
-				missile01Texture, Vector2f(this->playerCenter.x, this->playerCenter.y),
+				missile01Texture,
+				Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f), Vector2f(0.05f, 0.02f),
 				Vector2f(1.f, 0.f), 2.f,
-				50.f, 1.f
+				45.f, 1.f
 			));
+
+			if (this->dualMissiles01)
+			{
+				this->bullets.push_back(Bullet(
+					missile01Texture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f), Vector2f(0.05f, 0.02f),
+					Vector2f(1.f, 0.f), 2.f,
+					45.f, 1.f
+				));
+			}
 		}
 		else if (this->currentWeapon == MISSILE02)
 		{
+			if (this->dualMissiles02)
+			{
 
+			}
 		}
 		this->shootTimer = 0; //Reset timer
 	}

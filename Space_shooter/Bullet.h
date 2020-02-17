@@ -11,7 +11,9 @@ using namespace sf;
 class Bullet
 {
 public:
-	Bullet(Texture* texture, Vector2f position, 
+	// scale - масштаб объекта | direction - направление | acceleration - ускорение
+	Bullet(Texture *texture, 
+		Vector2f position, Vector2f scale,
 		Vector2f direction, float initialVelocity, 
 		float maxVelocity, float acceleration
 	);

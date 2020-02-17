@@ -1,6 +1,7 @@
 #pragma once
 
 #include"Player.h"
+#include"Enemy.h"
 
 
 class Game
@@ -32,6 +33,9 @@ private:
 
 	//Players
 	std::vector<Player> players;
+
+	//Enemies
+	std::vector<Enemy> enemies;
 	
 	//Textures
 	std::vector<Texture> textures;

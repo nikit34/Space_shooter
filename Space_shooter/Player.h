@@ -3,8 +3,6 @@
 #include"Bullet.h"
 
 
-using namespace sf;
-
 class Player
 {
 public:
@@ -70,4 +68,8 @@ private:
 
 	//Upgrades
 	int currentWeapon;
+
+	int mainGunLevel;
+	bool dualMissiles01;
+	bool dualMissiles02;
 };
