@@ -45,7 +45,9 @@ private:
 	Sprite mainGunSprite;
 
 	std::vector<Bullet> bullets;
-	Texture *bulletTexture;
+	Texture *laserTexture;
+	Texture *missile01Texture;
+	Texture *missile02Texture;
 
 	int controls[5];
 	Vector2f currentVelocity;
@@ -65,4 +67,7 @@ private:
 	int damageMax;
 
 	int score;
+
+	//Upgrades
+	int currentWeapon;
 };

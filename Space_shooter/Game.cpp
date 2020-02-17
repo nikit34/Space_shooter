@@ -1,7 +1,7 @@
 #include "Game.h"
 
 
-enum textures { player = 0, missile01, mainGun01 };
+enum textures { player = 0, laser01, missile01, mainGun01 };
 
 Game::Game(RenderWindow *window)
 {
@@ -15,7 +15,9 @@ Game::Game(RenderWindow *window)
 	this->textures.push_back(Texture());
 	this->textures[player].loadFromFile("Textures/ship.png");
 	this->textures.push_back(Texture());
-	this->textures[missile01].loadFromFile("Textures/Guns/bullet.png");
+	this->textures[laser01].loadFromFile("Textures/Guns/laserTex01.png");
+	this->textures.push_back(Texture());
+	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
 	this->textures.push_back(Texture());
 	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
 
