@@ -25,9 +25,23 @@ Game::Game(RenderWindow *window)
 
 	//Init players
 	this->players.push_back(Player(this->textures));
-		this->players.push_back(Player(
+	this->players.push_back(Player(
 		this->textures, Keyboard::Numpad8, Keyboard::Numpad2, 
 		Keyboard::Numpad4, Keyboard::Numpad6, Keyboard::Numpad0));
+
+
+	this->enemies.push_back(Enemy(&this->textures[enemy01], this->window->getSize(),
+		Vector2f(0.f, 0.f), Vector2f(-1.f, 0.f),
+		Vector2f(0.1f, 0.1f), 0,
+		rand() % 3 + 1, 3, 1));
+	this->enemies.push_back(Enemy(&this->textures[enemy01], this->window->getSize(),
+		Vector2f(0.f, 0.f), Vector2f(-1.f, 0.f),
+		Vector2f(0.1f, 0.1f), 0,
+		rand() % 3 + 1, 3, 1));
+	this->enemies.push_back(Enemy(&this->textures[enemy01], this->window->getSize(),
+		Vector2f(0.f, 0.f), Vector2f(-1.f, 0.f),
+		Vector2f(0.1f, 0.1f), 0,
+		rand() % 3 + 1, 3, 1));
 
 	this->InitUI();
 }
@@ -64,7 +78,6 @@ void Game::UpdateUI()
 	{
 		this->followPlayerTexts[i].setPosition(this->players[i].getPosition().x, this->players[i].getPosition().y - 20.f);
 		this->followPlayerTexts[i].setString(std::to_string(i) + "       " + this->players[i].getHpAsString());
-
 	}
 	for (size_t i = 0; i < this->staticPlayerTexts.size(); i++)
 	{
@@ -76,25 +89,52 @@ void Game::Update()
 {
 	for (size_t i = 0; i < this->players.size(); i++)
 	{
-		///UIUpdate Players
+		bool enemyRemoved = false;
+		bool bulletRemoved = false;
+		///Update Players
 		this->players[i].Update(this->window->getSize());
-		
+
 		//Bullets update
-		for (int k = 0; k < this->players[i].getBullets().size(); k++)
+		for (size_t k = 0; k < this->players[i].getBullets().size() && !bulletRemoved; k++)
 		{
 			this->players[i].getBullets()[k].Update();
 
+			//Enemy collision check
+			for (size_t j = 0; j < this->enemies.size() && !enemyRemoved; j++)
+			{
+				if (this->players[i].getBullets()[k].getGlobalBounds().intersects(this->enemies[j].getGlobalBounds()))
+				{
+					this->players[i].getBullets().erase(this->players[i].getBullets().begin() + k);
+					this->enemies.erase(this->enemies.begin() + j);
+					enemyRemoved = true;
+					bulletRemoved = true;
+				}
+				else if (this->enemies[i].getPosition().x < 0 - this->enemies[i].getGlobalBounds().width)
+				{
+					this->enemies.erase(this->enemies.begin() + i);
+					enemyRemoved = true;
+				}
+			}
+
 			//Window bounds check
-			if (this->players[i].getBullets()[k].getPosition().x > this->window->getSize().x - 100)
+			if (this->players[i].getBullets()[k].getPosition().x > this->window->getSize().x && !bulletRemoved)
 			{
 				this->players[i].getBullets().erase(this->players[i].getBullets().begin() + k);
-				break;
+				bulletRemoved = true;
 			}
-			//Enemy collision check
 		}
-		//Update UI
-		this->UpdateUI();
 	}
+	for (size_t i = 0; i < this->enemies.size(); i++)
+	{
+		this->enemies[i].Update();
+		if (this->enemies[i].getPosition().x < 0 - this->enemies[i].getGlobalBounds().width)
+		{
+			this->enemies.erase(this->enemies.begin() + i);
+			return;
+		}
+	}
+	//Update UI
+	this->UpdateUI();
 }
 
 void Game::DrawUI()
@@ -116,6 +156,10 @@ void Game::Draw()
 	for (size_t i = 0; i < this->players.size(); i++)
 	{
 		this->players[i].Draw(*this->window);
+	}
+	for (size_t i = 0; i < this->enemies.size(); i++)
+	{
+		this->enemies[i].Draw(*this->window);
 	}
 
 	this->DrawUI();

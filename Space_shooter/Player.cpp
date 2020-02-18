@@ -27,6 +27,7 @@ Player::Player(std::vector<Texture> &textures,
 
 	this->laserTexture = &textures[1];
 	this->missile01Texture = &textures[2];
+	this->missile02Texture = &textures[2];
 
 	this->mainGunSprite.setTexture(textures[3]);
 	this->mainGunSprite.setOrigin(
