@@ -27,6 +27,7 @@ private:
 	Font font;
 	std::vector<Text> followPlayerTexts;
 	std::vector<Text> staticPlayerTexts;
+	Text enemyText;
 
 	// Players
 	std::vector<Player> players;

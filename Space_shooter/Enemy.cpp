@@ -17,7 +17,7 @@ Enemy::Enemy(Texture* texture, Vector2u windowBounds, Vector2f position,
 	this->type = type;
 
 	this->hpMax = hpMax;
-	this->hp = hp;
+	this->hp = this->hpMax;
 
 	this->damageMax = damageMax;
 	this->damageMin = damageMin;
