@@ -36,6 +36,9 @@ private:
 
 	//Enemies
 	std::vector<Enemy> enemies;
+	std::vector<Enemy> enemiesSaved;	
+	int enemySpawnTimerMax;
+	int enemySpawnTimer;
 	
 	//Textures
 	std::vector<Texture> textures;

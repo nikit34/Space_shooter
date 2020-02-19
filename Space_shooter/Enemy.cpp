@@ -12,6 +12,7 @@ Enemy::Enemy(Texture *texture, Vector2u windowBounds,
 	this->sprite.setTexture(*this->texture);
 	this->sprite.setScale(scale);
 
+	this->direction = direction;
 	this->sprite.setPosition(windowBounds.x, (rand() % windowBounds.y) - this->sprite.getGlobalBounds().height);
 
 	this->type = type;

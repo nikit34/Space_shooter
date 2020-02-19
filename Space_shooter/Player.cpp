@@ -27,8 +27,7 @@ Player::Player(std::vector<Texture> &textures,
 
 	this->laserTexture = &textures[1];
 	this->missile01Texture = &textures[2];
-	this->missile02Texture = &textures[2];
-
+	
 	this->mainGunSprite.setTexture(textures[3]);
 	this->mainGunSprite.setOrigin(
 		this->mainGunSprite.getGlobalBounds().width / 2, 
@@ -61,7 +60,7 @@ Player::Player(std::vector<Texture> &textures,
 	this->stabilizerForce = 0.4f;
 
 	//Guns
-	this->currentWeapon = MISSILE01;
+	this->currentWeapon = LASER;
 
 	//Upgrades
 	this->mainGunLevel = 0;//mainGunLevel;
