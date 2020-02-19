@@ -1,46 +1,42 @@
 #pragma once
 
-#include"Player.h"
-#include"Enemy.h"
+#include "Enemy.h"
+#include "Player.h"
 
+class Game {
+ public:
+  Game(RenderWindow* window);
+  virtual ~Game();
 
-class Game
-{
-public:
-	Game(RenderWindow *window);
-	virtual ~Game();
+  // Accessors
+  RenderWindow& getWindow() { return *this->window; }
 
-	//Accessors
-	RenderWindow &getWindow() { return *this->window; }
+  // Setters
 
-	//Setters
+  // Functions
+  void InitUI();
+  void UpdateUI();
+  void Update();
+  void DrawUI();
+  void Draw();
 
+ private:
+  RenderWindow* window;
 
-	//Functions
-	void InitUI();
-	void UpdateUI();
-	void Update();
-	void DrawUI();
-	void Draw();
+  // Text
+  Font font;
+  std::vector<Text> followPlayerTexts;
+  std::vector<Text> staticPlayerTexts;
 
-private:
-	RenderWindow *window;
+  // Players
+  std::vector<Player> players;
 
-	//Text
-	Font font;
-	std::vector<Text>followPlayerTexts;
-	std::vector<Text>staticPlayerTexts;
+  // Enemies
+  std::vector<Enemy> enemies;
+  std::vector<Enemy> enemiesSaved;
+  int enemySpawnTimerMax;
+  int enemySpawnTimer;
 
-	//Players
-	std::vector<Player> players;
-
-	//Enemies
-	std::vector<Enemy> enemies;
-	std::vector<Enemy> enemiesSaved;	
-	int enemySpawnTimerMax;
-	int enemySpawnTimer;
-	
-	//Textures
-	std::vector<Texture> textures;
+  // Textures
+  std::vector<Texture> textures;
 };
-
