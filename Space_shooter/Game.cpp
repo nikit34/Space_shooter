@@ -100,7 +100,8 @@ void Game::Update() {
 					this->players[i].getBullets().erase(
 						this->players[i].getBullets().begin() + k);
 					if (this->enemies[j].getHp > 1)
-						this->enemies.erase(this->enemies.begin() + j);
+						this->enemies[j].takeDamage(1);
+					this->enemies.erase(this->enemies.begin() + j);
 					return;
 				}
 			}
