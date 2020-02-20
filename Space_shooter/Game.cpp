@@ -64,10 +64,10 @@ void Game::InitUI() {
 	this->enemyText.setFillColor(Color::White);
 
 	this->gameOverText.setFont(this->font);
-	this->gameOverText.setFillColor(Color::White);
+	this->gameOverText.setFillColor(Color::Red);
 	this->gameOverText.setCharacterSize(40);
 	this->gameOverText.setString("GAME OVER!");
-	this->gameOverText.setPosition(this->window->getSize().x - 100.f, 
+	this->gameOverText.setPosition(this->window->getSize().x / 2 - 100.f, 
 									this->window->getSize().y / 2);
 }
 
