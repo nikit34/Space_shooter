@@ -19,6 +19,7 @@ public:
 	inline const int& getHpMax() const { return this->hpMax; }
 	inline void takeDamage(int damage) { this->hp -= damage; }
 	inline bool isAlive() const { return this->hp > 0; }
+	inline const int& getPlayerNr() const { return this->playerNr; }
 
 	// Functions
 	void UpdateAccessories();
