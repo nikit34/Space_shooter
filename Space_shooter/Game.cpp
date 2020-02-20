@@ -5,6 +5,7 @@ enum textures { player = 0, laser01, missile01, mainGun01, enemy01 };
 Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(60);
+	this->dtMultiplier = 60.f;
 
 	// Init font
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
@@ -83,10 +84,11 @@ void Game::UpdateUI() {
 	}
 }
 
-void Game::Update() {
+void Game::Update(const float &dt) {
 	if (this->playersAlive > 0) {
 		// Update timers
-		if (this->enemySpawnTimer < this->enemySpawnTimerMax) this->enemySpawnTimer++;
+		if (this->enemySpawnTimer < this->enemySpawnTimerMax) 
+			this->enemySpawnTimer += 1.f * dt * this->dtMultiplier;
 
 		// Spawn enemies
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {

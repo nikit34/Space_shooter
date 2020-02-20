@@ -5,6 +5,9 @@ int main() {
 
 	Game game(&window);
 
+	Clock clock;
+	float dt = 0.f;
+
 	while (window.isOpen()) {
 		Event event;
 		while (window.pollEvent(event)) {
@@ -12,7 +15,8 @@ int main() {
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape)
 				window.close();
 		}
-		game.Update();
+		dt = clock.restart().asSeconds();
+		game.Update(dt);
 		game.Draw();
 	}
 	return 0;

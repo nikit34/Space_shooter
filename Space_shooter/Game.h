@@ -16,12 +16,13 @@ public:
 	// Functions
 	void InitUI();
 	void UpdateUI();
-	void Update();
+	void Update(const float& dt);
 	void DrawUI();
 	void Draw();
 
 private:
 	RenderWindow* window;
+	float dtMultiplier;
 
 	// Text
 	Font font;
@@ -37,8 +38,8 @@ private:
 	// Enemies
 	std::vector<Enemy> enemies;
 	std::vector<Enemy> enemiesSaved;
-	int enemySpawnTimerMax;
-	int enemySpawnTimer;
+	float enemySpawnTimerMax;
+	float enemySpawnTimer;
 
 	// Textures
 	std::vector<Texture> textures;
