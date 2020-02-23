@@ -36,7 +36,8 @@ void Enemy::takeDamage(int damage) {
 void Enemy::Update(const float& dt) {
 	switch (this->type) {
 	case 0:
-		this->sprite.move(this->direction.x * dt * this->dtMultiplier, this->direction.y * 10.f);
+		this->sprite.move(this->direction.x * 10.f * dt * this->dtMultiplier,
+			this->direction.y * 10.f * dt * this->dtMultiplier);
 		break;
 	default:
 		break;

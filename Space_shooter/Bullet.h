@@ -27,11 +27,13 @@ public:
 	}
 
 	// Functions
-	void Movement();
-	void Update();
+	void Movement(const float& dt);
+	void Update(const float &dt);
 	void Draw(RenderTarget& target);
 
 private:
+	float dtMultiplier;
+
 	Texture* texture;
 	Sprite sprite;
 

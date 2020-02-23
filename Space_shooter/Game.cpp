@@ -103,11 +103,11 @@ void Game::Update(const float &dt) {
 
 			if (this->players[i].isAlive()) {
 				/// Update Players
-				this->players[i].Update(this->window->getSize());
+				this->players[i].Update(this->window->getSize(), dt);
 
 				// Bullets update
 				for (size_t k = 0; k < this->players[i].getBullets().size(); k++) {
-					this->players[i].getBullets()[k].Update();
+					this->players[i].getBullets()[k].Update(dt);
 
 					// Enemy collision check
 					for (size_t j = 0; j < this->enemies.size(); j++) {
@@ -136,7 +136,7 @@ void Game::Update(const float &dt) {
 
 		// Update Enemies
 		for (size_t i = 0; i < this->enemies.size(); i++) {
-			this->enemies[i].Update();
+			this->enemies[i].Update(dt);
 
 			for (size_t k = 0; k < this->players.size(); k++)
 			{
