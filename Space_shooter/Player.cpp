@@ -78,6 +78,19 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 
 Player::~Player() {}
 
+const int Player::getDamage() const {
+	switch (this->currentWeapon) {
+	case LASER:
+		break;
+	case MISSILE01:
+		break;
+	case MISSILE02:
+		break;
+	}
+	int damage;
+	return rand() % this->damageMax + this->damage; 
+}
+
 void Player::UpdateLeveling() {
 	if (this->exp >= this->expNext) {
 		this->level++;
