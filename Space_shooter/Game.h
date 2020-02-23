@@ -33,6 +33,8 @@ private:
 	Text enemyText;
 	Text gameOverText;
 
+	RectangleShape playerExpBar;
+
 	// Players
 	std::vector<Player> players;
 	int playersAlive;

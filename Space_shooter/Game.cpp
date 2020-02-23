@@ -50,14 +50,16 @@ void Game::InitUI() {
 		this->followPlayerText.setFont(font);
 		this->followPlayerText.setCharacterSize(14);
 		this->followPlayerText.setFillColor(Color::White);
-		this->followPlayerText.setString(std::to_string(i));
 
 		// Static Text Init
 		this->staticPlayerText.setFont(font);
 		this->staticPlayerText.setCharacterSize(14);
 		this->staticPlayerText.setFillColor(Color::White);
-		this->staticPlayerText.setString("");
 	}
+
+	this->playerExpBar.setSize(Vector2f(40.f, 5.f));
+	this->playerExpBar.setFillColor(Color(0.f, 100.f, 200.f, 200.f));
+
 	this->enemyText.setFont(this->font);
 	this->enemyText.setCharacterSize(14);
 	this->enemyText.setFillColor(Color::White);
@@ -85,8 +87,19 @@ void Game::UpdateUIPlayer(int index) {
 			+ "\n\n\n\n"
 			+ std::to_string(this->players[index].getLevel())
 		);
+	
+
+		// Bars
+		this->playerExpBar.setPosition(
+			this->players[index].getPosition().x + 10.f,
+			this->players[index].getPosition().y + 60.f);
+		this->playerExpBar.setScale(
+			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
+			1.f
+		);
+
+		// Static text
 	}
-	// Static text
 }
 
 void Game::UpdateUIEnemy(int index) {
@@ -129,10 +142,18 @@ void Game::Update(const float &dt) {
 							this->enemies[j].getGlobalBounds())) {
 							this->players[i].getBullets().erase(
 								this->players[i].getBullets().begin() + k);
-							if (this->enemies[j].getHp() > 0)
+							
+							// Enemy take damage
+							if (this->enemies[j].getHp() > 0) {
 								this->enemies[j].takeDamage(this->players[i].getDamage());
-							if (this->enemies[j].getHp() <= 0)
+							}
+
+							// Enemy dead
+							if (this->enemies[j].getHp() <= 0) {
+								this->players[i].gainExp(this->enemies[j].getHpMax()
+									+ (rand() % this->enemies[j].getHpMax() + 1));
 								this->enemies.erase(this->enemies.begin() + j);
+							}
 							return;
 						}
 					}
@@ -198,6 +219,7 @@ void Game::Draw() {
 			// UI
 			this->UpdateUIPlayer(i);
 			this->window->draw(this->followPlayerText);
+			this->window->draw(this->playerExpBar);
 		}
 	}
 

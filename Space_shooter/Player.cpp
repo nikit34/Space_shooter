@@ -9,7 +9,6 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 	int RIGHT, int SHOOT)
 	: level(1),
 	exp(0),
-	expNext(100),
 	hp(10),
 	hpMax(10),
 	damage(1),
@@ -18,6 +17,11 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 
 	// Dt
 	this->dtMultiplier = 60.f;
+
+	// Stats
+	this->expNext = 20 + static_cast<int>(
+		(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
+	
 
 	// Update positions
 	this->playerCenter.x =
@@ -73,6 +77,16 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 }
 
 Player::~Player() {}
+
+void Player::UpdateLeveling() {
+	if (this->exp >= this->expNext) {
+		this->level++;
+		this->statPoints++;
+		this->exp -= this->expNext;
+		this->expNext = static_cast<int>(
+			(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
+	}
+}
 
 void Player::UpdateAccessories(const float &dt) {
 	// Set the position of gun to follow player
