@@ -1,15 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include <math.h>
+#include "textTag.h"
 
-#include "SFML\Audio.hpp"
-#include "SFML\Graphics.hpp"
-#include "SFML\System.hpp"
-
-using namespace sf;
 
 class Bullet {
 public:

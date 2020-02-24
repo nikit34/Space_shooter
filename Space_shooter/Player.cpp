@@ -11,6 +11,8 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 	exp(0),
 	hp(10),
 	hpMax(10),
+	statPoints(0), cooling(0),
+	plating(0), wiring(0), power(0),
 	damage(1),
 	damageMax(2),
 	score(0) {
@@ -64,11 +66,12 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 	this->stabilizerForce = 0.4f;
 
 	// Guns
-	this->currentWeapon = LASER;
+	// this->currentWeapon = LASER;
+	this->currentWeapon = MISSILE01;
 
 	// Upgrades
 	this->mainGunLevel = 0;        // mainGunLevel;
-	this->dualMissiles01 = true;   // dualMissiles01;
+	this->dualMissiles01 = false;   // dualMissiles01;
 	this->dualMissiles02 = false;  // dualMissiles02;
 
 	// Add number to players for coop
@@ -78,27 +81,36 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 
 Player::~Player() {}
 
-const int Player::getDamage() const {
+int		Player::getDamage() const {
+	int damage = 0;
 	switch (this->currentWeapon) {
 	case LASER:
+		damage = rand() % this->damageMax + this->damage; 
 		break;
 	case MISSILE01:
+		damage = rand() % this->damageMax + this->damage;
 		break;
 	case MISSILE02:
+		damage = rand() % this->damageMax + this->damage;
+		break;
+	default:
+		damage = rand() % this->damageMax + this->damage;
 		break;
 	}
-	int damage;
-	return rand() % this->damageMax + this->damage; 
+	return damage;
 }
 
-void Player::UpdateLeveling() {
+bool Player::UpdateLeveling() {
 	if (this->exp >= this->expNext) {
 		this->level++;
 		this->statPoints++;
 		this->exp -= this->expNext;
 		this->expNext = static_cast<int>(
 			(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
+		this->hp = hpMax;
+		return true;
 	}
+	return false;
 }
 
 void Player::UpdateAccessories(const float &dt) {
