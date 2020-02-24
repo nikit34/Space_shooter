@@ -7,6 +7,7 @@
 #include "SFML\Audio.hpp"
 #include "SFML\Graphics.hpp"
 #include "SFML\System.hpp"
+#include "dArr.h"
 
 using namespace sf;
 
