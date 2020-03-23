@@ -66,8 +66,8 @@ Player::Player(std::vector<Texture>& textures, int UP, int DOWN, int LEFT,
 	this->stabilizerForce = 0.4f;
 
 	// Guns
-	// this->currentWeapon = LASER;
-	this->currentWeapon = MISSILE01;
+	this->currentWeapon = LASER;
+	// this->currentWeapon = MISSILE01;
 
 	// Upgrades
 	this->mainGunLevel = 0;        // mainGunLevel;
