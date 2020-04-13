@@ -132,15 +132,14 @@ void Game::Update(const float &dt) {
 				this->players[i].Update(this->window->getSize(), dt);
 
 				// Bullets update
-				for (size_t k = 0; k < this->players[i].getBullets().size(); k++) {
-					this->players[i].getBullets()[k].Update(dt);
+				for (size_t k = 0; k < this->players[i].getBulletsSize(); k++) {
+					this->players[i].getBullet(k).Update(dt);
 
 					// Enemy collision check
 					for (size_t j = 0; j < this->enemies.size(); j++) {
-						if (this->players[i].getBullets()[k].getGlobalBounds().intersects(
+						if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 							this->enemies[j].getGlobalBounds())) {
-							this->players[i].getBullets().erase(
-								this->players[i].getBullets().begin() + k);
+							this->players[i].removeBullet(k);
 							
 							// Enemy take damage
 							int damage = this->players[i].getDamage();
@@ -154,8 +153,10 @@ void Game::Update(const float &dt) {
 									Color::Green,
 									Vector2f(this->enemies[j].getPosition().x + 20.f,
 										this->enemies[j].getPosition().y - 20.f),
+									Vector2f(1.f, 0.f),
 									28,
-									20.f
+									20.f,
+									true
 								));
 							}
 
@@ -172,8 +173,10 @@ void Game::Update(const float &dt) {
 										Color::Cyan,
 										Vector2f(this->players[i].getPosition().x + 20.f,
 											this->players[i].getPosition().y - 20.f),
+										Vector2f(1.f, 0.f),
 										30,
-										20.f
+										20.f,
+										true
 									));
 								}
 								this->enemies.remove(j);
@@ -185,8 +188,10 @@ void Game::Update(const float &dt) {
 									Color::Cyan,
 									Vector2f(this->players[i].getPosition().x + 20.f,
 										this->players[i].getPosition().y - 20.f),
+									Vector2f(1.f, 0.f),
 									28,
-									20.f
+									20.f,
+									true
 								));
 							}
 							return;
@@ -194,10 +199,9 @@ void Game::Update(const float &dt) {
 					}
 
 					// Window bounds check
-					if (this->players[i].getBullets()[k].getPosition().x >
+					if (this->players[i].getBullet(k).getPosition().x >
 						this->window->getSize().x) {
-						this->players[i].getBullets().erase(
-							this->players[i].getBullets().begin() + k);
+						this->players[i].removeBullet(k);
 						return;
 					}
 				}
@@ -231,8 +235,10 @@ void Game::Update(const float &dt) {
 							Color::Red,
 							Vector2f(this->players[k].getPosition().x + 20.f,
 								this->players[k].getPosition().y - 20.f),
+							Vector2f(1.f, 0.f),
 							30,
-							20.f
+							20.f,
+							true
 						));
 
 						// Player death

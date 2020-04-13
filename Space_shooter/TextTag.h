@@ -18,9 +18,11 @@ public:
 	TextTag(Font* font, 
 		std::string text, 
 		const Color color, 
-		Vector2f position, 
+		Vector2f position,
+		Vector2f direction,
 		unsigned int size,
-		float timerMax);
+		float timerMax,
+		bool accelerate);
 	virtual ~TextTag();
 
 	inline const float& getTimer()const { return this->timer; }
@@ -38,4 +40,5 @@ private:
 	Vector2f direction;
 	float timer;
 	float timerMax;
+	bool accelerate;
 };

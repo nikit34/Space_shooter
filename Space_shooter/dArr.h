@@ -12,9 +12,11 @@ private:
 	void expand();
 public:
 	dArr(unsigned size = 5);
+	dArr(const dArr& obj);
 	~dArr();
 
 	T& operator[](int index);
+	void operator = (const T& obj);
 
 	void add(const T element);
 	void remove(int index);
@@ -26,10 +28,20 @@ template<typename T>
 dArr<T>::dArr(unsigned cap) {
 	this->cap = cap;
 	this->nrOfEl = 0;
+	this->arr = new T * [this->cap];
+	this->initialize(0);
+}
+
+template<typename T>
+dArr<T>::dArr(const dArr& obj) {
+	this->cap = obj.cap;
+	this->nrOfEl = obj.nrOfEl;
 
 	this->arr = new T * [this->cap];
-
-	this->initialize(0);
+	for (size_t i = 0; i < this->nrOfEl; i++) {
+		this->arr[i] = new T(*obj.arr[i]);
+	}
+	this->initialize(this->nrOfEl);
 }
 
 template<typename T>
@@ -45,6 +57,21 @@ T& dArr<T>::operator[](int index) {
 	if (index < 0 || index >= this->nrOfEl)
 		throw("OUT OF BOUNDS EXEPTION!");
 	return *this->arr[index];
+}
+
+template<typename T>
+void dArr<T>::operator = (const T& obj) {
+	for (size_t i = 0; i < this->nrOfEl; i++) {
+		delete this->arr[i];
+	}
+	delete[] this->arr;
+	this->cap = obj.cap;
+	this->nrOfEl = obj.nrOfEl;
+	this->arr = new T * [this->cap];
+	for (size_t i = 0; i < this->nrOfEl; i++) {
+		this->arr[i] = new T(*obj.arr[i]);
+	}
+	this->initialize(this->nrOfEl);
 }
 
 template<typename T>

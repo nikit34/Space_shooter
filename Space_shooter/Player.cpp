@@ -200,7 +200,7 @@ void Player::Combat(const float& dt) {
 		if (this->currentWeapon == LASER) {
 			if (this->mainGunLevel == 0) {
 				// Create bullet
-				this->bullets.push_back(Bullet(
+				this->bullets.add(Bullet(
 					laserTexture, Vector2f(this->playerCenter.x, this->playerCenter.y),
 					Vector2f(0.125f, 0.075f), Vector2f(1.f, 0.f), 2.f, 70.f, 2.f));
 			}
@@ -213,13 +213,13 @@ void Player::Combat(const float& dt) {
 		}
 		else if (this->currentWeapon == MISSILE01) {
 			// Create bullet
-			this->bullets.push_back(
+			this->bullets.add(
 				Bullet(missile01Texture,
 					Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
 					Vector2f(0.05f, 0.02f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
 			
 			if (this->dualMissiles01) {
-				this->bullets.push_back(
+				this->bullets.add(
 					Bullet(missile01Texture,
 						Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
 						Vector2f(0.05f, 0.02f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
@@ -231,6 +231,18 @@ void Player::Combat(const float& dt) {
 		}
 		this->shootTimer = 0;  // Reset timer
 	}
+}
+
+Bullet& Player::getBullet(unsigned index) {
+	if (index < 0 || index > this->bullets.size())
+		throw "OUT OF BOUNDS! PLAYER::GETBULLET";
+	return this->bullets[index];
+}
+
+void Player::removeBullet(unsigned index) {
+	if (index < 0 || index > this->bullets.size())
+		throw "OUT OF BOUNDS! PLAYER::REMOVEBULLET";
+	this->bullets.remove(index);
 }
 
 void Player::Update(Vector2u windowBounds, const float& dt) {

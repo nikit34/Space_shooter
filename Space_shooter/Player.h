@@ -9,7 +9,9 @@ public:
 		int LEFT = 0, int RIGHT = 3, int SHOOT = 57);
 
 	// Accessors
-	inline std::vector<Bullet>& getBullets() { return this->bullets; }
+	Bullet& getBullet(unsigned index);
+	void removeBullet(unsigned index);
+	inline const int getBulletsSize() const { return this->bullets.size(); }
 	inline const Vector2f& getPosition() const { return this->sprite.getPosition(); }
 	inline const String getHpAsString() const {
 		return std::to_string(this->hp) + "/" + std::to_string(this->hpMax); }
@@ -53,7 +55,7 @@ private:
 
 	// Accessories
 	Sprite mainGunSprite;
-	std::vector<Bullet> bullets;
+	dArr<Bullet> bullets;
 	Texture* laserTexture;
 	Texture* missile01Texture;
 	Texture* missile02Texture;
