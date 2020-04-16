@@ -35,8 +35,8 @@ void TextTag::Update(const float& dt) {
 		if (this->accelerate) {
 			if(this->timer < this->timerMax / 2) {
 				this->text.move(
-					this->direction.x * this->speed * dt * this->dtMultiplier * 2.f,
-					this->direction.y * this->speed * dt * this->dtMultiplier * 2.f);
+					this->direction.x * (this->speed * 10.f) * dt * this->dtMultiplier * 2.f,
+					this->direction.y * (this->speed * 10.f) * dt * this->dtMultiplier * 2.f);
 			}
 			else {
 				this->text.move(

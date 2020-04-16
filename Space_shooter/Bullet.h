@@ -1,12 +1,12 @@
-#pragma once
+п»ї#pragma once
 
 #include "textTag.h"
 
 
 class Bullet {
 public:
-	// scale - масштаб объекта | direction - направление | acceleration -
-	// ускорение
+	// scale - РјР°С€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ | direction - РЅР°РїСЂР°РІР»РµРЅРёРµ | acceleration -
+	// СѓСЃРєРѕСЂРµРЅРёРµ
 	Bullet(Texture* texture, Vector2f position, Vector2f scale,
 		Vector2f direction, float initialVelocity, float maxVelocity,
 		float acceleration);

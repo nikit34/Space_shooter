@@ -30,12 +30,8 @@ Game::Game(RenderWindow* window) {
 	this->playersAlive = this->players.size();
 
 	// Init Enemies
-	Enemy e1(&this->textures[enemy01], this->window->getSize(),
-		Vector2f(0.f, 0.f), Vector2f(-1.f, 0.f), Vector2f(1.f, 1.f), 0,
-		rand() % 3 + 1, 3, 1);
-	this->enemies.add(Enemy(e1));
 
-	this->enemySpawnTimerMax = 20;
+	this->enemySpawnTimerMax = 25.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 
 	this->InitUI();
@@ -121,7 +117,7 @@ void Game::Update(const float &dt) {
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
 				&this->textures[enemy01], this->window->getSize(), Vector2f(0.f, 0.f),
-				Vector2f(-1.f, 0.f), Vector2f(1.f, 1.f), 0, rand() % 3 + 1, 3, 1));
+				Vector2f(-1.f, 0.f), Vector2f(1.f, 1.f), rand() % 2, rand() % 3 + 1, 2, 1, rand() % this->playersAlive));
 
 			this->enemySpawnTimer = 0;  // Reset timer
 		}
@@ -173,7 +169,7 @@ void Game::Update(const float &dt) {
 										Color::Cyan,
 										Vector2f(this->players[i].getPosition().x + 20.f,
 											this->players[i].getPosition().y - 20.f),
-										Vector2f(1.f, 0.f),
+										Vector2f(0.f, 1.f),
 										30,
 										20.f,
 										true
@@ -181,6 +177,7 @@ void Game::Update(const float &dt) {
 								}
 								this->enemies.remove(j);
 
+								// Gain exp tag
 								// Create text tag
 								this->textTags.add(TextTag(
 									&this->font,
@@ -188,7 +185,7 @@ void Game::Update(const float &dt) {
 									Color::Cyan,
 									Vector2f(this->players[i].getPosition().x + 20.f,
 										this->players[i].getPosition().y - 20.f),
-									Vector2f(1.f, 0.f),
+									Vector2f(0.f, 1.f),
 									28,
 									20.f,
 									true
@@ -205,19 +202,12 @@ void Game::Update(const float &dt) {
 						return;
 					}
 				}
-				for (size_t i = 0; i < this->textTags.size(); i++) {
-					this->textTags[i].Update(dt);
-					if (this->textTags[i].getTimer() <= 0.f) {
-						this->textTags.remove(i);
-						break;
-					}
-				}
 			}
 		}
 
 		// Update Enemies
 		for (size_t i = 0; i < this->enemies.size(); i++) {
-			this->enemies[i].Update(dt);
+			this->enemies[i].Update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
 
 			// Eneny player collision
 			for (size_t k = 0; k < this->players.size(); k++)
@@ -235,7 +225,7 @@ void Game::Update(const float &dt) {
 							Color::Red,
 							Vector2f(this->players[k].getPosition().x + 20.f,
 								this->players[k].getPosition().y - 20.f),
-							Vector2f(1.f, 0.f),
+							Vector2f(-1.f, 0.f),
 							30,
 							20.f,
 							true
