@@ -54,17 +54,19 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 		break;
 
 	case FOLLOW:
-		direction.x = playerPosition.x - this->sprite.getPosition().x;
-		direction.y = playerPosition.y - this->sprite.getPosition().y;
-
+		if (this->sprite.getPosition().x > playerPosition.x) {
+			direction.x = playerPosition.x - this->sprite.getPosition().x;
+			direction.y = playerPosition.y - this->sprite.getPosition().y;
+		}
+		
 		normalizedDir = normalize(direction, vectorLength(direction));
 
-		if (normalizedDir.y > 0.5)
-			normalizedDir.y = 0.5;
-		else if (normalizedDir.y < -0.5)
-			normalizedDir.y = -0.5;
-		if (normalizedDir.x > -0.5)
-			normalizedDir.x = -0.5;
+		if (normalizedDir.y > 0.3)
+			normalizedDir.y = 0.3;
+		else if (normalizedDir.y < -0.3)
+			normalizedDir.y = -0.3;
+		if (normalizedDir.x > -0.7)
+			normalizedDir.x = -0.7;
 
 		this->sprite.setRotation(atan2(normalizedDir.y, normalizedDir.x) * 180 / 3.14 + 180);
 

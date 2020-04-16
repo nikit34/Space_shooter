@@ -25,8 +25,8 @@ Game::Game(RenderWindow* window) {
 	// Init Players
 	this->players.add(Player(this->textures));
 	this->players.add(Player(this->textures, Keyboard::Numpad8,
-		Keyboard::Numpad2, Keyboard::Numpad4,
-		Keyboard::Numpad6, Keyboard::Numpad0));
+		Keyboard::Numpad5, Keyboard::Numpad4,
+		Keyboard::Numpad6, Keyboard::Numpad1));
 	this->playersAlive = this->players.size();
 
 	// Init Enemies
