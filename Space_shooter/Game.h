@@ -15,10 +15,10 @@ public:
 	// Setters
 
 	// Functions
+	void InitTextures();
 	void InitUI();
 	void UpdateUIPlayer(int index);
 	void UpdateUIEnemy(int index);
-	void UpdateUI();
 	void Update(const float& dt);
 	void DrawUI();
 	void Draw();
@@ -39,7 +39,7 @@ private:
 
 	// TextTags
 	dArr<TextTag> textTags;
-		;
+
 	// Players
 	dArr<Player> players;
 	int playersAlive;
@@ -52,4 +52,8 @@ private:
 
 	// Textures
 	std::vector<Texture> textures;
+	dArr<Texture> lWingTextures;
+	dArr<Texture> rWingTextures;
+	dArr<Texture> cPitTextures;
+	dArr<Texture> areaTextures;
 };

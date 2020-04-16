@@ -7,26 +7,24 @@ Game::Game(RenderWindow* window) {
 	this->window->setFramerateLimit(60);
 	this->dtMultiplier = 60.f;
 
-	// Init font
+	// Init fonts
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
-	// Init textures
-	this->textures.push_back(Texture());
-	this->textures[player].loadFromFile("Textures/ship.png");
-	this->textures.push_back(Texture());
-	this->textures[laser01].loadFromFile("Textures/Guns/rayTex01.png");
-	this->textures.push_back(Texture());
-	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
-	this->textures.push_back(Texture());
-	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
-	this->textures.push_back(Texture());
-	this->textures[enemy01].loadFromFile("Textures/enemy.png");
+	// Init Textures
+	this->InitTextures();
 
 	// Init Players
-	this->players.add(Player(this->textures));
-	this->players.add(Player(this->textures, Keyboard::Numpad8,
+	this->players.add(Player(this->textures,
+		this->lWingTextures, this->rWingTextures,
+		this->cPitTextures, this->areaTextures));
+
+	this->players.add(Player(this->textures, 
+		this->lWingTextures, this->rWingTextures,
+		this->cPitTextures, this->areaTextures,
+		Keyboard::Numpad8,
 		Keyboard::Numpad5, Keyboard::Numpad4,
 		Keyboard::Numpad6, Keyboard::Numpad1));
+
 	this->playersAlive = this->players.size();
 
 	// Init Enemies
@@ -38,6 +36,75 @@ Game::Game(RenderWindow* window) {
 }
 
 Game::~Game() {}
+
+void Game::InitTextures() {
+	// Init Textures regular
+	this->textures.push_back(Texture());
+	this->textures[player].loadFromFile("Textures/ship.png");
+	this->textures.push_back(Texture());
+	this->textures[laser01].loadFromFile("Textures/Guns/rayTex01.png");
+	this->textures.push_back(Texture());
+	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
+	this->textures.push_back(Texture());
+	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
+	this->textures.push_back(Texture());
+	this->textures[enemy01].loadFromFile("Textures/enemy.png");
+
+	// Init Accessory Textures
+	std::ifstream in;
+
+	in.open("Textures/Accessories/leftwings.txt");
+	std::string fileName = "";
+
+	if (in.is_open()) {
+		while (getline(in, fileName)) {
+			Texture temp;
+			temp.loadFromFile(fileName);
+			this->lWingTextures.add(Texture(temp));
+		}
+	}
+
+	in.close();
+
+	in.open("Textures/Accessories/rightwings.txt");
+	fileName = "";
+
+	if (in.is_open()) {
+		while (getline(in, fileName)) {
+			Texture temp;
+			temp.loadFromFile(fileName);
+			this->rWingTextures.add(Texture(temp));
+		}
+	}
+
+	in.close();
+
+	in.open("Textures/Accessories/cockpits.txt");
+	fileName = "";
+
+	if (in.is_open()) {
+		while (getline(in, fileName)) {
+			Texture temp;
+			temp.loadFromFile(fileName);
+			this->cPitTextures.add(Texture(temp));
+		}
+	}
+
+	in.close();
+
+	in.open("Textures/Accessories/auras.txt");
+	fileName = "";
+
+	if (in.is_open()) {
+		while (getline(in, fileName)) {
+			Texture temp;
+			temp.loadFromFile(fileName);
+			this->areaTextures.add(Texture(temp));
+		}
+	}
+
+	in.close();
+}
 
 void Game::InitUI() {
 	Text tempText;

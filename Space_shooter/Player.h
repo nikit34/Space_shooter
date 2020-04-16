@@ -4,9 +4,17 @@
 
 class Player {
 public:
+	Player(std::vector<Texture>& textures,
+		dArr<Texture>& lWingTextures,
+		dArr<Texture>& rWingTextures, 
+		dArr<Texture>& cPitTextures, 
+		dArr<Texture>& auraTextures,
+		int UP = 22, int DOWN = 18,
+		int LEFT = 0, int RIGHT = 3,
+		int SHOOT = 57
+		);
+
 	virtual ~Player();
-	Player(std::vector<Texture>& textures, int UP = 22, int DOWN = 18,
-		int LEFT = 0, int RIGHT = 3, int SHOOT = 57);
 
 	// Accessors
 	Bullet& getBullet(unsigned index);
@@ -59,6 +67,15 @@ private:
 	Texture* laserTexture;
 	Texture* missile01Texture;
 	Texture* missile02Texture;
+
+	dArr<Texture>* lWingTextures;
+	dArr<Texture>* rWingTextures;
+	dArr<Texture>* cPitTextures;
+	dArr<Texture>* auraTextures;
+	Sprite lWing;
+	Sprite rWing;
+	Sprite cPit;
+	Sprite aura;
 
 	int controls[5];
 	Vector2f currentVelocity;
