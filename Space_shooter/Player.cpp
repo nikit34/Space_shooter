@@ -212,7 +212,7 @@ void Player::UpdateAccessories(const float &dt) {
 	// Cockpit
 	this->cPit.setScale(0.3f, 0.3f);
 	this->cPit.setPosition(
-		playerCenter.x - 90.f - this->currentVelocity.x,
+		playerCenter.x - 90.f + this->currentVelocity.x,
 		playerCenter.y
 	);
 	
@@ -222,6 +222,7 @@ void Player::UpdateAccessories(const float &dt) {
 		playerCenter.x - 90.f,
 		playerCenter.y - 35.f
 	);
+	this->aura.rotate(1.2f * dt * this->dtMultiplier);
 }
 
 void Player::Movement(const float& dt) {

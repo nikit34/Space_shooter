@@ -1,6 +1,6 @@
 #include "Game.h"
 
-enum textures { player = 0, laser01, missile01, mainGun01, enemy01 };
+enum textures { player = 0, laser01, missile01, mainGun01};
 
 Game::Game(RenderWindow* window) {
 	this->window = window;
@@ -49,8 +49,11 @@ void Game::InitTextures() {
 	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
 	this->textures.push_back(Texture());
 	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
-	this->textures.push_back(Texture());
-	this->textures[enemy01].loadFromFile("Textures/enemy.png");
+	Texture temp;
+	temp.loadFromFile("Textures/enemy.png");
+	this->enemyTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/enemy02.png");
+	this->enemyTextures.add(Texture(temp));
 
 	// Init Accessory Textures
 	std::ifstream in;
@@ -185,12 +188,13 @@ void Game::Update(const float &dt) {
 		// Spawn enemies
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
-				&this->textures[enemy01], this->window->getSize(), Vector2f(0.f, 0.f),
+				this->enemyTextures, this->window->getSize(), Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f), Vector2f(0.3f, 0.3f), rand() % 2, rand() % 3 + 1, 2, 1, rand() % this->playersAlive));
 
 			this->enemySpawnTimer = 0;  // Reset timer
 		}
 
+		// Update players, bullets and combat
 		for (size_t i = 0; i < this->players.size(); i++) {
 			if (this->players[i].isAlive()) {
 				/// Update Players

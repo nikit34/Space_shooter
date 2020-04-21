@@ -2,15 +2,17 @@
 
 enum eTypes { MOVELEFT = 0, FOLLOW, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
 
-Enemy::Enemy(Texture* texture, Vector2u windowBounds, Vector2f position,
+Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
 	Vector2f direction, Vector2f scale, int type, int hpMax,
 	int damageMax, int damageMin, int playerFollowNr) {
 	
 	this->dtMultiplier = 60.f;
-	this->texture = texture;
+	this->textures = &textures;
 	this->windowBounds = windowBounds;
 
-	this->sprite.setTexture(*this->texture);
+	this->type = type;
+
+	this->sprite.setTexture((*this->textures)[this->type]);
 	this->sprite.setScale(scale);
 	this->sprite.setRotation(270);
 	this->sprite.setOrigin(
@@ -26,8 +28,6 @@ Enemy::Enemy(Texture* texture, Vector2u windowBounds, Vector2f position,
 	this->damageTimer = 0;
 
 	this->direction = direction;
-
-	this->type = type;
 
 	this->hpMax = hpMax;
 	this->hp = this->hpMax;
