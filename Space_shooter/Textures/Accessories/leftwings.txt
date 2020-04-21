@@ -5,8 +5,3 @@ Textures/Accessories/wingLeft04.png
 Textures/Accessories/wingLeft05.png
 Textures/Accessories/wingLeft06.png
 Textures/Accessories/wingLeft07.png
-Textures/Accessories/wingLeft08.png
-Textures/Accessories/wingLeft09.png
-Textures/Accessories/wingLeft10.png
-Textures/Accessories/wingLeft11.png
-Textures/Accessories/wingLeft12.png

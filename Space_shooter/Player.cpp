@@ -195,16 +195,32 @@ void Player::UpdateAccessories(const float &dt) {
 	}
 
 	// Left wing
-	this->lWing.setPosition(playerCenter);
+	this->lWing.setScale(0.3f, 0.3f);
+	this->lWing.setPosition(
+		playerCenter.x - 80.f,
+		playerCenter.y
+	);
 
 	// Right wing
-	this->rWing.setPosition(playerCenter);
+	this->rWing.setScale(0.3f, 0.3f);
+	this->rWing.setPosition(
+		playerCenter.x - 80.f,
+		playerCenter.y
+	);
 
 	// Cockpit
-	this->cPit.setPosition(playerCenter);
+	this->cPit.setScale(0.3f, 0.3f);
+	this->cPit.setPosition(
+		playerCenter.x - 90.f,
+		playerCenter.y
+	);
 	
 	// Aura
-	this->aura.setPosition(playerCenter);
+	this->aura.setScale(1.5f, 1.5f);
+	this->aura.setPosition(
+		playerCenter.x - 80.f,
+		playerCenter.y
+	);
 }
 
 void Player::Movement(const float& dt) {
@@ -341,8 +357,8 @@ void Player::Draw(RenderTarget& target) {
 	}
 
 	target.draw(this->sprite);
-	target.draw(this->mainGunSprite);
-	target.draw(this->cPit);
 	target.draw(this->lWing);
 	target.draw(this->rWing);
+	target.draw(this->cPit);
+	target.draw(this->mainGunSprite);
 }

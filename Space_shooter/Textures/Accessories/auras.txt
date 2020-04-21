@@ -8,4 +8,3 @@ Textures/Accessories/aura07.png
 Textures/Accessories/aura08.png
 Textures/Accessories/aura09.png
 Textures/Accessories/aura10.png
-Textures/Accessories/aura11.png
