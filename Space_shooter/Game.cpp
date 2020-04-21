@@ -50,9 +50,9 @@ void Game::InitTextures() {
 	this->textures.push_back(Texture());
 	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
 	Texture temp;
-	temp.loadFromFile("Textures/enemy.png");
+	temp.loadFromFile("Textures/enemyMoveLeft.png");
 	this->enemyTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/enemy02.png");
+	temp.loadFromFile("Textures/enemyFollow.png");
 	this->enemyTextures.add(Texture(temp));
 
 	// Init Accessory Textures
@@ -234,6 +234,11 @@ void Game::Update(const float &dt) {
 								// Gain exp
 								int exp = this->enemies[j].getHpMax()
 									+ (rand() % this->enemies[j].getHpMax() + 1);
+								
+								// Gain score
+								int score = this->enemies[j].getHpMax();
+								this->players[i].gainScore(score);
+								
 								if (this->players[i].gainExp(exp)){
 									// Create text tag
 									this->textTags.add(TextTag(
@@ -287,7 +292,8 @@ void Game::Update(const float &dt) {
 			{
 				if (this->players[k].isAlive()) {
 					if (this->players[k].getGlobalBounds().intersects(
-									this->enemies[i].getGlobalBounds())) {
+						this->enemies[i].getGlobalBounds()) &&
+						!this->players[k].isDamageCooldown()) {
 						int damage = this->enemies[i].getDamage();
 						this->players[k].takeDamage(damage);
 						
@@ -307,7 +313,7 @@ void Game::Update(const float &dt) {
 						// Player death
 						if (!this->players[k].isAlive())
 							this->playersAlive--;
-						this->enemies.remove(i);
+
 						return;
 					}
 				}
@@ -336,14 +342,8 @@ void Game::DrawUI() {
 
 void Game::Draw() {
 	this->window->clear();
-	for (size_t i = 0; i < this->enemies.size(); i++) {
-		this->enemies[i].Draw(*this->window);
 
-		// UI
-		this->UpdateUIEnemy(i);
-		this->window->draw(this->enemyText);
-	}
-
+	// Draw players
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (this->players[i].isAlive()) {
 			this->players[i].Draw(*this->window);
@@ -353,6 +353,15 @@ void Game::Draw() {
 			this->window->draw(this->followPlayerText);
 			this->window->draw(this->playerExpBar);
 		}
+	}
+
+	// Draw enemies
+	for (size_t i = 0; i < this->enemies.size(); i++) {
+		this->enemies[i].Draw(*this->window);
+
+		// UI
+		this->UpdateUIEnemy(i);
+		this->window->draw(this->enemyText);
 	}
 
 	// Draw Texttags

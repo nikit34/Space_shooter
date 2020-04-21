@@ -27,6 +27,10 @@ Player::Player(std::vector<Texture>& textures,
 	// Dt
 	this->dtMultiplier = 60.f;
 
+	// KeyTime
+	this->keyTimeMax = 8.f;
+	this->keyTime = this->keyTimeMax;
+	
 	// Stats
 	this->expNext = 20 + static_cast<int>(
 		(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
@@ -70,10 +74,18 @@ Player::Player(std::vector<Texture>& textures,
 	);
 
 	// Accessories
-	this->lWing.setTexture((*this->lWingTextures)[3]);
-	this->rWing.setTexture((*this->rWingTextures)[3]);
-	this->cPit.setTexture((*this->cPitTextures)[3]);
-	this->aura.setTexture((*this->auraTextures)[3]);
+
+	// Selectors
+	this->lWingSelect = 0;
+	this->rWingSelect = 0;
+	this->cPitSelect = 0;
+	this->auraSelect = 0;
+
+	// Accessory textures
+	this->lWing.setTexture((*this->lWingTextures)[this->lWingSelect]);
+	this->rWing.setTexture((*this->rWingTextures)[this->rWingSelect]);
+	this->cPit.setTexture((*this->cPitTextures)[this->cPitSelect]);
+	this->aura.setTexture((*this->auraTextures)[this->auraSelect]);
 
 	// Init Accessories
 	this->lWing.setOrigin(
@@ -110,7 +122,7 @@ Player::Player(std::vector<Texture>& textures,
 	// Timers
 	this->shootTimerMax = 25.f;
 	this->shootTimer = this->shootTimerMax;
-	this->damageTimerMax = 10.f;
+	this->damageTimerMax = 40.f;
 	this->damageTimer = this->damageTimerMax;
 
 	// Controls
@@ -162,6 +174,12 @@ int Player::getDamage() const {
 	return damage;
 }
 
+void Player::takeDamage(int damage) {
+	this->hp -= damage;
+
+	this->damageTimer = 0;
+}
+
 bool Player::UpdateLeveling() {
 	if (this->exp >= this->expNext) {
 		this->level++;
@@ -169,10 +187,67 @@ bool Player::UpdateLeveling() {
 		this->exp -= this->expNext;
 		this->expNext = static_cast<int>(
 			(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
+
+		this->wiring++;
+		this->cooling++;
+		this->plating++;
+		this->power++;
+
+		this->hpMax = 10 + plating * 5;
+		this->damageMax = 2 + power * 2;
+		this->damage = 1 + power;
+
 		this->hp = hpMax;
 		return true;
 	}
 	return false;
+}
+
+void Player::ChangeAccessories() {
+	if (Keyboard::isKeyPressed(Keyboard::Num1) && this->keyTime >= this->keyTimeMax) {
+		if (lWingSelect < (*this->lWingTextures).size() - 1) {
+			lWingSelect++;
+		}
+		else {
+			lWingSelect = 0;
+		}
+
+		this->lWing.setTexture((*this->lWingTextures)[lWingSelect]);
+		this->keyTime = 0;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Num2) && this->keyTime >= this->keyTimeMax) {
+		if (rWingSelect < (*this->rWingTextures).size() - 1) {
+			rWingSelect++;
+		}
+		else {
+			rWingSelect = 0;
+		}
+
+		this->rWing.setTexture((*this->rWingTextures)[rWingSelect]);
+		this->keyTime = 0;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Num3) && this->keyTime >= this->keyTimeMax) {
+		if (cPitSelect < (*this->cPitTextures).size() - 1) {
+			cPitSelect++;
+		}
+		else {
+			cPitSelect = 0;
+		}
+
+		this->cPit.setTexture((*this->cPitTextures)[cPitSelect]);
+		this->keyTime = 0;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Num4) && this->keyTime >= this->keyTimeMax) {
+		if (auraSelect < (*this->auraTextures).size() - 1) {
+			auraSelect++;
+		}
+		else {
+			auraSelect = 0;
+		}
+
+		this->aura.setTexture((*this->auraTextures)[auraSelect]);
+		this->keyTime = 0;
+	}
 }
 
 void Player::UpdateAccessories(const float &dt) {
@@ -325,6 +400,18 @@ void Player::Combat(const float& dt) {
 		}
 		this->shootTimer = 0;  // Reset timer
 	}
+
+	// Damaged
+	if (this->isDamageCooldown()) {
+		this->lWing.setColor(Color::Red);
+		this->rWing.setColor(Color::Red);
+		this->cPit.setColor(Color::Red);
+	}
+	else {
+		this->lWing.setColor(Color::White);
+		this->rWing.setColor(Color::White);
+		this->cPit.setColor(Color::White);
+	}
 }
 
 Bullet& Player::getBullet(unsigned index) {
@@ -347,7 +434,11 @@ void Player::Update(Vector2u windowBounds, const float& dt) {
 	if (this->damageTimer < this->damageTimerMax) 
 		this->damageTimer += 1 * dt * this->dtMultiplier;
 
+	if (this->keyTime < this->keyTimeMax)
+		this->keyTime += 1 * dt * this->dtMultiplier;
+
 	this->Movement(dt);
+	this->ChangeAccessories();
 	this->UpdateAccessories(dt);
 	this->Combat(dt);
 }

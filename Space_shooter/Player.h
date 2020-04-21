@@ -28,16 +28,20 @@ public:
 	inline FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline const int& getHp() const { return this->hp; }
 	inline const int& getHpMax() const { return this->hpMax; }
-	inline void takeDamage(int damage) { this->hp -= damage; }
+	void takeDamage(int damage);
 	inline bool isAlive() const { return this->hp > 0; }
 	inline const int& getPlayerNr() const { return this->playerNr; }
 	inline const int& getLevel() const { return this->level; }
 	inline const int& getExp() const { return this->exp; }
 	inline const int& getExpNext() const { return this->expNext; }
 	inline bool gainExp(int exp) { this->exp += exp; return this->UpdateLeveling(); }
+	inline void gainScore(int score) { this->score += score; }
+	inline const int getScore() const { return this->score; }
+	inline bool isDamageCooldown() { return this->damageTimer < this->damageTimerMax; }
 
 	// Functions
 	bool UpdateLeveling();
+	void ChangeAccessories();
 	void UpdateAccessories(const float& dt);
 	void Combat(const float& dt);
 	void Movement(const float& dt);
@@ -49,6 +53,8 @@ public:
 
 private:
 	float dtMultiplier;
+	float keyTimeMax;
+	float keyTime;
 
 	unsigned playerNr;
 
@@ -78,6 +84,11 @@ private:
 	Sprite rWing;
 	Sprite cPit;
 	Sprite aura;
+
+	int lWingSelect;
+	int rWingSelect;
+	int cPitSelect;
+	int auraSelect;
 
 	int controls[5];
 	Vector2f currentVelocity;
