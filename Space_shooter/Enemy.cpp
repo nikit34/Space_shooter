@@ -7,23 +7,25 @@ Enemy::Enemy(Texture* texture, Vector2u windowBounds, Vector2f position,
 	int damageMax, int damageMin, int playerFollowNr) {
 	
 	this->dtMultiplier = 60.f;
-
 	this->texture = texture;
+	this->windowBounds = windowBounds;
+
 	this->sprite.setTexture(*this->texture);
 	this->sprite.setScale(scale);
-	this->windowBounds = windowBounds;
+	this->sprite.setRotation(270);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2
+	);
+	this->sprite.setPosition(
+		this->windowBounds.x,
+		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
 	);
 
 	this->damageTimerMax = 5.f;
 	this->damageTimer = 0;
 
 	this->direction = direction;
-	this->sprite.setPosition(
-		this->windowBounds.x,
-		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height);
 
 	this->type = type;
 
@@ -68,7 +70,7 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 		if (normalizedDir.x > -0.7)
 			normalizedDir.x = -0.7;
 
-		this->sprite.setRotation(atan2(normalizedDir.y, normalizedDir.x) * 180 / 3.14 + 180);
+		this->sprite.setRotation(atan2(normalizedDir.y, normalizedDir.x) * 180 / 3.14 + 90);
 
 		this->sprite.move(normalizedDir.x * 3.f * dt * this->dtMultiplier, normalizedDir.y * 3.f * dt * this->dtMultiplier);
 
@@ -77,9 +79,9 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 		break;
 	}
 	if (this->damageTimer > 0) {
-		this->damageTimer -= 1.f * dt * dtMultiplier;
+		this->damageTimer -= 0.5f * dt * dtMultiplier;
 		this->sprite.setColor(Color::Red);
-		this->sprite.move(5.f * this->damageTimer * dt * dtMultiplier, 0.f);
+		this->sprite.move(2.f * this->damageTimer * dt * dtMultiplier, 0.f);
 	}
 	else {
 		this->sprite.setColor(Color::White);

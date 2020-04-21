@@ -10,6 +10,7 @@ Player::Player(std::vector<Texture>& textures,
 	dArr<Texture>& rWingTextures,
 	dArr<Texture>& cPitTextures,
 	dArr<Texture>& auraTextures,
+	Vector2u windowBounds,
 	int UP, int DOWN,
 	int LEFT, int RIGHT,
 	int SHOOT)
@@ -37,6 +38,8 @@ Player::Player(std::vector<Texture>& textures,
 	this->playerCenter.y =
 		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
 
+	this->windowBounds = windowBounds;
+
 	// Textures & Sprites
 	this->lWingTextures = &lWingTextures;
 	this->rWingTextures = &rWingTextures;
@@ -44,7 +47,9 @@ Player::Player(std::vector<Texture>& textures,
 	this->auraTextures = &auraTextures;
 
 	this->sprite.setTexture(textures[0]);
-	this->sprite.setScale(0.9f, 0.9f);
+	this->sprite.setScale(0.3f, 0.3f);
+	this->sprite.setRotation(90);
+	this->sprite.setPosition(40.f, (rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height);
 
 	this->laserTexture = &textures[1];
 	this->missile01Texture = &textures[2];
@@ -55,10 +60,11 @@ Player::Player(std::vector<Texture>& textures,
 		this->mainGunSprite.getGlobalBounds().height / 2
 	);
 	
-	this->mainGunSprite.setRotation(90);
+	this->mainGunSprite.setRotation(270);
+	this->mainGunSprite.setScale(0.5f, 0.5f);
 
 	this->mainGunSprite.setPosition(
-		this->playerCenter.x + 20.f,
+		this->playerCenter.x - 20.f,
 		this->playerCenter.y
 	);
 
@@ -176,14 +182,14 @@ void Player::UpdateAccessories(const float &dt) {
 	);
 
 	// Animate the main gun and correct it after firing
-	if (this->mainGunSprite.getPosition().x < this->playerCenter.x + 20.f) {
+	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 20.f) {
 		this->mainGunSprite.move(
 			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 0.f
 		);
 	}
-	if (this->mainGunSprite.getPosition().x > this->playerCenter.x + 20.f) {
+	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 20.f) {
 		this->mainGunSprite.setPosition(
-			this->playerCenter.x + 20.f,
+			this->playerCenter.x - 20.f,
 			this->playerCenter.y
 		);
 	}
@@ -272,7 +278,7 @@ void Player::Combat(const float& dt) {
 				// Create bullet
 				this->bullets.add(Bullet(
 					laserTexture, Vector2f(this->playerCenter.x, this->playerCenter.y),
-					Vector2f(0.125f, 0.075f), Vector2f(1.f, 0.f), 2.f, 70.f, 2.f));
+					Vector2f(0.5f, 0.5f), Vector2f(1.f, 0.f), 2.f, 70.f, 2.f));
 			}
 			else if (this->mainGunLevel == 1) {
 			}
@@ -286,7 +292,7 @@ void Player::Combat(const float& dt) {
 			this->bullets.add(
 				Bullet(missile01Texture,
 					Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
-					Vector2f(0.05f, 0.02f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
+					Vector2f(0.5f, 0.2f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
 			
 			if (this->dualMissiles01) {
 				this->bullets.add(
@@ -333,8 +339,9 @@ void Player::Draw(RenderTarget& target) {
 	for (size_t i = 0; i < this->bullets.size(); i++) {
 		this->bullets[i].Draw(target);
 	}
-	target.draw(this->mainGunSprite);
+
 	target.draw(this->sprite);
+	target.draw(this->mainGunSprite);
 	target.draw(this->cPit);
 	target.draw(this->lWing);
 	target.draw(this->rWing);

@@ -16,11 +16,13 @@ Game::Game(RenderWindow* window) {
 	// Init Players
 	this->players.add(Player(this->textures,
 		this->lWingTextures, this->rWingTextures,
-		this->cPitTextures, this->areaTextures));
+		this->cPitTextures, this->areaTextures,
+		this->window->getSize()));
 
 	this->players.add(Player(this->textures, 
 		this->lWingTextures, this->rWingTextures,
 		this->cPitTextures, this->areaTextures,
+		this->window->getSize(),
 		Keyboard::Numpad8,
 		Keyboard::Numpad5, Keyboard::Numpad4,
 		Keyboard::Numpad6, Keyboard::Numpad1));
@@ -141,8 +143,8 @@ void Game::UpdateUIPlayer(int index) {
 		std::cout << "OUT OF BOUNDS! (UPDATEUI)";
 	else { // Follow text
 		this->followPlayerText.setPosition(
-			this->players[index].getPosition().x,
-			this->players[index].getPosition().y - 20.f);
+			this->players[index].getPosition().x - 70.f,
+			this->players[index].getPosition().y - 5.f);
 		this->followPlayerText.setString(
 			std::to_string(this->players[index].getPlayerNr())
 			+ "       " +
@@ -154,8 +156,8 @@ void Game::UpdateUIPlayer(int index) {
 
 		// Bars
 		this->playerExpBar.setPosition(
-			this->players[index].getPosition().x + 10.f,
-			this->players[index].getPosition().y + 60.f);
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 70.f);
 		this->playerExpBar.setScale(
 			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
 			1.f
@@ -184,7 +186,7 @@ void Game::Update(const float &dt) {
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
 				&this->textures[enemy01], this->window->getSize(), Vector2f(0.f, 0.f),
-				Vector2f(-1.f, 0.f), Vector2f(1.f, 1.f), rand() % 2, rand() % 3 + 1, 2, 1, rand() % this->playersAlive));
+				Vector2f(-1.f, 0.f), Vector2f(0.3f, 0.3f), rand() % 2, rand() % 3 + 1, 2, 1, rand() % this->playersAlive));
 
 			this->enemySpawnTimer = 0;  // Reset timer
 		}
@@ -234,7 +236,7 @@ void Game::Update(const float &dt) {
 										&this->font,
 										"Level UP!",
 										Color::Cyan,
-										Vector2f(this->players[i].getPosition().x + 20.f,
+										Vector2f(this->players[i].getPosition().x - 10.f,
 											this->players[i].getPosition().y - 20.f),
 										Vector2f(0.f, 1.f),
 										30,
@@ -250,7 +252,7 @@ void Game::Update(const float &dt) {
 									&this->font,
 									"+ " + std::to_string(damage) + " exp",
 									Color::Cyan,
-									Vector2f(this->players[i].getPosition().x + 20.f,
+									Vector2f(this->players[i].getPosition().x - 10.f,
 										this->players[i].getPosition().y - 20.f),
 									Vector2f(0.f, 1.f),
 									28,

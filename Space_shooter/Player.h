@@ -9,6 +9,7 @@ public:
 		dArr<Texture>& rWingTextures, 
 		dArr<Texture>& cPitTextures, 
 		dArr<Texture>& auraTextures,
+		Vector2u windowBounds,
 		int UP = 22, int DOWN = 18,
 		int LEFT = 0, int RIGHT = 3,
 		int SHOOT = 57
@@ -52,6 +53,7 @@ private:
 	unsigned playerNr;
 
 	Vector2f playerCenter;
+	Vector2u windowBounds;
 
 	float shootTimer;
 	float shootTimerMax;
