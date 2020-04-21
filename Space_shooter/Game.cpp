@@ -143,11 +143,11 @@ void Game::UpdateUIPlayer(int index) {
 		std::cout << "OUT OF BOUNDS! (UPDATEUI)";
 	else { // Follow text
 		this->followPlayerText.setPosition(
-			this->players[index].getPosition().x - 70.f,
+			this->players[index].getPosition().x - 75.f,
 			this->players[index].getPosition().y - 5.f);
 		this->followPlayerText.setString(
 			std::to_string(this->players[index].getPlayerNr())
-			+ "       " +
+			+ "           " +
 			this->players[index].getHpAsString()
 			+ "\n\n\n\n"
 			+ std::to_string(this->players[index].getLevel())

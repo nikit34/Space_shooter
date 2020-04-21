@@ -50,6 +50,7 @@ Player::Player(std::vector<Texture>& textures,
 	this->sprite.setScale(0.3f, 0.3f);
 	this->sprite.setRotation(90);
 	this->sprite.setPosition(40.f, (rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height);
+	// this->sprite.setColor(Color(10, 10, 10, 255));
 
 	this->laserTexture = &textures[1];
 	this->missile01Texture = &textures[2];
@@ -69,10 +70,10 @@ Player::Player(std::vector<Texture>& textures,
 	);
 
 	// Accessories
-	this->lWing.setTexture((*this->lWingTextures)[0]);
-	this->rWing.setTexture((*this->rWingTextures)[0]);
-	this->cPit.setTexture((*this->cPitTextures)[0]);
-	this->aura.setTexture((*this->auraTextures)[0]);
+	this->lWing.setTexture((*this->lWingTextures)[3]);
+	this->rWing.setTexture((*this->rWingTextures)[3]);
+	this->cPit.setTexture((*this->cPitTextures)[3]);
+	this->aura.setTexture((*this->auraTextures)[3]);
 
 	// Init Accessories
 	this->lWing.setOrigin(
@@ -197,29 +198,29 @@ void Player::UpdateAccessories(const float &dt) {
 	// Left wing
 	this->lWing.setScale(0.3f, 0.3f);
 	this->lWing.setPosition(
-		playerCenter.x - 80.f,
-		playerCenter.y
+		playerCenter.x - 80.f - abs(this->currentVelocity.x),
+		playerCenter.y - abs(this->currentVelocity.x / 2)
 	);
 
 	// Right wing
 	this->rWing.setScale(0.3f, 0.3f);
 	this->rWing.setPosition(
-		playerCenter.x - 80.f,
-		playerCenter.y
+		playerCenter.x - 80.f - abs(this->currentVelocity.x),
+		playerCenter.y + abs(this->currentVelocity.x / 2)
 	);
 
 	// Cockpit
 	this->cPit.setScale(0.3f, 0.3f);
 	this->cPit.setPosition(
-		playerCenter.x - 90.f,
+		playerCenter.x - 90.f - this->currentVelocity.x,
 		playerCenter.y
 	);
 	
 	// Aura
-	this->aura.setScale(1.5f, 1.5f);
+	this->aura.setScale(0.2f, 0.2f);
 	this->aura.setPosition(
-		playerCenter.x - 80.f,
-		playerCenter.y
+		playerCenter.x - 90.f,
+		playerCenter.y - 35.f
 	);
 }
 

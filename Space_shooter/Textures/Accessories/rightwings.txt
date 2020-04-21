@@ -1,3 +1,4 @@
+Textures/Accessories/wingRight00.png
 Textures/Accessories/wingRight01.png
 Textures/Accessories/wingRight02.png
 Textures/Accessories/wingRight03.png
