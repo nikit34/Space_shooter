@@ -24,7 +24,7 @@ Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
 		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
 	);
 
-	this->damageTimerMax = 5.f;
+	this->damageTimerMax = 4.f;
 	this->damageTimer = 0;
 
 	this->direction = direction;
@@ -78,7 +78,7 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 	default:
 		break;
 	}
-	if (this->damageTimer > 0) {
+	if (this->damageTimer > 0.f) {
 		this->damageTimer -= 0.5f * dt * dtMultiplier;
 		this->sprite.setColor(Color::Red);
 		this->sprite.move(2.f * this->damageTimer * dt * dtMultiplier, 0.f);
@@ -88,4 +88,6 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 	}
 }
 
-void Enemy::Draw(RenderTarget& target) { target.draw(this->sprite); }
+void Enemy::Draw(RenderTarget& target) { 
+	target.draw(this->sprite); 
+}

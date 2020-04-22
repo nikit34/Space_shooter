@@ -171,7 +171,9 @@ void Game::UpdateUIPlayer(int index) {
 }
 
 void Game::UpdateUIEnemy(int index) {
-	this->enemyText.setPosition(this->enemies[index].getPosition());
+	this->enemyText.setPosition(
+		this->enemies[index].getPosition().x, 
+		this->enemies[index].getPosition().y - 20.f);
 	this->enemyText.setString(
 		std::to_string(this->enemies[index].getHp())
 		+ "/" +

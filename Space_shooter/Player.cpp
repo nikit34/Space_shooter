@@ -274,14 +274,14 @@ void Player::UpdateAccessories(const float &dt) {
 	this->lWing.setScale(0.3f, 0.3f);
 	this->lWing.setPosition(
 		playerCenter.x - 80.f - abs(this->currentVelocity.x),
-		playerCenter.y - abs(this->currentVelocity.x / 2)
+		playerCenter.y - abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2)
 	);
 
 	// Right wing
 	this->rWing.setScale(0.3f, 0.3f);
 	this->rWing.setPosition(
 		playerCenter.x - 80.f - abs(this->currentVelocity.x),
-		playerCenter.y + abs(this->currentVelocity.x / 2)
+		playerCenter.y + abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2)
 	);
 
 	// Cockpit
@@ -403,9 +403,16 @@ void Player::Combat(const float& dt) {
 
 	// Damaged
 	if (this->isDamageCooldown()) {
-		this->lWing.setColor(Color::Red);
-		this->rWing.setColor(Color::Red);
-		this->cPit.setColor(Color::Red);
+		if ((int)this->damageTimer % 5 == 0) {
+			this->lWing.setColor(Color::Red);
+			this->rWing.setColor(Color::Red);
+			this->cPit.setColor(Color::Red);
+		}
+		else {
+			this->lWing.setColor(Color::White);
+			this->rWing.setColor(Color::White);
+			this->cPit.setColor(Color::White);
+		}
 	}
 	else {
 		this->lWing.setColor(Color::White);
