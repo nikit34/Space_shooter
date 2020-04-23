@@ -33,7 +33,10 @@ public:
 	}
 
 	Vector2f normalize(Vector2f v, float length) {
-		return v / length;
+		if (length == 0)
+			return Vector2f(0.f, 0.f);
+		else
+			return v / length;
 	}
 
 private:
@@ -43,6 +46,7 @@ private:
 	Sprite sprite;
 	Vector2u windowBounds;
 	Vector2f direction;
+	Vector2f normalizedDir;
 
 
 	float damageTimerMax;

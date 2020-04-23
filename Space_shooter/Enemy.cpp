@@ -48,32 +48,33 @@ void Enemy::takeDamage(int damage) {
 }
 
 void Enemy::Update(const float& dt, Vector2f playerPosition) {
-	Vector2f normalizedDir;
 	switch (this->type) {
 	case MOVELEFT:
 		this->sprite.move(this->direction.x * 10.f * dt * this->dtMultiplier,
 			this->direction.y * 10.f * dt * this->dtMultiplier);
+
+		this->normalizedDir = normalize(this->direction, vectorLength(this->direction));
 		break;
 
 	case FOLLOW:
 		if (this->sprite.getPosition().x > playerPosition.x) {
-			direction.x = playerPosition.x - this->sprite.getPosition().x;
-			direction.y = playerPosition.y - this->sprite.getPosition().y;
+			this->direction.x = playerPosition.x - this->sprite.getPosition().x;
+			this->direction.y = playerPosition.y - this->sprite.getPosition().y;
 		}
 		
-		normalizedDir = normalize(direction, vectorLength(direction));
+		this->normalizedDir = normalize(this->direction, vectorLength(this->direction));
 
-		if (normalizedDir.y > 0.3)
-			normalizedDir.y = 0.3;
-		else if (normalizedDir.y < -0.3)
-			normalizedDir.y = -0.3;
-		if (normalizedDir.x > -0.7)
-			normalizedDir.x = -0.7;
+		if (this->normalizedDir.y > 0.3)
+			this->normalizedDir.y = 0.3;
+		else if (this->normalizedDir.y < -0.3)
+			this->normalizedDir.y = -0.3;
+		if (this->normalizedDir.x > -0.7)
+			this->normalizedDir.x = -0.7;
 
-		this->sprite.setRotation(atan2(normalizedDir.y, normalizedDir.x) * 180 / 3.14 + 90);
+		this->sprite.setRotation(atan2(this->normalizedDir.y, this->normalizedDir.x) * 180 / 3.14 + 90);
 
-		this->sprite.move(normalizedDir.x * 3.f * dt * this->dtMultiplier, normalizedDir.y * 3.f * dt * this->dtMultiplier);
-
+		this->sprite.move(this->normalizedDir.x * 3.f * dt * this->dtMultiplier, this->normalizedDir.y * 3.f * dt * this->dtMultiplier);
+		break;
 
 	default:
 		break;
@@ -81,7 +82,10 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 	if (this->damageTimer > 0.f) {
 		this->damageTimer -= 0.5f * dt * dtMultiplier;
 		this->sprite.setColor(Color::Red);
-		this->sprite.move(2.f * this->damageTimer * dt * dtMultiplier, 0.f);
+		this->sprite.move(
+			2.f * -this->normalizedDir.x * this->damageTimer * dt * dtMultiplier, 
+			2.f * -this->normalizedDir.y * this->damageTimer * dt * dtMultiplier
+		);
 	}
 	else {
 		this->sprite.setColor(Color::White);

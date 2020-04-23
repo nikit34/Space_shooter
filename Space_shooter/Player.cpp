@@ -178,6 +178,9 @@ void Player::takeDamage(int damage) {
 	this->hp -= damage;
 
 	this->damageTimer = 0;
+
+	this->currentVelocity.x += -this->normDir.x * 10.f;		
+	this->currentVelocity.y += -this->normDir.y * 10.f;
 }
 
 bool Player::UpdateLeveling() {
@@ -301,6 +304,9 @@ void Player::UpdateAccessories(const float &dt) {
 }
 
 void Player::Movement(const float& dt) {
+	// Update normalized direction
+	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
+
 	// UP
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::UP]))) {
 		this->direction.x = 0.f;
