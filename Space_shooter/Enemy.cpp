@@ -35,16 +35,16 @@ Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
 	case MOVELEFT:
 		this->hpMax = (rand() % 5 + 1) * scalar;
 		this->hp = this->hpMax;
-		this->damageMax = (rand() % 4 + 1) * scalar;
+		this->damageMax = (rand() % 3 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = rand() % 20 + 10;
+		this->maxVelocity = rand() % 20 + 5;
 		break;
 	case FOLLOW:
 		this->hpMax = (rand() % 3 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = 15;
+		this->maxVelocity = 9;
 		break;
 	default:
 		this->maxVelocity = 15;

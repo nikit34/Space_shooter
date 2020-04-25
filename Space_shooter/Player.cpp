@@ -303,7 +303,7 @@ void Player::UpdateAccessories(const float &dt) {
 	this->aura.rotate(1.2f * dt * this->dtMultiplier);
 }
 
-void Player::Movement(const float& dt) {
+void Player::Movement(Vector2u windowBounds, const float& dt) {
 	// Update normalized direction
 	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
 
@@ -367,6 +367,24 @@ void Player::Movement(const float& dt) {
 		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2;
 	this->playerCenter.y =
 		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
+
+	// Window collision
+	if (this->getPosition().x - this->getGlobalBounds().width <= 0) {
+		this->sprite.setPosition(this->getGlobalBounds().width, this->sprite.getPosition().y);
+		this->currentVelocity.x = 0.f;
+	}
+	if (this->getPosition().y <= 0) {
+		this->sprite.setPosition(this->sprite.getPosition().x, 0);
+		this->currentVelocity.y = 0.f;
+	}
+	if (this->getPosition().x + this->getGlobalBounds().width >= windowBounds.x) {
+		this->sprite.setPosition(windowBounds.x - this->getGlobalBounds().width, this->sprite.getPosition().y);
+		this->currentVelocity.x = 0.f;
+	}
+	if (this->getPosition().y + this->getGlobalBounds().height >= windowBounds.y) {
+		this->sprite.setPosition(this->sprite.getPosition().x, windowBounds.y - this->getGlobalBounds().height);
+		this->currentVelocity.y = 0.f;
+	}
 }
 
 void Player::Combat(const float& dt) {
@@ -450,7 +468,7 @@ void Player::Update(Vector2u windowBounds, const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
 		this->keyTime += 1 * dt * this->dtMultiplier;
 
-	this->Movement(dt);
+	this->Movement(windowBounds, dt);
 	this->ChangeAccessories();
 	this->UpdateAccessories(dt);
 	this->Combat(dt);
