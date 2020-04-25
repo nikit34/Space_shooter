@@ -26,6 +26,7 @@ public:
 private:
 	RenderWindow* window;
 	float dtMultiplier;
+	unsigned score;
 
 	// Text
 	Font font;
@@ -33,6 +34,7 @@ private:
 	Text staticPlayerText;
 	Text enemyText;
 	Text gameOverText;
+	Text scoreText;
 
 	// Bars
 	RectangleShape playerExpBar;

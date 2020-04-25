@@ -19,7 +19,7 @@ Game::Game(RenderWindow* window) {
 		this->cPitTextures, this->areaTextures,
 		this->window->getSize()));
 
-	this->players.add(Player(this->textures, 
+	this->players.add(Player(this->textures,
 		this->lWingTextures, this->rWingTextures,
 		this->cPitTextures, this->areaTextures,
 		this->window->getSize(),
@@ -139,6 +139,12 @@ void Game::InitUI() {
 	this->gameOverText.setPosition(
 		this->window->getSize().x / 2 - 100.f, 
 		this->window->getSize().y / 2);
+
+	this->scoreText.setFont(this->font);
+	this->scoreText.setFillColor(Color::White);
+	this->scoreText.setCharacterSize(32);
+	this->scoreText.setString("Score: 0");
+	this->scoreText.setPosition(10.f, 10.f);
 }
 
 void Game::UpdateUIPlayer(int index) {
@@ -173,7 +179,7 @@ void Game::UpdateUIPlayer(int index) {
 void Game::UpdateUIEnemy(int index) {
 	this->enemyText.setPosition(
 		this->enemies[index].getPosition().x, 
-		this->enemies[index].getPosition().y - 20.f);
+		this->enemies[index].getPosition().y);
 	this->enemyText.setString(
 		std::to_string(this->enemies[index].getHp())
 		+ "/" +
@@ -283,6 +289,11 @@ void Game::Update(const float &dt) {
 					}
 				}
 			}
+
+			// Update score
+			this->score = 0;
+			this->score += this->players[i].getScore();
+			this->scoreText.setString(std::to_string(this->score));
 		}
 
 		// Update Enemies
@@ -340,7 +351,18 @@ void Game::Update(const float &dt) {
 }
 
 void Game::DrawUI() {
+	// Draw Texttags
+	for (size_t i = 0; i < this->textTags.size(); i++) {
+		this->textTags[i].Draw(*this->window);
+	}
 
+	// Game over text
+	if (this->playersAlive <= 0) {
+		this->window->draw(this->gameOverText);
+	}
+
+	// Score text
+	this->window->draw(this->scoreText);
 }
 
 void Game::Draw() {
@@ -367,14 +389,6 @@ void Game::Draw() {
 		this->window->draw(this->enemyText);
 	}
 
-	// Draw Texttags
-	for (size_t i = 0; i < this->textTags.size(); i++) {
-		this->textTags[i].Draw(*this->window);
-	}
-
-	// Game over text
-	if (this->playersAlive <= 0) {
-		this->window->draw(this->gameOverText);
-	}
+	this->DrawUI();
 	this->window->display();
 }
