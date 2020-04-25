@@ -3,8 +3,7 @@
 enum eTypes { MOVELEFT = 0, FOLLOW, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
 
 Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
-	Vector2f direction, Vector2f scale, int type, int hpMax,
-	int damageMax, int damageMin, int playerFollowNr) {
+	Vector2f direction, Vector2f scale, int type, int scalar, int playerFollowNr) {
 	
 	this->dtMultiplier = 60.f;
 	this->textures = &textures;
@@ -24,10 +23,33 @@ Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
 		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
 	);
 
+	this->maxVelocity = maxVelocity;
+
 	this->damageTimerMax = 4.f;
 	this->damageTimer = 0;
 
 	this->direction = direction;
+
+	switch (this->type)
+	{
+	case MOVELEFT:
+		this->hpMax = (rand() % 5 + 1) * scalar;
+		this->hp = this->hpMax;
+		this->damageMax = (rand() % 4 + 1) * scalar;
+		this->damageMin = (rand() % 1 + 1) * scalar;
+		this->maxVelocity = rand() % 20 + 10;
+		break;
+	case FOLLOW:
+		this->hpMax = (rand() % 3 + 1) * scalar;
+		this->hp = this->hpMax;
+		this->damageMax = (rand() % 2 + 1) * scalar;
+		this->damageMin = (rand() % 1 + 1) * scalar;
+		this->maxVelocity = 15;
+		break;
+	default:
+		this->maxVelocity = 15;
+		break;
+	}
 
 	this->hpMax = hpMax;
 	this->hp = this->hpMax;
@@ -40,6 +62,10 @@ Enemy::Enemy(dArr<Texture>& textures, Vector2u windowBounds, Vector2f position,
 
 Enemy::~Enemy() {}
 
+void Enemy::collision() {
+	this->damageTimer = this->damageTimerMax;
+}
+
 void Enemy::takeDamage(int damage) {
 	this->hp -= damage;
 	this->damageTimer = this->damageTimerMax;
@@ -50,8 +76,8 @@ void Enemy::takeDamage(int damage) {
 void Enemy::Update(const float& dt, Vector2f playerPosition) {
 	switch (this->type) {
 	case MOVELEFT:
-		this->sprite.move(this->direction.x * 10.f * dt * this->dtMultiplier,
-			this->direction.y * 10.f * dt * this->dtMultiplier);
+		this->sprite.move(this->direction.x * this->maxVelocity * dt * this->dtMultiplier,
+			this->direction.y * this->maxVelocity * dt * this->dtMultiplier);
 
 		this->normalizedDir = normalize(this->direction, vectorLength(this->direction));
 		break;
@@ -73,12 +99,17 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 
 		this->sprite.setRotation(atan2(this->normalizedDir.y, this->normalizedDir.x) * 180 / 3.14 + 90);
 
-		this->sprite.move(this->normalizedDir.x * 3.f * dt * this->dtMultiplier, this->normalizedDir.y * 3.f * dt * this->dtMultiplier);
+		this->sprite.move(
+			this->normalizedDir.x * this->maxVelocity * dt * this->dtMultiplier, 
+			this->normalizedDir.y * this->maxVelocity * dt * this->dtMultiplier
+		);
 		break;
 
 	default:
 		break;
 	}
+
+	// Damaged
 	if (this->damageTimer > 0.f) {
 		this->damageTimer -= 0.5f * dt * dtMultiplier;
 		this->sprite.setColor(Color::Red);

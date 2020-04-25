@@ -191,7 +191,7 @@ void Game::Update(const float &dt) {
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
 				this->enemyTextures, this->window->getSize(), Vector2f(0.f, 0.f),
-				Vector2f(-1.f, 0.f), Vector2f(0.3f, 0.3f), rand() % 2, rand() % 3 + 1, 2, 1, rand() % this->playersAlive));
+				Vector2f(-1.f, 0.f), Vector2f(0.3f, 0.3f), rand() % 2, this->players[(rand() % this->playersAlive)].getLevel(), rand() % this->playersAlive));
 
 			this->enemySpawnTimer = 0;  // Reset timer
 		}
@@ -298,6 +298,7 @@ void Game::Update(const float &dt) {
 						!this->players[k].isDamageCooldown()) {
 						int damage = this->enemies[i].getDamage();
 						this->players[k].takeDamage(damage);
+						this->enemies[i].collision();
 						
 						// Create text tag
 						this->textTags.add(TextTag(
