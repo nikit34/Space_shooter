@@ -10,7 +10,6 @@ Bullet::Bullet(Texture* texture,
 ) {
 	this->dtMultiplier = 60.f;
 	this->texture = texture;
-	this->sprite.setTexture(*this->texture);
 	this->maxVelocity = maxVelocity;
 	this->direction = direction;
 	this->acceleration = acceleration;
@@ -18,11 +17,13 @@ Bullet::Bullet(Texture* texture,
 		initialVelocity * this->direction.x,
 		initialVelocity * this->direction.y);
 
+	this->sprite.setTexture(*this->texture);
+	this->sprite.setOrigin(
+		this->sprite.getGlobalBounds().width / 2,
+		this->sprite.getGlobalBounds().height / 2);
 	this->sprite.setScale(scale);
-	this->sprite.setRotation(90.f);
-	this->sprite.setPosition(
-		Vector2f(position.x - this->sprite.getGlobalBounds().width / 2,
-			position.y - this->sprite.getGlobalBounds().height / 2));
+	this->sprite.setPosition(position);
+	this->sprite.setRotation(atan2(this->direction.y, this->direction.x) * 180 / 3.14 + 270);
 }
 
 Bullet::~Bullet() {}

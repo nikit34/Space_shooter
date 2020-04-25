@@ -1,8 +1,10 @@
 #include "Enemy.h"
 
 enum eTypes { MOVELEFT = 0, FOLLOW, MOVELEFTSHOOT, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
+enum bulletTypes { REGULAR = 0, MISSILE };
 
 Enemy::Enemy(dArr<Texture>& textures, 
+	dArr<Texture>& bulletTextures,
 	Vector2u windowBounds, 
 	Vector2f position,
 	Vector2f moveDirection,
@@ -10,12 +12,11 @@ Enemy::Enemy(dArr<Texture>& textures,
 	int scalar, 
 	int playerFollowNr
 ) {
-	
 	this->dtMultiplier = 60.f;
-	
 	this->windowBounds = windowBounds;
 
 	this->textures = &textures;
+	this->bulletTextures = &bulletTextures;
 	this->type = type;
 
 	this->sprite.setTexture((*this->textures)[this->type]);
@@ -29,6 +30,9 @@ Enemy::Enemy(dArr<Texture>& textures,
 
 	this->damageTimerMax = 4.f;
 	this->damageTimer = 0;
+
+	this->shootTimerMax = 50.f;
+	this->shootTimer = this->shootTimerMax;
 
 	this->moveDirection = moveDirection;
 
@@ -57,6 +61,8 @@ Enemy::Enemy(dArr<Texture>& textures,
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
 		this->maxVelocity = 13;
+		this->shootTimerMax = 15.f;
+		this->shootTimer = 0.f;
 		break;
 	default:
 		this->hpMax = (rand() % 2 + 1) * scalar;
@@ -127,6 +133,10 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 		break;
 
 	case MOVELEFTSHOOT:
+		this->shootTimerMax = 50.f;
+		if (this->shootTimer < this->shootTimerMax)
+			this->shootTimer += 1.f * dt * this->dtMultiplier;
+
 		this->lookDirection.x = playerPosition.x - this->sprite.getPosition().x;
 		this->lookDirection.y = playerPosition.y - this->sprite.getPosition().y;
 		
@@ -138,6 +148,19 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 			this->moveDirection.y * this->maxVelocity * dt * this->dtMultiplier);
 
 		this->normalizedMoveDir = normalize(this->moveDirection, vectorLength(this->moveDirection));
+
+		if (this->shootTimer >= this->shootTimerMax) {
+			this->bullets.add(Bullet(
+				&(*this->bulletTextures)[REGULAR],
+				this->sprite.getPosition(),
+				Vector2f(0.2f, 0.2f),
+				this->normalizedLookDir,
+				1.f,
+				5,
+				10.f
+			));
+			this->shootTimer = 0.f;
+		}
 		break;
 
 	default:
@@ -160,4 +183,8 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 
 void Enemy::Draw(RenderTarget& target) { 
 	target.draw(this->sprite); 
+
+	for (size_t i = 0; i < this->bullets.size(); i++) {
+		this->bullets[i].Draw(target);
+	}
 }

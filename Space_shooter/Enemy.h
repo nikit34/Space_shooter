@@ -4,7 +4,8 @@
 
 class Enemy {
 public:
-	Enemy(dArr<Texture> &textures, 
+	Enemy(dArr<Texture> &textures,
+		dArr<Texture>& bulletTextures,
 		Vector2u windowBounds, 
 		Vector2f position,
 		Vector2f direction,
@@ -23,6 +24,7 @@ public:
 	inline FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline Vector2f getPosition() const { return this->sprite.getPosition(); }
 	inline const int& getPlayerFollowNr() const { return this->playerFollowNr; }
+	inline dArr<Bullet>& getBullets() { return this->bullets; }
 
 	// Functions
 	void collision();
@@ -51,9 +53,15 @@ private:
 	Vector2f normalizedLookDir;
 	float maxVelocity;
 
+	dArr<Texture>* bulletTextures;
+	Texture* bulletTexture;
+	dArr<Bullet> bullets;
 
 	float damageTimerMax;
 	float damageTimer;
+
+	float shootTimerMax;
+	float shootTimer;
 
 	int type;
 	int hp;

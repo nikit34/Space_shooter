@@ -5,8 +5,6 @@
 
 class Bullet {
 public:
-	// scale - маштабирование | direction - направление | acceleration -
-	// ускорение
 	Bullet(Texture* texture, 
 		Vector2f position, 
 		Vector2f scale,

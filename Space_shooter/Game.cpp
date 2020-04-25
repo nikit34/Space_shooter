@@ -74,6 +74,9 @@ void Game::InitTextures() {
 	temp.loadFromFile("Textures/enemyMoveLeftShoot.png");
 	this->enemyTextures.add(Texture(temp));
 
+	temp.loadFromFile("Textures/Guns/enemyBullet.png");
+	this->enemyBulletTextures.add(Texture(temp));
+
 	// Init Accessory Textures
 	std::ifstream in;
 
@@ -231,6 +234,7 @@ void Game::Update(const float &dt) {
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
 				this->enemyTextures, 
+				this->enemyBulletTextures,
 				this->window->getSize(), 
 				Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f), 
@@ -359,6 +363,11 @@ void Game::Update(const float &dt) {
 		// Update Enemies
 		for (size_t i = 0; i < this->enemies.size(); i++) {
 			this->enemies[i].Update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
+
+			// Enemy bullet update
+			for (size_t k = 0; k < this->enemies[i].getBullets().size(); k++) {
+				this->enemies[i].getBullets()[k].Update(dt);
+			}
 
 			// Eneny player collision
 			for (size_t k = 0; k < this->players.size(); k++)
