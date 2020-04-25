@@ -7,8 +7,7 @@ public:
 	Enemy(dArr<Texture> &textures, 
 		Vector2u windowBounds, 
 		Vector2f position,
-		Vector2f direction, 
-		Vector2f scale, 
+		Vector2f direction,
 		int type, 
 		int scalar, 
 		int playerFollowNr

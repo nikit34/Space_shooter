@@ -198,11 +198,13 @@ void Game::UpdateUIPlayer(int index) {
 void Game::UpdateUIEnemy(int index) {
 	this->enemyText.setPosition(
 		this->enemies[index].getPosition().x, 
-		this->enemies[index].getPosition().y);
+		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
+	);
 	this->enemyText.setString(
 		std::to_string(this->enemies[index].getHp())
 		+ "/" +
-		std::to_string(this->enemies[index].getHpMax()));
+		std::to_string(this->enemies[index].getHpMax())
+	);
 	this->enemies[index].Draw(*this->window);
 }
 
@@ -232,7 +234,6 @@ void Game::Update(const float &dt) {
 				this->window->getSize(), 
 				Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f), 
-				Vector2f(0.3f, 0.3f), 
 				rand() % 3, 
 				this->players[(rand() % this->playersAlive)].getLevel(), 
 				rand() % this->playersAlive)

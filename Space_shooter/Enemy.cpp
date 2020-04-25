@@ -6,28 +6,23 @@ Enemy::Enemy(dArr<Texture>& textures,
 	Vector2u windowBounds, 
 	Vector2f position,
 	Vector2f moveDirection,
-	Vector2f scale, 
 	int type, 
 	int scalar, 
 	int playerFollowNr
 ) {
 	
 	this->dtMultiplier = 60.f;
-	this->textures = &textures;
+	
 	this->windowBounds = windowBounds;
 
+	this->textures = &textures;
 	this->type = type;
 
 	this->sprite.setTexture((*this->textures)[this->type]);
-	this->sprite.setScale(scale);
 	this->sprite.setRotation(270);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2
-	);
-	this->sprite.setPosition(
-		this->windowBounds.x,
-		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
 	);
 
 	this->maxVelocity = maxVelocity;
@@ -40,6 +35,7 @@ Enemy::Enemy(dArr<Texture>& textures,
 	switch (this->type)
 	{
 	case MOVELEFT:
+		this->sprite.setScale(Vector2f(0.4f, 0.4f));
 		this->hpMax = (rand() % 5 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 3 + 1) * scalar;
@@ -47,6 +43,7 @@ Enemy::Enemy(dArr<Texture>& textures,
 		this->maxVelocity = rand() % 20 + 5;
 		break;
 	case FOLLOW:
+		this->sprite.setScale(Vector2f(0.3f, 0.3f));
 		this->hpMax = (rand() % 3 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
@@ -54,6 +51,7 @@ Enemy::Enemy(dArr<Texture>& textures,
 		this->maxVelocity = 9;
 		break;
 	case MOVELEFTSHOOT:
+		this->sprite.setScale(Vector2f(0.35f, 0.35f));
 		this->hpMax = (rand() % 3 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
@@ -61,11 +59,11 @@ Enemy::Enemy(dArr<Texture>& textures,
 		this->maxVelocity = 13;
 		break;
 	default:
-		this->hpMax = (rand() % 3 + 1) * scalar;
+		this->hpMax = (rand() % 2 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = 15;
+		this->maxVelocity = 20;
 		break;
 	}
 
@@ -76,6 +74,11 @@ Enemy::Enemy(dArr<Texture>& textures,
 	this->damageMin = damageMin;
 
 	this->playerFollowNr = playerFollowNr;
+
+	this->sprite.setPosition(
+		this->windowBounds.x,
+		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
+	);
 }
 
 Enemy::~Enemy() {}
@@ -124,10 +127,8 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 		break;
 
 	case MOVELEFTSHOOT:
-		if (this->sprite.getPosition().x > playerPosition.x) {
-			this->lookDirection.x = playerPosition.x - this->sprite.getPosition().x;
-			this->lookDirection.y = playerPosition.y - this->sprite.getPosition().y;
-		}
+		this->lookDirection.x = playerPosition.x - this->sprite.getPosition().x;
+		this->lookDirection.y = playerPosition.y - this->sprite.getPosition().y;
 		
 		this->normalizedLookDir = normalize(this->lookDirection, vectorLength(this->lookDirection));
 
