@@ -4,21 +4,24 @@
 
 class Enemy {
 public:
-	Enemy(dArr<Texture> &textures, Vector2u windowBounds, Vector2f position,
-		Vector2f direction, Vector2f scale, int type, int scalar, int playerFollowNr);
+	Enemy(dArr<Texture> &textures, 
+		Vector2u windowBounds, 
+		Vector2f position,
+		Vector2f direction, 
+		Vector2f scale, 
+		int type, 
+		int scalar, 
+		int playerFollowNr
+	);
 
 	virtual ~Enemy();
 
 	// Accessors
-	inline const int getDamage() const {
-		return rand() % this->damageMax + this->damageMin;
-	}
+	inline const int getDamage() const { return rand() % this->damageMax + this->damageMin; }
 	inline const int getHp() const { return this->hp; }
 	inline const int getHpMax() const { return this->hpMax; }
 	inline const bool isDead() const { return this->hp <= 0; }
-	inline FloatRect getGlobalBounds() const {
-		return this->sprite.getGlobalBounds();
-	}
+	inline FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline Vector2f getPosition() const { return this->sprite.getPosition(); }
 	inline const int& getPlayerFollowNr() const { return this->playerFollowNr; }
 
@@ -28,9 +31,7 @@ public:
 	void Update(const float &dt, Vector2f playerPosition);
 	void Draw(RenderTarget& target);
 
-	float vectorLength(Vector2f v) {
-		return sqrt(pow(v.x, 2) + pow(v.y, 2));
-	}
+	float vectorLength(Vector2f v) { return sqrt(pow(v.x, 2) + pow(v.y, 2)); }
 
 	Vector2f normalize(Vector2f v, float length) {
 		if (length == 0)

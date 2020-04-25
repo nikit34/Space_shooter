@@ -7,7 +7,8 @@ TextTag::TextTag(Font *font,
 	Vector2f direction,
 	unsigned int size, 
 	float timerMax,
-	bool accelerate) {
+	bool accelerate
+) {
 	this->dtMultiplier = 60.f;
 
 	this->text.setFont(*font);
@@ -24,9 +25,7 @@ TextTag::TextTag(Font *font,
 	this->accelerate = accelerate;
 }
 
-TextTag::~TextTag() {
-
-}
+TextTag::~TextTag() {}
 
 void TextTag::Update(const float& dt) {
 	// Update timer

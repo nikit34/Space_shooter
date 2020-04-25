@@ -24,6 +24,7 @@ public:
 		unsigned int size,
 		float timerMax,
 		bool accelerate);
+
 	virtual ~TextTag();
 
 	inline const float& getTimer()const { return this->timer; }

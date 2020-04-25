@@ -3,13 +3,6 @@
 
 template<typename T>
 class dArr {
-private:
-	unsigned cap;
-	unsigned nrOfEl;
-	T** arr;
-
-	void initialize(unsigned from);
-	void expand();
 public:
 	dArr(unsigned size = 5);
 	dArr(const dArr& obj);
@@ -22,6 +15,14 @@ public:
 	void remove(int index);
 	unsigned size() const;
 	void clear();
+
+private:
+	unsigned cap;
+	unsigned nrOfEl;
+	T** arr;
+
+	void initialize(unsigned from);
+	void expand();
 };
 
 template<typename T>

@@ -10,10 +10,12 @@ public:
 		dArr<Texture>& cPitTextures, 
 		dArr<Texture>& auraTextures,
 		Vector2u windowBounds,
-		int UP = 22, int DOWN = 18,
-		int LEFT = 0, int RIGHT = 3,
+		int UP = 22, 
+		int DOWN = 18,
+		int LEFT = 0, 
+		int RIGHT = 3,
 		int SHOOT = 57
-		);
+	);
 
 	virtual ~Player();
 

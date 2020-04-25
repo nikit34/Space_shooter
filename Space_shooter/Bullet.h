@@ -7,9 +7,15 @@ class Bullet {
 public:
 	// scale - маштабирование | direction - направление | acceleration -
 	// ускорение
-	Bullet(Texture* texture, Vector2f position, Vector2f scale,
-		Vector2f direction, float initialVelocity, float maxVelocity,
-		float acceleration);
+	Bullet(Texture* texture, 
+		Vector2f position, 
+		Vector2f scale,
+		Vector2f direction, 
+		float initialVelocity, 
+		float maxVelocity,
+		float acceleration
+	);
+
 	virtual ~Bullet();
 
 	// Accessors

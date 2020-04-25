@@ -1,8 +1,13 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Texture* texture, Vector2f position, Vector2f scale,
-	Vector2f direction, float initialVelocity, float maxVelocity,
-	float acceleration) {
+Bullet::Bullet(Texture* texture, 
+	Vector2f position, 
+	Vector2f scale,
+	Vector2f direction, 
+	float initialVelocity, 
+	float maxVelocity,
+	float acceleration
+) {
 	this->dtMultiplier = 60.f;
 	this->texture = texture;
 	this->sprite.setTexture(*this->texture);

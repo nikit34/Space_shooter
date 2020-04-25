@@ -6,6 +6,12 @@ Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(60);
 	this->dtMultiplier = 60.f;
+	this->scoreMultiplier = 1;
+	this->score = 0;
+	this->multiplierAdder = 0;
+	this->multiplierAdderMax = 10;
+	this->multiplierTimerMax = 100.f;
+	this->multiplierTimer = this->multiplierTimerMax;
 
 	// Init fonts
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
@@ -14,18 +20,28 @@ Game::Game(RenderWindow* window) {
 	this->InitTextures();
 
 	// Init Players
-	this->players.add(Player(this->textures,
-		this->lWingTextures, this->rWingTextures,
-		this->cPitTextures, this->areaTextures,
-		this->window->getSize()));
+	this->players.add(Player(
+		this->textures,
+		this->lWingTextures, 
+		this->rWingTextures,
+		this->cPitTextures, 
+		this->areaTextures,
+		this->window->getSize()
+	));
 
-	this->players.add(Player(this->textures,
-		this->lWingTextures, this->rWingTextures,
-		this->cPitTextures, this->areaTextures,
+	this->players.add(Player(
+		this->textures,
+		this->lWingTextures,
+		this->rWingTextures,
+		this->cPitTextures,
+		this->areaTextures,
 		this->window->getSize(),
 		Keyboard::Numpad8,
-		Keyboard::Numpad5, Keyboard::Numpad4,
-		Keyboard::Numpad6, Keyboard::Numpad1));
+		Keyboard::Numpad5,
+		Keyboard::Numpad4,
+		Keyboard::Numpad6,
+		Keyboard::Numpad1
+	));
 
 	this->playersAlive = this->players.size();
 
@@ -141,7 +157,7 @@ void Game::InitUI() {
 		this->window->getSize().y / 2);
 
 	this->scoreText.setFont(this->font);
-	this->scoreText.setFillColor(Color::White);
+	this->scoreText.setFillColor(Color(200,200,200,150));
 	this->scoreText.setCharacterSize(32);
 	this->scoreText.setString("Score: 0");
 	this->scoreText.setPosition(10.f, 10.f);
@@ -193,11 +209,31 @@ void Game::Update(const float &dt) {
 		if (this->enemySpawnTimer < this->enemySpawnTimerMax) 
 			this->enemySpawnTimer += 1.f * dt * this->dtMultiplier;
 
+		// Score timer and multipliers
+		if (this->multiplierTimer > 0.f) {
+			this->multiplierTimer -= 1.f * dt * this->dtMultiplier;
+			
+			if (this->multiplierTimer <= 0.f) {
+				this->multiplierTimer = 0.f;
+				this->multiplierAdder = 0;
+				this->scoreMultiplier = 1;
+			}
+		}
+
+		this->scoreMultiplier = this->multiplierAdder / this->multiplierAdderMax + 1;
+
 		// Spawn enemies
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
-				this->enemyTextures, this->window->getSize(), Vector2f(0.f, 0.f),
-				Vector2f(-1.f, 0.f), Vector2f(0.3f, 0.3f), rand() % 2, this->players[(rand() % this->playersAlive)].getLevel(), rand() % this->playersAlive));
+				this->enemyTextures, 
+				this->window->getSize(), 
+				Vector2f(0.f, 0.f),
+				Vector2f(-1.f, 0.f), 
+				Vector2f(0.3f, 0.3f), 
+				rand() % 2, 
+				this->players[(rand() % this->playersAlive)].getLevel(), 
+				rand() % this->playersAlive)
+			);
 
 			this->enemySpawnTimer = 0;  // Reset timer
 		}
@@ -243,10 +279,24 @@ void Game::Update(const float &dt) {
 								int exp = this->enemies[j].getHpMax()
 									+ (rand() % this->enemies[j].getHpMax() + 1);
 								
-								// Gain score
-								int score = this->enemies[j].getHpMax();
+								// Gain score & reset multiplier timer
+								this->multiplierTimer = this->multiplierTimerMax;
+								int score = this->enemies[j].getHpMax() * this->scoreMultiplier;
+								this->multiplierAdder++;
 								this->players[i].gainScore(score);
 								
+								// Score text tag
+								this->textTags.add(TextTag(
+									&this->font,
+									"+ " + std::to_string(score) + "  ( x " + std::to_string(this->scoreMultiplier) + " )",
+									Color::White,
+									Vector2f(90.f, 10.f),
+									Vector2f(1.f, 0.f),
+									30,
+									30.f,
+									true
+								));
+
 								if (this->players[i].gainExp(exp)){
 									// Create text tag
 									this->textTags.add(TextTag(
@@ -257,7 +307,7 @@ void Game::Update(const float &dt) {
 											this->players[i].getPosition().y - 20.f),
 										Vector2f(0.f, 1.f),
 										30,
-										20.f,
+										40.f,
 										true
 									));
 								}
@@ -273,7 +323,7 @@ void Game::Update(const float &dt) {
 										this->players[i].getPosition().y - 20.f),
 									Vector2f(0.f, 1.f),
 									28,
-									20.f,
+									30.f,
 									true
 								));
 							}
@@ -293,7 +343,13 @@ void Game::Update(const float &dt) {
 			// Update score
 			this->score = 0;
 			this->score += this->players[i].getScore();
-			this->scoreText.setString(std::to_string(this->score));
+			this->scoreText.setString(
+				"Score: " + std::to_string(this->score) +
+				"\nMultiplier: " + std::to_string(this->scoreMultiplier) +
+				"\nMultiplier Timer: " + std::to_string((int)this->multiplierTimer) +
+				"\nNew Multiplier: " + std::to_string(this->multiplierAdder) + 
+				" / " + std::to_string(this->multiplierAdderMax)
+			);
 		}
 
 		// Update Enemies

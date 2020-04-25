@@ -24,9 +24,17 @@ public:
 	void Draw();
 
 private:
+	// Game
 	RenderWindow* window;
 	float dtMultiplier;
+	
+	// Score
 	unsigned score;
+	unsigned scoreMultiplier;
+	float multiplierTimer;
+	float multiplierTimerMax;
+	int multiplierAdder;
+	int multiplierAdderMax;
 
 	// Text
 	Font font;
