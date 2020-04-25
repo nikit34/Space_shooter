@@ -46,8 +46,10 @@ private:
 	dArr<Texture>* textures;
 	Sprite sprite;
 	Vector2u windowBounds;
-	Vector2f direction;
-	Vector2f normalizedDir;
+	Vector2f moveDirection;
+	Vector2f normalizedMoveDir;
+	Vector2f lookDirection;
+	Vector2f normalizedLookDir;
 	float maxVelocity;
 
 

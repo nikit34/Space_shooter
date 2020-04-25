@@ -65,10 +65,13 @@ void Game::InitTextures() {
 	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
 	this->textures.push_back(Texture());
 	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
+
 	Texture temp;
 	temp.loadFromFile("Textures/enemyMoveLeft.png");
 	this->enemyTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/enemyFollow.png");
+	this->enemyTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/enemyMoveLeftShoot.png");
 	this->enemyTextures.add(Texture(temp));
 
 	// Init Accessory Textures
@@ -230,7 +233,7 @@ void Game::Update(const float &dt) {
 				Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f), 
 				Vector2f(0.3f, 0.3f), 
-				rand() % 2, 
+				rand() % 3, 
 				this->players[(rand() % this->playersAlive)].getLevel(), 
 				rand() % this->playersAlive)
 			);
