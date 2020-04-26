@@ -347,12 +347,12 @@ void Game::Update(const float &dt) {
 								// Add pickup
 								int pickupChance = rand() % 10;
 
-								if (pickupChance > 1)
+								if (pickupChance > 7)
 									this->pickups.add(Pickup(
 										&this->pickupTextures,
 										this->enemies[j].getPosition(),
 										0,
-										30.f
+										100.f
 									));
 
 								this->enemies.remove(j);
@@ -455,11 +455,12 @@ void Game::Update(const float &dt) {
 					default:
 						break;
 					}
-
-					if (this->pickups[i].canDelete()) {
-						this->pickups.remove(i);
-						break;
-					}
+					this->pickups.remove(i);
+					break;
+				}
+				if (this->pickups[i].canDelete()) {
+					this->pickups.remove(i);
+					break;
 				}
 			}
 		}

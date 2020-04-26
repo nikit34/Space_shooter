@@ -34,7 +34,7 @@ bool Pickup::checkCollision(FloatRect rect) {
 void Pickup::Update(const float& dt) {
 	if (this->aliveTimer < this->aliveTimerMax) 
 		this->aliveTimer += 1.f * dt * this->dtMultiplier;
-	
+
 	this->sprite.rotate(5.f * dt * this->dtMultiplier);
 }
 
