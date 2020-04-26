@@ -6,6 +6,7 @@ enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT };
 enum weapons { LASER = 0, MISSILE01, MISSILE02 };
 
 Player::Player(std::vector<Texture>& textures,
+	dArr<Texture>& mainGunTextures,
 	dArr<Texture>& lWingTextures,
 	dArr<Texture>& rWingTextures,
 	dArr<Texture>& cPitTextures,
@@ -33,7 +34,10 @@ Player::Player(std::vector<Texture>& textures,
 	
 	// Stats
 	this->expNext = 20 + static_cast<int>(
-		(50 / 3) * ((pow(level, 3) - 6 * pow(level, 2)) + 17 * level - 12));
+		(50 / 3) * ((pow(level, 3) - 
+		6 * pow(level, 2)) + 
+		17 * level - 12)
+	);
 	
 
 	// Update positions
@@ -59,7 +63,8 @@ Player::Player(std::vector<Texture>& textures,
 	this->laserTexture = &textures[1];
 	this->missile01Texture = &textures[2];
 
-	this->mainGunSprite.setTexture(textures[3]);
+	this->mainGunTextures = &mainGunTextures;
+	this->mainGunSprite.setTexture((*this->mainGunTextures)[0]);
 	this->mainGunSprite.setOrigin(
 		this->mainGunSprite.getGlobalBounds().width / 2,
 		this->mainGunSprite.getGlobalBounds().height / 2
@@ -145,6 +150,8 @@ Player::Player(std::vector<Texture>& textures,
 	this->mainGunLevel = 0;        // mainGunLevel;
 	this->dualMissiles01 = false;   // dualMissiles01;
 	this->dualMissiles02 = false;  // dualMissiles02;
+
+	this->setGunLevel(1);
 
 	// Add number to players for coop
 	this->playerNr = Player::players;
@@ -394,32 +401,94 @@ void Player::Combat(const float& dt) {
 			if (this->mainGunLevel == 0) {
 				// Create bullet
 				this->bullets.add(Bullet(
-					laserTexture, Vector2f(this->playerCenter.x, this->playerCenter.y),
-					Vector2f(0.5f, 0.5f), Vector2f(1.f, 0.f), 2.f, 70.f, 2.f));
+					laserTexture, 
+					Vector2f(this->playerCenter.x, this->playerCenter.y),
+					Vector2f(0.5f, 0.5f), 
+					Vector2f(1.f, 0.f), 
+					2.f, 
+					70.f, 
+					2.f
+				));
 			}
 			else if (this->mainGunLevel == 1) {
+				this->bullets.add(Bullet(
+					laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
+					Vector2f(0.5f, 0.5f),
+					Vector2f(1.f, 0.f),
+					2.f,
+					70.f,
+					2.f
+				));
+				this->bullets.add(Bullet(
+					laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
+					Vector2f(0.5f, 0.5f),
+					Vector2f(1.f, 0.f),
+					2.f,
+					70.f,
+					2.f
+				));
 			}
 			else if (this->mainGunLevel == 2) {
+				this->bullets.add(Bullet(
+					laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y - 5.f),
+					Vector2f(0.5f, 0.5f),
+					Vector2f(1.f, 0.f),
+					2.f,
+					70.f,
+					2.f
+				));
+				this->bullets.add(Bullet(
+					laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y),
+					Vector2f(0.5f, 0.5f),
+					Vector2f(1.f, 0.f),
+					2.f,
+					70.f,
+					2.f
+				));
+				this->bullets.add(Bullet(
+					laserTexture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y + 5.f),
+					Vector2f(0.5f, 0.5f),
+					Vector2f(1.f, 0.f),
+					2.f,
+					70.f,
+					2.f
+				));
 			}
 			// Animate gun
 			this->mainGunSprite.move(-30.f, 0.f);
 		}
 		else if (this->currentWeapon == MISSILE01) {
 			// Create bullet
-			this->bullets.add(
-				Bullet(missile01Texture,
-					Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
-					Vector2f(0.5f, 0.2f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
+			this->bullets.add(Bullet(
+				missile01Texture,
+				Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
+				Vector2f(0.5f, 0.2f), 
+				Vector2f(1.f, 0.f), 
+				2.f, 
+				45.f, 
+				1.f
+			));
 			
 			if (this->dualMissiles01) {
-				this->bullets.add(
-					Bullet(missile01Texture,
-						Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
-						Vector2f(0.05f, 0.02f), Vector2f(1.f, 0.f), 2.f, 45.f, 1.f));
+				this->bullets.add(Bullet(
+					missile01Texture,
+					Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
+					Vector2f(0.05f, 0.02f), 
+					Vector2f(1.f, 0.f), 
+					2.f, 
+					45.f, 
+					1.f
+				));
 			}
 		}
 		else if (this->currentWeapon == MISSILE02) {
 			if (this->dualMissiles02) {
+
 			}
 		}
 		this->shootTimer = 0;  // Reset timer
@@ -457,6 +526,11 @@ void Player::removeBullet(unsigned index) {
 	this->bullets.remove(index);
 }
 
+void Player::setGunLevel(int gunLevel) { 
+	this->mainGunLevel = gunLevel; 
+	this->mainGunSprite.setTexture((*this->mainGunTextures)[this->mainGunLevel]);
+}
+
 void Player::Update(Vector2u windowBounds, const float& dt) {
 	// Update timers
 	if (this->shootTimer < this->shootTimerMax)
@@ -485,10 +559,4 @@ void Player::Draw(RenderTarget& target) {
 	target.draw(this->rWing);
 	target.draw(this->cPit);
 	target.draw(this->mainGunSprite);
-}
-
-void Player::gainHP(int hp) {
-	this->hp += hp;
-	if (this->hp > this->hpMax)
-		this->hp = this->hpMax;
 }

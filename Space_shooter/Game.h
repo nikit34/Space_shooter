@@ -65,6 +65,7 @@ private:
 
 	// Textures
 	std::vector<Texture> textures;
+	dArr<Texture> playerMainGunTextures;
 	dArr<Texture> enemyTextures;
 	dArr<Texture> enemyBulletTextures;
 	dArr<Texture> lWingTextures;

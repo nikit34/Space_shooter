@@ -1,6 +1,6 @@
 #include "Game.h"
 
-enum textures { player = 0, laser01, missile01, mainGun01};
+enum textures { player = 0, laser01, missile01 };
 
 Game::Game(RenderWindow* window) {
 	this->window = window;
@@ -22,6 +22,7 @@ Game::Game(RenderWindow* window) {
 	// Init Players
 	this->players.add(Player(
 		this->textures,
+		this->playerMainGunTextures,
 		this->lWingTextures, 
 		this->rWingTextures,
 		this->cPitTextures, 
@@ -63,10 +64,15 @@ void Game::InitTextures() {
 	this->textures[laser01].loadFromFile("Textures/Guns/rayTex01.png");
 	this->textures.push_back(Texture());
 	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
-	this->textures.push_back(Texture());
-	this->textures[mainGun01].loadFromFile("Textures/Guns/gun01.png");
 
 	Texture temp;
+	temp.loadFromFile("Textures/Guns/gun01.png");
+	this->playerMainGunTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Guns/gun02.png");
+	this->playerMainGunTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Guns/gun03.png");
+	this->playerMainGunTextures.add(Texture(temp));
+
 	temp.loadFromFile("Textures/enemyMoveLeft.png");
 	this->enemyTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/enemyFollow.png");
@@ -307,7 +313,8 @@ void Game::Update(const float &dt) {
 								// Score text tag
 								this->textTags.add(TextTag(
 									&this->font,
-									"+ " + std::to_string(score) + "  ( x " + std::to_string(this->scoreMultiplier) + " )",
+									"+ " + std::to_string(score) + "  ( x " + 
+									std::to_string(this->scoreMultiplier) + " )",
 									Color::White,
 									Vector2f(90.f, 10.f),
 									Vector2f(1.f, 0.f),
@@ -345,14 +352,14 @@ void Game::Update(const float &dt) {
 								));
 
 								// Add pickup
-								int pickupChance = rand() % 10;
+								int pickupChance = rand() % 11;
 
-								if (pickupChance > 7)
+								if (pickupChance > 8)
 									this->pickups.add(Pickup(
 										&this->pickupTextures,
 										this->enemies[j].getPosition(),
 										0,
-										100.f
+										150.f
 									));
 
 								this->enemies.remove(j);
@@ -405,7 +412,7 @@ void Game::Update(const float &dt) {
 						// Create text tag
 						this->textTags.add(TextTag(
 							&this->font,
-							"-" + std::to_string(damage),
+							"- " + std::to_string(damage),
 							Color::Red,
 							Vector2f(this->players[k].getPosition().x + 20.f,
 								this->players[k].getPosition().y - 20.f),
@@ -444,9 +451,59 @@ void Game::Update(const float &dt) {
 			this->pickups[i].Update(dt);
 			for (size_t k = 0; k < this->players.size(); k++) {
 				if (this->pickups[i].checkCollision(this->players[k].getGlobalBounds())) {
+					int gainHp = this->players[k].getHpMax() / 5;
 					switch (this->pickups[i].getType()) {
 					case 0: // HP
-						this->players[k].gainHP(this->players[k].getHpMax() / 5);
+						if (this->players[k].getHp() < this->players[k].getHpMax()) {
+							this->players[k].gainHP(gainHp);
+
+							// Gain HP tag
+							this->textTags.add(
+								TextTag(&this->font,
+									"+ " +
+									std::to_string(gainHp) +
+									" HP",
+									Color::Green,
+									Vector2f(this->players[k].getPosition()),
+									Vector2f(0.f, -1.f),
+									24,
+									40.f,
+									true
+								)
+							);
+						}
+						else
+						{
+							// Gain exp tag
+							this->textTags.add(
+								TextTag(&this->font,
+									"+ " +
+									std::to_string(10) +
+									" EXP",
+									Color::Cyan,
+									this->pickups[i].getPosition(),
+									Vector2f(1.f, 0.f),
+									24,
+									40.f,
+									true
+								)
+							);
+							if (this->players[k].gainExp(10))
+							{
+								this->textTags.add(
+									TextTag(&this->font,
+										"LEVEL UP!",
+										Color::Cyan,
+										Vector2f(this->players[i].getPosition().x + 20.f,
+											this->players[i].getPosition().y - 20.f),
+										Vector2f(0.f, 1.f),
+										32,
+										40.f,
+										true
+									)
+								);
+							}
+						}
 						break;
 					case 1: // MISSILE
 						break;

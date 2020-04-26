@@ -5,6 +5,7 @@
 class Player {
 public:
 	Player(std::vector<Texture>& textures,
+		dArr<Texture>& mainGunTextures,
 		dArr<Texture>& lWingTextures,
 		dArr<Texture>& rWingTextures, 
 		dArr<Texture>& cPitTextures, 
@@ -40,7 +41,12 @@ public:
 	inline void gainScore(int score) { this->score += score; }
 	inline const int getScore() const { return this->score; }
 	inline bool isDamageCooldown() { return this->damageTimer < this->damageTimerMax; }
-	void gainHP(int hp);
+	inline void gainHP(int hp) {
+		this->hp += hp;
+		if (this->hp > this->hpMax)
+			this->hp = this->hpMax;
+	}
+	void setGunLevel(int gunLevel);
 
 	// Functions
 	bool UpdateLeveling();
@@ -87,6 +93,7 @@ private:
 	// Accessories
 	Sprite mainGunSprite;
 	dArr<Bullet> bullets;
+	dArr<Texture>* mainGunTextures;
 	Texture* laserTexture;
 	Texture* missile01Texture;
 	Texture* missile02Texture;
