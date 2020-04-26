@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Enemy.h"
-#include "Player.h"
+#include"Enemy.h"
+#include"Player.h"
 
 
 class Game {
@@ -10,7 +10,7 @@ public:
 	virtual ~Game();
 
 	// Accessors
-	RenderWindow& getWindow() { return *this->window; }
+	inline RenderWindow& getWindow() { return *this->window; }
 
 	// Setters
 
@@ -57,8 +57,11 @@ private:
 	// Enemies
 	dArr<Enemy> enemies;
 	std::vector<Enemy> enemiesSaved;
-	float enemySpawnTimerMax;
 	float enemySpawnTimer;
+	float enemySpawnTimerMax;
+
+	// Pickup
+	dArr<Pickup> pickups;
 
 	// Textures
 	std::vector<Texture> textures;
@@ -68,4 +71,5 @@ private:
 	dArr<Texture> rWingTextures;
 	dArr<Texture> cPitTextures;
 	dArr<Texture> areaTextures;
+	dArr<Texture> pickupTextures;
 };

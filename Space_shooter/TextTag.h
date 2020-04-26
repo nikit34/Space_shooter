@@ -1,14 +1,6 @@
 #pragma once
 
-#include"SFML\Audio.hpp"
-#include"SFML\Graphics.hpp"
-#include"SFML\System.hpp"
-#include<iostream>
-#include<vector>
-#include<cstdlib>
-#include<math.h>
-#include<fstream>
-#include"dArr.h"
+#include"Pickup.h"
 
 using namespace sf;
 
@@ -23,7 +15,8 @@ public:
 		Vector2f direction,
 		unsigned int size,
 		float timerMax,
-		bool accelerate);
+		bool accelerate
+	);
 
 	virtual ~TextTag();
 

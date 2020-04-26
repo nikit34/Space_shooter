@@ -10,7 +10,7 @@ Game::Game(RenderWindow* window) {
 	this->score = 0;
 	this->multiplierAdder = 0;
 	this->multiplierAdderMax = 10;
-	this->multiplierTimerMax = 100.f;
+	this->multiplierTimerMax = 200.f;
 	this->multiplierTimer = this->multiplierTimerMax;
 
 	// Init fonts
@@ -29,7 +29,7 @@ Game::Game(RenderWindow* window) {
 		this->window->getSize()
 	));
 
-	this->players.add(Player(
+	/*this->players.add(Player(
 		this->textures,
 		this->lWingTextures,
 		this->rWingTextures,
@@ -41,7 +41,7 @@ Game::Game(RenderWindow* window) {
 		Keyboard::Numpad4,
 		Keyboard::Numpad6,
 		Keyboard::Numpad1
-	));
+	));*/
 
 	this->playersAlive = this->players.size();
 
@@ -76,6 +76,13 @@ void Game::InitTextures() {
 
 	temp.loadFromFile("Textures/Guns/enemyBullet.png");
 	this->enemyBulletTextures.add(Texture(temp));
+
+	temp.loadFromFile("Textures/Pickups/hpSupply.png");
+	this->pickupTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Pickups/missileSupply.png");
+	this->pickupTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Pickups/missileHSupply.png");
+	this->pickupTextures.add(Texture(temp));
 
 	// Init Accessory Textures
 	std::ifstream in;
@@ -228,7 +235,10 @@ void Game::Update(const float &dt) {
 			}
 		}
 
-		this->scoreMultiplier = this->multiplierAdder / this->multiplierAdderMax + 1;
+		if (this->multiplierAdder >= this->multiplierAdderMax) {
+			this->multiplierAdder = 0;
+			this->scoreMultiplier++;
+		}
 
 		// Spawn enemies
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
@@ -271,7 +281,7 @@ void Game::Update(const float &dt) {
 								this->textTags.add(TextTag(
 									&this->font,
 									"- " + std::to_string(damage),
-									Color::Green,
+									Color::Red,
 									Vector2f(this->enemies[j].getPosition().x + 20.f,
 										this->enemies[j].getPosition().y - 20.f),
 									Vector2f(1.f, 0.f),
@@ -283,15 +293,16 @@ void Game::Update(const float &dt) {
 
 							// Enemy dead
 							if (this->enemies[j].getHp() <= 0) {
-								// Gain exp
-								int exp = this->enemies[j].getHpMax()
-									+ (rand() % this->enemies[j].getHpMax() + 1);
-								
 								// Gain score & reset multiplier timer
 								this->multiplierTimer = this->multiplierTimerMax;
 								int score = this->enemies[j].getHpMax() * this->scoreMultiplier;
 								this->multiplierAdder++;
 								this->players[i].gainScore(score);
+
+								// Gain exp
+								int exp = this->enemies[j].getHpMax()
+									+ (rand() % this->enemies[j].getHpMax() + 1) 
+									* this->scoreMultiplier;
 								
 								// Score text tag
 								this->textTags.add(TextTag(
@@ -319,21 +330,32 @@ void Game::Update(const float &dt) {
 										true
 									));
 								}
-								this->enemies.remove(j);
 
-								// Gain exp tag
-								// Create text tag
 								this->textTags.add(TextTag(
 									&this->font,
-									"+ " + std::to_string(damage) + " exp",
+									"+ " + std::to_string(exp) + 
+									" ( x" + std::to_string(this->scoreMultiplier) +
+									" ) EXP",
 									Color::Cyan,
-									Vector2f(this->players[i].getPosition().x - 10.f,
-										this->players[i].getPosition().y - 20.f),
-									Vector2f(0.f, 1.f),
-									28,
-									30.f,
+									Vector2f(this->enemies[j].getPosition()),
+									Vector2f(1.f, 0.f),
+									24,
+									40.f,
 									true
 								));
+
+								// Add pickup
+								int pickupChance = rand() % 10;
+
+								if (pickupChance > 1)
+									this->pickups.add(Pickup(
+										&this->pickupTextures,
+										this->enemies[j].getPosition(),
+										0,
+										30.f
+									));
+
+								this->enemies.remove(j);
 							}
 							return;
 						}
@@ -353,7 +375,7 @@ void Game::Update(const float &dt) {
 			this->score += this->players[i].getScore();
 			this->scoreText.setString(
 				"Score: " + std::to_string(this->score) +
-				"\nMultiplier: " + std::to_string(this->scoreMultiplier) +
+				"\nMultiplier: " + std::to_string(this->scoreMultiplier) + "x" +
 				"\nMultiplier Timer: " + std::to_string((int)this->multiplierTimer) +
 				"\nNew Multiplier: " + std::to_string(this->multiplierAdder) + 
 				" / " + std::to_string(this->multiplierAdderMax)
@@ -416,6 +438,31 @@ void Game::Update(const float &dt) {
 				break;
 			}
 		}
+
+		// Update pickups
+		for (size_t i = 0; i < this->pickups.size(); i++) {
+			this->pickups[i].Update(dt);
+			for (size_t k = 0; k < this->players.size(); k++) {
+				if (this->pickups[i].checkCollision(this->players[k].getGlobalBounds())) {
+					switch (this->pickups[i].getType()) {
+					case 0: // HP
+						this->players[k].gainHP(this->players[k].getHpMax() / 5);
+						break;
+					case 1: // MISSILE
+						break;
+					case 2: // HMISSILE
+						break;
+					default:
+						break;
+					}
+
+					if (this->pickups[i].canDelete()) {
+						this->pickups.remove(i);
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -456,6 +503,12 @@ void Game::Draw() {
 		// UI
 		this->UpdateUIEnemy(i);
 		this->window->draw(this->enemyText);
+	}
+
+	// Draw pickups
+	for (size_t i = 0; i < this->pickups.size(); i++)
+	{
+		this->pickups[i].Draw(*this->window);
 	}
 
 	this->DrawUI();

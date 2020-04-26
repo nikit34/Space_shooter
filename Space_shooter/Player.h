@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bullet.h"
+#include"Bullet.h"
 
 class Player {
 public:
@@ -40,6 +40,7 @@ public:
 	inline void gainScore(int score) { this->score += score; }
 	inline const int getScore() const { return this->score; }
 	inline bool isDamageCooldown() { return this->damageTimer < this->damageTimerMax; }
+	void gainHP(int hp);
 
 	// Functions
 	bool UpdateLeveling();

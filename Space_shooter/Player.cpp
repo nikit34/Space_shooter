@@ -486,3 +486,9 @@ void Player::Draw(RenderTarget& target) {
 	target.draw(this->cPit);
 	target.draw(this->mainGunSprite);
 }
+
+void Player::gainHP(int hp) {
+	this->hp += hp;
+	if (this->hp > this->hpMax)
+		this->hp = this->hpMax;
+}
