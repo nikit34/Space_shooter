@@ -148,10 +148,12 @@ Player::Player(std::vector<Texture>& textures,
 
 	// Upgrades
 	this->mainGunLevel = 0;        // mainGunLevel;
+	this->piercingShot = false;
+	this->shield = false;
 	this->dualMissiles01 = false;   // dualMissiles01;
 	this->dualMissiles02 = false;  // dualMissiles02;
 
-	this->setGunLevel(1);
+	this->setGunLevel(0);
 
 	// Add number to players for coop
 	this->playerNr = Player::players;

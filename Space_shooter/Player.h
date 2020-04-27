@@ -25,8 +25,7 @@ public:
 	void removeBullet(unsigned index);
 	inline const int getBulletsSize() const { return this->bullets.size(); }
 	inline const Vector2f& getPosition() const { return this->sprite.getPosition(); }
-	inline const String getHpAsString() const {
-		return std::to_string(this->hp) + "/" + std::to_string(this->hpMax); }
+	inline const String getHpAsString() const { return std::to_string(this->hp) + "/" + std::to_string(this->hpMax); }
 	int getDamage() const;
 	inline FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline const int& getHp() const { return this->hp; }
@@ -47,6 +46,12 @@ public:
 			this->hp = this->hpMax;
 	}
 	void setGunLevel(int gunLevel);
+	inline void enablePiercingShot() { this->piercingShot = true; }
+	inline void enableShield() { this->shield = true; }
+	inline void enableDualMissiles01() { this->dualMissiles01 = true; }
+	inline void enableDualMissiles02() { this->dualMissiles02 = true; }
+	inline void upgradeHP() { this->hpMax += 10; this->hp = this->hpMax; }
+	inline bool getPiercingShot() const { return this->piercingShot; }
 
 	// Functions
 	bool UpdateLeveling();
@@ -138,10 +143,12 @@ private:
 
 	int score;
 
-	// Upgrades
 	int currentWeapon;
 
+	// Upgrades
 	int mainGunLevel;
+	bool piercingShot;
+	bool shield;
 	bool dualMissiles01;
 	bool dualMissiles02;
 };

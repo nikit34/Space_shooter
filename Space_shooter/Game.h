@@ -56,12 +56,14 @@ private:
 
 	// Enemies
 	dArr<Enemy> enemies;
-	std::vector<Enemy> enemiesSaved;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 
 	// Pickup
 	dArr<Pickup> pickups;
+
+	// Upgrades
+	dArr<Upgrade> upgrades;
 
 	// Textures
 	std::vector<Texture> textures;
@@ -73,4 +75,5 @@ private:
 	dArr<Texture> cPitTextures;
 	dArr<Texture> areaTextures;
 	dArr<Texture> pickupTextures;
+	dArr<Texture> upgradeTextures;
 };

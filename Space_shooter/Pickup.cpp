@@ -1,14 +1,14 @@
 #include"Pickup.h"
 
 Pickup::Pickup(
-	dArr<Texture>* textures,
+	dArr<Texture>& textures,
 	Vector2f position,
 	int type,
 	float duration
 ) {
 	this->dtMultiplier = 60.f;
 
-	this->textures = textures;
+	this->textures = &textures;
 	this->type = type;
 
 	this->sprite.setTexture((*this->textures)[this->type]);
