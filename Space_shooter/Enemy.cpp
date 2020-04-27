@@ -3,7 +3,8 @@
 enum eTypes { MOVELEFT = 0, FOLLOW, MOVELEFTSHOOT, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
 enum bulletTypes { REGULAR = 0, MISSILE };
 
-Enemy::Enemy(dArr<Texture>& textures, 
+Enemy::Enemy(
+	dArr<Texture>& textures, 
 	dArr<Texture>& bulletTextures,
 	Vector2u windowBounds, 
 	Vector2f position,

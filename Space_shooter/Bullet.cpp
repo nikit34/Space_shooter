@@ -1,6 +1,7 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Texture* texture, 
+Bullet::Bullet(
+	Texture* texture, 
 	Vector2f position, 
 	Vector2f scale,
 	Vector2f direction, 

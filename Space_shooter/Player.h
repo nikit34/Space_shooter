@@ -52,6 +52,7 @@ public:
 	inline void enableDualMissiles02() { this->dualMissiles02 = true; }
 	inline void upgradeHP() { this->hpMax += 10; this->hp = this->hpMax; }
 	inline bool getPiercingShot() const { return this->piercingShot; }
+	inline const int& getGunLevel() const { return this->mainGunLevel; }
 
 	// Functions
 	bool UpdateLeveling();

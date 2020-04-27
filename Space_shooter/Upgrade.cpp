@@ -1,8 +1,9 @@
 #include"Upgrade.h"
 
-Upgrade::Upgrade(dArr<Texture> &textures, 
+Upgrade::Upgrade(
+	dArr<Texture> &textures,
+	Vector2f position,
 	int type, 
-	Vector2f position, 
 	float aliveTimerMax
 ) {
 	this->dtMultiplier = 60.f;

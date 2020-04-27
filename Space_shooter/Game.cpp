@@ -388,10 +388,10 @@ void Game::Update(const float &dt) {
 
 								// Add upgrade
 								int dropChance = rand() % 101;
-								if (dropChance > 60) {
+								if (dropChance > 80) {
 									// Add pickup
-									dropChance = rand() % 101;
-									if (dropChance > 60)
+									dropChance = rand() % 100 + 1;
+									if (dropChance > 80)
 										this->pickups.add(Pickup(
 											this->pickupTextures,
 											this->enemies[j].getPosition(),
@@ -401,16 +401,15 @@ void Game::Update(const float &dt) {
 								}
 								else {
 									// Add pickup
-									dropChance = rand() % 101;
-									if (dropChance > 10)
+									dropChance = rand() % 100 + 1;
+									if (dropChance > 95)
 										this->upgrades.add(Upgrade(
 											this->upgradeTextures,
 											this->enemies[j].getPosition(),
 											rand() % 5,
 											500.f
 										));
-								}
-								
+								}		
 								this->enemies.remove(j);
 							}
 							return;
@@ -477,7 +476,6 @@ void Game::Update(const float &dt) {
 						// Player death
 						if (!this->players[k].isAlive())
 							this->playersAlive--;
-
 						return;
 					}
 				}
@@ -513,29 +511,102 @@ void Game::Update(const float &dt) {
 					switch (this->upgrades[i].getType()) {
 
 					case 0: // Doubleray
-						this->players[k].setGunLevel(1);
+						if(this->players[k].getGunLevel() < 1)
+							this->players[k].setGunLevel(1);
+
+						// DR text tag
+						this->textTags.add(
+							TextTag(&this->font,
+								"DOUBLE RAY UPGRADE",
+								Color::Yellow,
+								Vector2f(this->players[k].getPosition()),
+								Vector2f(1.f, 0.f),
+								40,
+								100.f,
+								true
+							)
+						);
 						break;
 
 					case 1: // Tripleray
-						this->players[k].setGunLevel(2);
+						if (this->players[k].getGunLevel() < 2)
+							this->players[k].setGunLevel(2);
+						
+						// TR text tag
+						this->textTags.add(
+							TextTag(&this->font,
+								"TRIPLE RAY UPGRADE",
+								Color::Yellow,
+								Vector2f(this->players[k].getPosition()),
+								Vector2f(1.f, 0.f),
+								40,
+								100.f,
+								true
+							)
+						);
 						break;
 
 					case 2: // Piercing
 						this->players[k].enablePiercingShot();
+
+						// PS text tag
+						this->textTags.add(
+							TextTag(&this->font,
+								"PIERCING SHOT UPGRADE",
+								Color::Yellow,
+								Vector2f(this->players[k].getPosition()),
+								Vector2f(1.f, 0.f),
+								40,
+								100.f,
+								true
+							)
+						);
 						break;
 					
 					case 3: // Shield
 						this->players[k].enableShield();
+
+						// SH text tag
+						this->textTags.add(
+							TextTag(&this->font,
+								"SHIELD UPGRADE",
+								Color::Yellow,
+								Vector2f(this->players[k].getPosition()),
+								Vector2f(1.f, 0.f),
+								40,
+								100.f,
+								true
+							)
+						);
 						break;
 					
 					case 4: // healthtank
 						this->players[k].upgradeHP();
+
+						// HT text tag
+						this->textTags.add(
+							TextTag(&this->font,
+								"PERMANENT HEALTH UPGRADE",
+								Color::Yellow,
+								Vector2f(this->players[k].getPosition()),
+								Vector2f(1.f, 0.f),
+								40,
+								100.f,
+								true
+							)
+						);
 						break;
 					
 					default:
 						break;
 					}
+					this->upgrades.remove(i);
+					return;
 				}
+			}
+			if (this->upgrades[i].canDelete()) {
+				this->upgrades.remove(i);
+				break;
 			}
 
 		}
@@ -593,8 +664,8 @@ void Game::Update(const float &dt) {
 									TextTag(&this->font,
 										"LEVEL UP!",
 										Color::Cyan,
-										Vector2f(this->players[i].getPosition().x + 20.f,
-											this->players[i].getPosition().y - 20.f),
+										Vector2f(this->players[k].getPosition().x + 20.f,
+											this->players[k].getPosition().y - 20.f),
 										Vector2f(0.f, 1.f),
 										32,
 										40.f,
@@ -612,13 +683,12 @@ void Game::Update(const float &dt) {
 						break;
 					}
 					this->pickups.remove(i);
-					break;
+					return;
 				}
-
-				if (this->pickups[i].canDelete()) {
-					this->pickups.remove(i);
-					break;
-				}
+			}
+			if (this->pickups[i].canDelete()) {
+				this->pickups.remove(i);
+				break;
 			}
 		}
 	}

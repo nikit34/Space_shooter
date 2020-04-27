@@ -54,7 +54,6 @@ private:
 	float maxVelocity;
 
 	dArr<Texture>* bulletTextures;
-	Texture* bulletTexture;
 	dArr<Bullet> bullets;
 
 	float damageTimerMax;

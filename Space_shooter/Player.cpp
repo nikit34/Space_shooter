@@ -5,7 +5,8 @@ unsigned Player::players = 0;
 enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT };
 enum weapons { LASER = 0, MISSILE01, MISSILE02 };
 
-Player::Player(std::vector<Texture>& textures,
+Player::Player(
+	std::vector<Texture>& textures,
 	dArr<Texture>& mainGunTextures,
 	dArr<Texture>& lWingTextures,
 	dArr<Texture>& rWingTextures,
