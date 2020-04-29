@@ -40,20 +40,20 @@ Game::Game(RenderWindow* window) {
 		this->window->getSize()
 	));
 
-	//this->players.add(player(
-	//	this->textures,
-	//  this->playerMainGunTextures,
-	//	this->lwingtextures,
-	//	this->rwingtextures,
-	//	this->cpittextures,
-	//	this->areatextures,
-	//	this->window->getsize(),
-	//	keyboard::numpad8,
-	//	keyboard::numpad5,
-	//	keyboard::numpad4,
-	//	keyboard::numpad6,
-	//	keyboard::numpad1
-	//));
+	this->players.add(Player(
+		this->textures,
+	    this->playerMainGunTextures,
+		this->lWingTextures,
+		this->rWingTextures,
+		this->cPitTextures,
+		this->areaTextures,
+		this->window->getSize(),
+		Keyboard::Numpad8,
+		Keyboard::Numpad5,
+		Keyboard::Numpad4,
+		Keyboard::Numpad6,
+		Keyboard::Numpad1
+	));
 
 	this->playersAlive = this->players.size();
 
@@ -228,9 +228,8 @@ void Game::InitUI() {
 }
 
 void Game::UpdateUIPlayer(int index) {
-	if (index >= this->players.size())
-		std::cout << "OUT OF BOUNDS! (UPDATEUI)";
-	else { // Follow text
+	if (index < this->players.size()) {
+		// Follow text
 		this->followPlayerText.setPosition(
 			this->players[index].getPosition().x - 75.f,
 			this->players[index].getPosition().y - 5.f

@@ -382,8 +382,8 @@ void Player::Movement(Vector2u windowBounds, const float& dt) {
 		this->sprite.setPosition(this->sprite.getPosition().x, 0);
 		this->currentVelocity.y = 0.f;
 	}
-	if (this->getPosition().x + this->getGlobalBounds().width >= windowBounds.x) {
-		this->sprite.setPosition(windowBounds.x - this->getGlobalBounds().width, this->sprite.getPosition().y);
+	if (this->getPosition().x + this->getGlobalBounds().width / 2 >= windowBounds.x) {
+		this->sprite.setPosition(windowBounds.x - this->getGlobalBounds().width / 2, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
 	if (this->getPosition().y + this->getGlobalBounds().height >= windowBounds.y) {
