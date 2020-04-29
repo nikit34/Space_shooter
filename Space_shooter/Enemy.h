@@ -1,19 +1,18 @@
-#pragma once
+﻿#pragma once
 
 #include"Bullet.h"
 
 class Enemy {
 public:
-	Enemy(dArr<Texture> &textures,
+	Enemy(dArr<Texture>& textures,
 		dArr<Texture>& bulletTextures,
-		Vector2u windowBounds, 
+		Vector2u windowBounds,
 		Vector2f position,
 		Vector2f direction,
-		int type, 
-		int scalar, 
+		int type,
+		int scalar,
 		int playerFollowNr
 	);
-
 	virtual ~Enemy();
 
 	// Accessors

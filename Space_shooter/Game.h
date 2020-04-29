@@ -15,6 +15,7 @@ public:
 	// Setters
 
 	// Functions
+	void toggleFullscreen();
 	void InitTextures();
 	void InitUI();
 	void UpdateUIPlayer(int index);
@@ -27,15 +28,25 @@ private:
 	// Game
 	RenderWindow* window;
 	float dtMultiplier;
+	bool paused;
+	float keyTime;
+	float keyTimeMax;
+	bool fullscreen;
 	
 	// Score
 	unsigned score;
 	unsigned scoreMultiplier;
+	Clock scoreTimer;
+	int scoreTime;
 	float multiplierTimer;
 	float multiplierTimerMax;
 	int multiplierAdder;
 	int multiplierAdderMax;
+	double bestScoreSecond;
+	float difficultyTimer;
+	int difficulty;
 
+	// UI
 	// Text
 	Font font;
 	Text followPlayerText;
@@ -43,6 +54,7 @@ private:
 	Text enemyText;
 	Text gameOverText;
 	Text scoreText;
+	Text controlsText;
 
 	// Bars
 	RectangleShape playerExpBar;
@@ -56,6 +68,7 @@ private:
 
 	// Enemies
 	dArr<Enemy> enemies;
+	std::vector<Enemy> enemiesSaved;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 

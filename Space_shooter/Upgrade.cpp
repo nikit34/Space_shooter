@@ -14,11 +14,11 @@ Upgrade::Upgrade(
 
 	this->textures = &textures;
 	this->sprite.setTexture((*this->textures)[this->type]);
-	this->sprite.setPosition(position);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2
 	);
+	this->sprite.setPosition(position);
 }
 
 Upgrade::~Upgrade() {

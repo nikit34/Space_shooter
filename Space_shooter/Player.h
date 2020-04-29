@@ -55,8 +55,9 @@ public:
 	inline const int& getGunLevel() const { return this->mainGunLevel; }
 
 	// Functions
+	void Reset();
 	bool UpdateLeveling();
-	void ChangeAccessories();
+	void ChangeAccessories(const float& dt);
 	void UpdateAccessories(const float& dt);
 	void Combat(const float& dt);
 	void Movement(Vector2u windowBounds, const float& dt);

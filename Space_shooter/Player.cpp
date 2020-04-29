@@ -216,47 +216,42 @@ bool Player::UpdateLeveling() {
 	return false;
 }
 
-void Player::ChangeAccessories() {
+void Player::ChangeAccessories(const float& dt) {
+	if (this->keyTime < this->keyTimeMax)
+		this->keyTime += 1.f * dt * this->dtMultiplier;
+
 	if (Keyboard::isKeyPressed(Keyboard::Num1) && this->keyTime >= this->keyTimeMax) {
-		if (lWingSelect < (*this->lWingTextures).size() - 1) {
+		if (lWingSelect < (*this->lWingTextures).size() - 1)
 			lWingSelect++;
-		}
-		else {
+		else
 			lWingSelect = 0;
-		}
 
 		this->lWing.setTexture((*this->lWingTextures)[lWingSelect]);
 		this->keyTime = 0;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Num2) && this->keyTime >= this->keyTimeMax) {
-		if (rWingSelect < (*this->rWingTextures).size() - 1) {
+		if (rWingSelect < (*this->rWingTextures).size() - 1)
 			rWingSelect++;
-		}
-		else {
+		else 
 			rWingSelect = 0;
-		}
 
 		this->rWing.setTexture((*this->rWingTextures)[rWingSelect]);
 		this->keyTime = 0;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Num3) && this->keyTime >= this->keyTimeMax) {
-		if (cPitSelect < (*this->cPitTextures).size() - 1) {
+		if (cPitSelect < (*this->cPitTextures).size() - 1)
 			cPitSelect++;
-		}
-		else {
+		else 
 			cPitSelect = 0;
-		}
 
 		this->cPit.setTexture((*this->cPitTextures)[cPitSelect]);
 		this->keyTime = 0;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Num4) && this->keyTime >= this->keyTimeMax) {
-		if (auraSelect < (*this->auraTextures).size() - 1) {
+		if (auraSelect < (*this->auraTextures).size() - 1)
 			auraSelect++;
-		}
-		else {
+		else
 			auraSelect = 0;
-		}
 
 		this->aura.setTexture((*this->auraTextures)[auraSelect]);
 		this->keyTime = 0;
@@ -534,6 +529,31 @@ void Player::setGunLevel(int gunLevel) {
 	this->mainGunSprite.setTexture((*this->mainGunTextures)[this->mainGunLevel]);
 }
 
+void Player::Reset() {
+	this->hpMax = 10;
+	this->hp = this->hpMax;
+	this->sprite.setPosition(Vector2f(100.f, 100.f));
+	this->bullets.clear();
+	this->setGunLevel(0);
+	this->wiring = 0;
+	this->cooling = 0;
+	this->power = 0;
+	this->plating = 0;
+	this->dualMissiles01 = false;
+	this->dualMissiles02 = false;
+	this->shield = false;
+	this->piercingShot = false;
+	this->currentVelocity.x = 0.f;
+	this->currentVelocity.y = 0.f;
+	this->level = 1;
+	this->exp = 0;
+	this->expNext = 20;
+	this->currentWeapon = LASER;
+	this->statPoints = 0;
+	this->shootTimer = this->shootTimerMax;
+	this->damageTimer = this->damageTimerMax;
+}
+
 void Player::Update(Vector2u windowBounds, const float& dt) {
 	// Update timers
 	if (this->shootTimer < this->shootTimerMax)
@@ -546,7 +566,7 @@ void Player::Update(Vector2u windowBounds, const float& dt) {
 		this->keyTime += 1 * dt * this->dtMultiplier;
 
 	this->Movement(windowBounds, dt);
-	this->ChangeAccessories();
+	this->ChangeAccessories(dt);
 	this->UpdateAccessories(dt);
 	this->Combat(dt);
 }

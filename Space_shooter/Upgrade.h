@@ -25,7 +25,7 @@ public:
 	inline const int& getType() { return this->type; }
 	inline bool canDelete() { return this->aliveTimer >= this->aliveTimerMax; }
 
-	bool checkCollision(const FloatRect rect);
+	bool checkCollision(FloatRect rect);
 
 	void Update(const float& dt);
 	void Draw(RenderTarget& target);
