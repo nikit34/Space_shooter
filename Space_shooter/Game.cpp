@@ -225,6 +225,13 @@ void Game::InitUI() {
 	this->scoreText.setCharacterSize(32);
 	this->scoreText.setString("Score: 0");
 	this->scoreText.setPosition(10.f, 10.f);
+
+	this->controlsText.setFont(this->font);
+	this->controlsText.setCharacterSize(26);
+	this->controlsText.setString(
+		"A: LEFT\nD: RIGHT\nW: UP\nS: DOWN\nSPACE: SHOOT\nRALT: SHIELD\nTAB: Stats window\nP: PAUSE/CONTROLS (START GAME)\nESC: QUIT\n1,2,3 & 4: CUSTOMIZE SHIP (CAN DO WHILE PAUSED!)\nF11: FULLSCREEN\n\nTOP-LEFT SHIP: Player number\nTOP-RIGHT SHIP: Hp/HpMax\nBOTTOM-LEFT SHIP: Level\nBOTTOM-RIGHT SHIP: Exp-bar\nBOTTOM-RIGHT SHIP: Shield-bar\n\nWARNING, SCORE-TIMER DOES NOT STOP WHEN PAUSED!"
+	);
+	this->controlsText.setPosition(50.f, 300.f);
 }
 
 void Game::UpdateUIPlayer(int index) {
