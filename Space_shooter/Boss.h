@@ -29,8 +29,15 @@ private:
 
 	class BossGun {
 	public:
-		BossGun(Texture *texture, Vector2f position) {
-
+		BossGun(Texture *texture, 
+			Vector2f position, 
+			float shootTimerMax
+		) {
+			this->shootTimerMax = shootTimerMax;
+			this->shootTimer = this->shootTimerMax;
+			
+			this->gunSprite.setTexture(*texture);
+			this->gunSprite.setPosition(position);
 		}
 
 		~BossGun() {
@@ -49,6 +56,7 @@ private:
 
 	float dtMultiplier;
 	int type;
+	int nrOfGuns;
 
 	dArr<Texture> *textures;
 	Sprite sprite;
