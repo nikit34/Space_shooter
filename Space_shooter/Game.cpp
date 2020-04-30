@@ -798,7 +798,7 @@ void Game::Update(const float& dt) {
 			this->bestScoreSecond = (double)this->score / (double)this->scoreTime;
 	}
 
-	// Restart
+	 // Restart
 	if (this->playersAlive <= 0) {
 		if (Keyboard::isKeyPressed(Keyboard::F1)) {
 			for (size_t i = 0; i < this->players.size(); i++) {

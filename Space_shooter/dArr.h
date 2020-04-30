@@ -107,7 +107,7 @@ void dArr<T>::remove(int index) {
 	if (index < 0 || index >= this->nrOfEl)
 		throw("OUT OF BOUNDS EXEPTION!");
 	delete this->arr[index];
-	this->arr[index] = this->arr[nrOfEl - 1];
+	this->arr[index] = this->arr[this->nrOfEl - 1];
 	this->arr[--nrOfEl] = nullptr;
 }
 
