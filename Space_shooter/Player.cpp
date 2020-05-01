@@ -206,14 +206,18 @@ bool Player::UpdateLeveling() {
 		this->plating++;
 		this->power++;
 
-		this->hpMax = 10 + plating * 5;
-		this->damageMax = 2 + power * 2;
-		this->damage = 1 + power;
-
+		this->UpdateStats();
 		this->hp = hpMax;
+
 		return true;
 	}
 	return false;
+}
+
+void Player::UpdateStats() {
+	this->hpMax = 10 + plating * 5;
+	this->damageMax = 2 + power * 2;
+	this->damage = 1 + power;
 }
 
 void Player::ChangeAccessories(const float& dt) {
@@ -529,6 +533,27 @@ void Player::setGunLevel(int gunLevel) {
 	this->mainGunSprite.setTexture((*this->mainGunTextures)[this->mainGunLevel]);
 }
 
+void Player::addStatPointRandom() {
+	int r = rand() % 4;
+	switch (r) {
+	case 0:
+		this->power++;
+		break;
+	case 1:
+		this->wiring++;
+		break;
+	case 2:
+		this->cooling++;
+		break;
+	case 3:
+		this->plating++;
+		break;
+	default:
+		break;
+	}
+	this->UpdateStats();
+}
+
 void Player::Reset() {
 	this->hpMax = 10;
 	this->hp = this->hpMax;
@@ -561,9 +586,6 @@ void Player::Update(Vector2u windowBounds, const float& dt) {
 
 	if (this->damageTimer < this->damageTimerMax) 
 		this->damageTimer += 1 * dt * this->dtMultiplier;
-
-	if (this->keyTime < this->keyTimeMax)
-		this->keyTime += 1 * dt * this->dtMultiplier;
 
 	this->Movement(windowBounds, dt);
 	this->ChangeAccessories(dt);

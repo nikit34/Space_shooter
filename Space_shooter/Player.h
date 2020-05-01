@@ -53,10 +53,17 @@ public:
 	inline void upgradeHP() { this->hpMax += 10; this->hp = this->hpMax; }
 	inline bool getPiercingShot() const { return this->piercingShot; }
 	inline const int& getGunLevel() const { return this->mainGunLevel; }
+	inline void resetVelocity() { this->currentVelocity = Vector2f(0.f, 0.f); }
+	inline void move(float x, float y) { this->sprite.move(x, y); this->mainGunSprite.move(x, y); }
+	inline const Vector2f getNormDir() const { return this->normDir; }
+	inline void addStatPoint() { this->statPoints++; }
+	void addStatPointRandom();
+	inline dArr<int>& getAcquiredUpgrades() { return this->upgradesAcquired; }
 
 	// Functions
 	void Reset();
 	bool UpdateLeveling();
+	void UpdateStats();
 	void ChangeAccessories(const float& dt);
 	void UpdateAccessories(const float& dt);
 	void Combat(const float& dt);
@@ -148,6 +155,7 @@ private:
 	int currentWeapon;
 
 	// Upgrades
+	dArr<int> upgradesAcquired;
 	int mainGunLevel;
 	bool piercingShot;
 	bool shield;

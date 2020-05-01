@@ -2,9 +2,6 @@
 
 #include"Pickup.h"
 
-using namespace sf;
-
-
 class TextTag
 {
 public:

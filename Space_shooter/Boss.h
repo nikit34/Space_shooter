@@ -1,20 +1,12 @@
 #pragma once
 
-#include"SFML\Audio.hpp"
-#include"SFML\Graphics.hpp"
-#include"SFML\System.hpp"
-#include<iostream>
-#include<vector>
-#include<cstdlib>
-#include<math.h>
-#include<fstream>
-#include"dArr.h"
-
-using namespace sf;
+#include"Bullet.h"
 
 class Boss {
 public:
-	Boss(dArr<Texture>& textures,
+	Boss(dArr<Texture>& bodyTextures,
+		dArr<Texture>& gunTextures,
+		dArr<Texture>& bulletTextures,
 		Vector2f position,
 		int type
 	);
@@ -23,7 +15,6 @@ public:
 	void Movement();
 	void Update(const float& dt);
 	void Draw(RenderTarget& target);
-
 
 private:
 
@@ -44,6 +35,14 @@ private:
 
 		}
 
+		void Update(const float &dt) {
+
+		}
+
+		void Draw(RenderTarget& target) {
+			target.draw(this->gunSprite);
+		}
+
 	private:
 		float dtMultiplier;
 
@@ -58,9 +57,12 @@ private:
 	int type;
 	int nrOfGuns;
 
-	dArr<Texture> *textures;
+	dArr<Texture> *bodyTextures;
+	dArr<Texture> *gunTextures;
+	dArr<Texture> *bulletTextures;
 	Sprite sprite;
 	dArr<BossGun> guns;
+	dArr<Bullet> bullets;
 
 	int damageMax;
 	int damageMin;
