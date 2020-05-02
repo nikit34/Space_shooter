@@ -13,6 +13,7 @@ Upgrade::Upgrade(
 	this->type = type;
 
 	this->textures = &textures;
+
 	this->sprite.setTexture((*this->textures)[this->type]);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,

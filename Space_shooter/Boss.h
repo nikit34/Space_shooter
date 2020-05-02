@@ -2,6 +2,8 @@
 
 #include"Bullet.h"
 
+using namespace sf;
+
 class Boss {
 public:
 	Boss(dArr<Texture>& bodyTextures,
@@ -20,8 +22,8 @@ private:
 
 	class BossGun {
 	public:
-		BossGun(Texture *texture, 
-			Vector2f position, 
+		BossGun(Texture* texture,
+			Vector2f position,
 			float shootTimerMax
 		) {
 			this->shootTimerMax = shootTimerMax;

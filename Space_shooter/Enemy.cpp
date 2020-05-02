@@ -27,8 +27,6 @@ Enemy::Enemy(
 		this->sprite.getGlobalBounds().height / 2
 	);
 
-	this->maxVelocity = maxVelocity;
-
 	this->damageTimerMax = 4.f;
 	this->damageTimer = 0;
 
@@ -104,8 +102,10 @@ void Enemy::takeDamage(int damage) {
 void Enemy::update(const float& dt, Vector2f playerPosition) {
 	switch (this->type) {
 	case MOVELEFT:
-		this->sprite.move(this->moveDirection.x * this->maxVelocity * dt * this->dtMultiplier,
-			this->moveDirection.y * this->maxVelocity * dt * this->dtMultiplier);
+		this->sprite.move(
+			this->moveDirection.x * this->maxVelocity * dt * this->dtMultiplier,
+			this->moveDirection.y * this->maxVelocity * dt * this->dtMultiplier
+		);
 
 		this->normalizedMoveDir = normalize(this->moveDirection, vectorLength(this->moveDirection));
 		break;
@@ -184,7 +184,6 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 
 void Enemy::draw(RenderTarget& target) { 
 	target.draw(this->sprite); 
-
 	for (size_t i = 0; i < this->bullets.size(); i++) {
 		this->bullets[i].draw(target);
 	}

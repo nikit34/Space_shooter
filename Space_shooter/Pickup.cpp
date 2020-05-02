@@ -12,13 +12,13 @@ Pickup::Pickup(
 	this->type = type;
 
 	this->sprite.setTexture((*this->textures)[this->type]);
-
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2
 	);
 	this->sprite.setPosition(position);
 	this->sprite.setColor(Color(255, 255, 255, 200));
+
 	this->aliveTimerMax = duration;
 	this->aliveTimer = 0;
 }

@@ -1,4 +1,4 @@
-#include "Boss.h"
+#include"Boss.h"
 
 enum textures { BODY = 0 };
 
@@ -23,7 +23,7 @@ Boss::Boss(
 		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
 		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
 		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
-		
+
 		this->sprite.setPosition(position);
 		break;
 	case 1:
