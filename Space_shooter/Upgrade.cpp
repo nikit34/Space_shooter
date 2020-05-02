@@ -31,13 +31,13 @@ bool Upgrade::checkCollision(const FloatRect rect) {
 	return false;
 }
 
-void Upgrade::Update(const float& dt) {
+void Upgrade::update(const float& dt) {
 	if (this->aliveTimer < this->aliveTimerMax)
 		this->aliveTimer += 1.f * dt * this->dtMultiplier;
 	
 	this->sprite.rotate(5.f * dt * this->dtMultiplier);
 }
 
-void Upgrade::Draw(RenderTarget& target) {
+void Upgrade::draw(RenderTarget& target) {
 	target.draw(this->sprite);
 }

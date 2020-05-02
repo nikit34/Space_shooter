@@ -101,7 +101,7 @@ void Enemy::takeDamage(int damage) {
 		this->hp = 0;
 }
 
-void Enemy::Update(const float& dt, Vector2f playerPosition) {
+void Enemy::update(const float& dt, Vector2f playerPosition) {
 	switch (this->type) {
 	case MOVELEFT:
 		this->sprite.move(this->moveDirection.x * this->maxVelocity * dt * this->dtMultiplier,
@@ -182,10 +182,10 @@ void Enemy::Update(const float& dt, Vector2f playerPosition) {
 	}
 }
 
-void Enemy::Draw(RenderTarget& target) { 
+void Enemy::draw(RenderTarget& target) { 
 	target.draw(this->sprite); 
 
 	for (size_t i = 0; i < this->bullets.size(); i++) {
-		this->bullets[i].Draw(target);
+		this->bullets[i].draw(target);
 	}
 }

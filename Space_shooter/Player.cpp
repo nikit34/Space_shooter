@@ -2,7 +2,7 @@
 
 unsigned Player::players = 0;
 
-enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AREA };
+enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AURA };
 enum weapons { LASER = 0, MISSILE01, MISSILE02 };
 
 Player::Player(
@@ -12,17 +12,21 @@ Player::Player(
 	dArr<Texture>& rWingTextures,
 	dArr<Texture>& cPitTextures,
 	dArr<Texture>& auraTextures,
-	int UP, int DOWN, int LEFT, int RIGHT, int SHOOT, int STATS,
-	int CHANGE_LWING, int CHANGE_CPIT, int CHANGE_RWING, int CHANGE_AREA)
-	:level(1),
-	exp(0),
-	hp(10),
-	hpMax(10),
-	hpAdded(10),
-	statPoints(0), cooling(0),
-	plating(0), wiring(0), power(0),
-	damage(1),
-	damageMax(2),
+	int UP,
+	int DOWN,
+	int LEFT,
+	int RIGHT,
+	int SHOOT,
+	int STATS,
+	int CHANGE_LWING,
+	int CHANGE_CPIT,
+	int CHANGE_RWING,
+	int CHANGE_AURA)
+	:level(1), exp(0),
+	hp(10), hpMax(10), hpAdded(10),
+	statPoints(0), 
+	cooling(0), plating(0), wiring(0), power(0),
+	damage(1), damageMax(2),
 	score(0) {
 
 	// Dt
@@ -39,14 +43,11 @@ Player::Player(
 		17 * level - 12)
 	);
 	
-
 	// Update positions
 	this->playerCenter.x =
 		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2;
 	this->playerCenter.y =
 		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
-
-	this->windowBounds = windowBounds;
 
 	// Textures & Sprites
 	this->lWingTextures = &lWingTextures;
@@ -57,7 +58,7 @@ Player::Player(
 	this->sprite.setTexture(textures[0]);
 	this->sprite.setScale(0.3f, 0.3f);
 	this->sprite.setRotation(90);
-	this->sprite.setPosition(40.f, (rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height);
+	this->sprite.setPosition(40.f, (rand() % 800) - this->sprite.getGlobalBounds().height);
 	// this->sprite.setColor(Color(10, 10, 10, 255));
 
 	this->laserTexture = &textures[1];
@@ -69,10 +70,8 @@ Player::Player(
 		this->mainGunSprite.getGlobalBounds().width / 2,
 		this->mainGunSprite.getGlobalBounds().height / 2
 	);
-	
 	this->mainGunSprite.setRotation(270);
 	this->mainGunSprite.setScale(0.5f, 0.5f);
-
 	this->mainGunSprite.setPosition(
 		this->playerCenter.x - 20.f,
 		this->playerCenter.y
@@ -97,14 +96,12 @@ Player::Player(
 		this->lWing.getGlobalBounds().width / 2,
 		this->lWing.getGlobalBounds().height / 2
 	);
-
 	this->lWing.setPosition(this->playerCenter);
 	this->lWing.setRotation(90.f);
 	this->rWing.setOrigin(
 		this->rWing.getGlobalBounds().width / 2,
 		this->rWing.getGlobalBounds().height / 2
 	);
-
 	this->rWing.setPosition(this->playerCenter);
 	this->rWing.setRotation(90.f);
 
@@ -112,7 +109,6 @@ Player::Player(
 		this->cPit.getGlobalBounds().width / 2,
 		this->cPit.getGlobalBounds().height / 2
 	);
-
 	this->cPit.setPosition(this->playerCenter);
 	this->cPit.setRotation(90.f);
 
@@ -120,7 +116,6 @@ Player::Player(
 		this->aura.getGlobalBounds().width / 2,
 		this->aura.getGlobalBounds().height / 2
 	);
-
 	this->aura.setPosition(this->playerCenter);
 	this->aura.setRotation(90.f);
 
@@ -131,11 +126,16 @@ Player::Player(
 	this->damageTimer = this->damageTimerMax;
 
 	// Controls
-	this->controls[controls::UP] = UP;
-	this->controls[controls::DOWN] = DOWN;
-	this->controls[controls::LEFT] = LEFT;
-	this->controls[controls::RIGHT] = RIGHT;
-	this->controls[controls::SHOOT] = SHOOT;
+	this->controls.add(int(UP));
+	this->controls.add(int(DOWN));
+	this->controls.add(int(LEFT));
+	this->controls.add(int(RIGHT));
+	this->controls.add(int(SHOOT));
+	this->controls.add(int(STATS));
+	this->controls.add(int(CHANGE_LWING));
+	this->controls.add(int(CHANGE_CPIT));
+	this->controls.add(int(CHANGE_RWING));
+	this->controls.add(int(CHANGE_AURA));
 
 	// Velocity & Acceleration
 	this->maxVelocity = 25.f;
@@ -147,11 +147,11 @@ Player::Player(
 	// this->currentWeapon = MISSILE01;
 
 	// Upgrades
-	this->mainGunLevel = 0;        // mainGunLevel;
+	this->mainGunLevel = 0;
 	this->piercingShot = false;
 	this->shield = false;
-	this->dualMissiles01 = false;   // dualMissiles01;
-	this->dualMissiles02 = false;  // dualMissiles02;
+	this->dualMissiles01 = false;
+	this->dualMissiles02 = false;
 
 	this->setGunLevel(0);
 
@@ -192,7 +192,7 @@ void Player::takeDamage(int damage) {
 	this->currentVelocity.y += -this->normDir.y * 10.f;
 }
 
-bool Player::UpdateLeveling() {
+bool Player::updateLeveling() {
 	if (this->exp >= this->expNext) {
 		this->level++;
 		this->statPoints++;
@@ -205,7 +205,8 @@ bool Player::UpdateLeveling() {
 		this->plating++;
 		this->power++;
 
-		this->UpdateStats();
+		this->updateStats();
+
 		this->hp = hpMax;
 
 		return true;
@@ -213,17 +214,17 @@ bool Player::UpdateLeveling() {
 	return false;
 }
 
-void Player::UpdateStats() {
+void Player::updateStats() {
 	this->hpMax = hpAdded + plating * 5;
 	this->damageMax = 2 + power * 2;
 	this->damage = 1 + power;
 }
 
-void Player::ChangeAccessories(const float& dt) {
+void Player::changeAccessories(const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
 		this->keyTime += 1.f * dt * this->dtMultiplier;
 
-	if (Keyboard::isKeyPressed(Keyboard::Num1) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[CHANGE_LWING])) && this->keyTime >= this->keyTimeMax) {
 		if (lWingSelect < (*this->lWingTextures).size() - 1)
 			lWingSelect++;
 		else
@@ -232,7 +233,7 @@ void Player::ChangeAccessories(const float& dt) {
 		this->lWing.setTexture((*this->lWingTextures)[lWingSelect]);
 		this->keyTime = 0;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num2) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[CHANGE_RWING])) && this->keyTime >= this->keyTimeMax) {
 		if (rWingSelect < (*this->rWingTextures).size() - 1)
 			rWingSelect++;
 		else 
@@ -241,7 +242,7 @@ void Player::ChangeAccessories(const float& dt) {
 		this->rWing.setTexture((*this->rWingTextures)[rWingSelect]);
 		this->keyTime = 0;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num3) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[CHANGE_CPIT])) && this->keyTime >= this->keyTimeMax) {
 		if (cPitSelect < (*this->cPitTextures).size() - 1)
 			cPitSelect++;
 		else 
@@ -250,7 +251,7 @@ void Player::ChangeAccessories(const float& dt) {
 		this->cPit.setTexture((*this->cPitTextures)[cPitSelect]);
 		this->keyTime = 0;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Num4) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[CHANGE_AURA])) && this->keyTime >= this->keyTimeMax) {
 		if (auraSelect < (*this->auraTextures).size() - 1)
 			auraSelect++;
 		else
@@ -261,7 +262,7 @@ void Player::ChangeAccessories(const float& dt) {
 	}
 }
 
-void Player::UpdateAccessories(const float &dt) {
+void Player::updateAccessories(const float &dt) {
 	// Set the position of gun to follow player
 	this->mainGunSprite.setPosition(
 		this->mainGunSprite.getPosition().x,
@@ -271,7 +272,8 @@ void Player::UpdateAccessories(const float &dt) {
 	// Animate the main gun and correct it after firing
 	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 20.f) {
 		this->mainGunSprite.move(
-			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 0.f
+			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 
+			0.f
 		);
 	}
 	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 20.f) {
@@ -311,7 +313,7 @@ void Player::UpdateAccessories(const float &dt) {
 	this->aura.rotate(1.2f * dt * this->dtMultiplier);
 }
 
-void Player::Movement(Vector2u windowBounds, const float& dt) {
+void Player::movement(Vector2u windowBounds, const float& dt) {
 	// Update normalized direction
 	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
 
@@ -351,24 +353,30 @@ void Player::Movement(Vector2u windowBounds, const float& dt) {
 	// Drag force
 	if (this->currentVelocity.x > 0) {
 		this->currentVelocity.x -= this->stabilizerForce * dt * this->dtMultiplier;
-		if (this->currentVelocity.x < 0) this->currentVelocity.x = 0;
+		if (this->currentVelocity.x < 0) 
+			this->currentVelocity.x = 0;
 	}
 	else if (this->currentVelocity.x < 0) {
 		this->currentVelocity.x += this->stabilizerForce * dt * this->dtMultiplier;
-		if (this->currentVelocity.x > 0) this->currentVelocity.x = 0;
+		if (this->currentVelocity.x > 0) 
+			this->currentVelocity.x = 0;
 	}
 	if (this->currentVelocity.y > 0) {
 		this->currentVelocity.y -= this->stabilizerForce * dt * this->dtMultiplier;
-		if (this->currentVelocity.y < 0) this->currentVelocity.y = 0;
+		if (this->currentVelocity.y < 0) 
+			this->currentVelocity.y = 0;
 	}
 	else if (this->currentVelocity.y < 0) {
 		this->currentVelocity.y += this->stabilizerForce * dt * this->dtMultiplier;
-		if (this->currentVelocity.y > 0) this->currentVelocity.y = 0;
+		if (this->currentVelocity.y > 0) 
+			this->currentVelocity.y = 0;
 	}
 
 	// Final move
-	this->sprite.move(this->currentVelocity.x * dt * this->dtMultiplier, 
-		this->currentVelocity.y * dt * this->dtMultiplier);
+	this->sprite.move(
+		this->currentVelocity.x * dt * this->dtMultiplier, 
+		this->currentVelocity.y * dt * this->dtMultiplier
+	);
 
 	// Update positions
 	this->playerCenter.x =
@@ -395,7 +403,7 @@ void Player::Movement(Vector2u windowBounds, const float& dt) {
 	}
 }
 
-void Player::Combat(const float& dt) {
+void Player::combat(const float& dt) {
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHOOT])) &&
 		this->shootTimer >= this->shootTimerMax) {
 		if (this->currentWeapon == LASER) {
@@ -550,10 +558,47 @@ void Player::addStatPointRandom() {
 	default:
 		break;
 	}
-	this->UpdateStats();
+	this->updateStats();
 }
 
-void Player::Reset() {
+bool Player::gainExp(int exp) {
+	this->exp += exp;
+	return this->updateLeveling();
+}
+
+void Player::gainHP(int hp) {
+	this->hp += hp;
+	if (this->hp > this->hpMax)
+		this->hp = this->hpMax;
+}
+
+void Player::upgradeHP() {
+	this->hpAdded += 10;
+	this->updateStats();
+	this->hp = this->hpMax;
+}
+
+bool Player::playerShowStatsIsPressed() {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::STATS])))
+		return true;
+	return false;
+}
+
+std::string Player::getStatsAsString()const {
+	return
+		"Level: " + std::to_string(this->level) +
+		"\nExp: " + std::to_string(this->exp) + "/" + std::to_string(this->expNext) +
+		"\nStatpoints: " + std::to_string(this->statPoints) +
+		"\nHP: " + std::to_string(this->hp) + "/" + std::to_string(this->hpMax) + " ( +" + std::to_string(this->hpAdded) + ") "
+		"\nDamage: " + std::to_string(this->damage) + "/" + std::to_string(this->damageMax) +
+		"\n\nScore: " + std::to_string(this->score) +
+		"\n\nPower: " + std::to_string(this->power) +
+		"\nPlating: " + std::to_string(this->plating) +
+		"\nWiring: " + std::to_string(this->wiring) +
+		"\nCooling: " + std::to_string(this->cooling);
+}
+
+void Player::reset() {
 	this->hpMax = 10;
 	this->hp = this->hpMax;
 	this->sprite.setPosition(Vector2f(100.f, 100.f));
@@ -576,9 +621,10 @@ void Player::Reset() {
 	this->statPoints = 0;
 	this->shootTimer = this->shootTimerMax;
 	this->damageTimer = this->damageTimerMax;
+	this->score = 0;
 }
 
-void Player::Update(Vector2u windowBounds, const float& dt) {
+void Player::update(Vector2u windowBounds, const float& dt) {
 	// Update timers
 	if (this->shootTimer < this->shootTimerMax)
 		this->shootTimer += 1 * dt * this->dtMultiplier;
@@ -586,16 +632,17 @@ void Player::Update(Vector2u windowBounds, const float& dt) {
 	if (this->damageTimer < this->damageTimerMax) 
 		this->damageTimer += 1 * dt * this->dtMultiplier;
 
-	this->Movement(windowBounds, dt);
-	this->ChangeAccessories(dt);
-	this->UpdateAccessories(dt);
-	this->Combat(dt);
+	this->movement(windowBounds, dt);
+	this->changeAccessories(dt);
+	this->updateAccessories(dt);
+	this->combat(dt);
 }
 
-void Player::Draw(RenderTarget& target) {
+void Player::draw(RenderTarget& target) {
 	target.draw(this->aura);
+
 	for (size_t i = 0; i < this->bullets.size(); i++) {
-		this->bullets[i].Draw(target);
+		this->bullets[i].draw(target);
 	}
 
 	target.draw(this->sprite);
@@ -604,3 +651,7 @@ void Player::Draw(RenderTarget& target) {
 	target.draw(this->cPit);
 	target.draw(this->mainGunSprite);
 }
+
+
+
+

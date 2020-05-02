@@ -20,8 +20,8 @@ int main() {
 				window.close();
 		}
 		dt = clock.restart().asSeconds();
-		game.Update(dt);
-		game.Draw();
+		game.update(dt);
+		game.draw();
 	}
 	return 0;
 }

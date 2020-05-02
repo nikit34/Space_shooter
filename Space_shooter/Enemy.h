@@ -28,8 +28,8 @@ public:
 	// Functions
 	void collision();
 	void takeDamage(int damage);
-	void Update(const float &dt, Vector2f playerPosition);
-	void Draw(RenderTarget& target);
+	void update(const float &dt, Vector2f playerPosition);
+	void draw(RenderTarget& target);
 
 	float vectorLength(Vector2f v) { return sqrt(pow(v.x, 2) + pow(v.y, 2)); }
 

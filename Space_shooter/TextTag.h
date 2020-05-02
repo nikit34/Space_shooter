@@ -19,8 +19,8 @@ public:
 
 	inline const float& getTimer()const { return this->timer; }
 	
-	void Update(const float& dt);
-	void Draw(RenderTarget &target);
+	void update(const float& dt);
+	void draw(RenderTarget &target);
 
 private:
 	float dtMultiplier;

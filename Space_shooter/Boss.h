@@ -12,9 +12,9 @@ public:
 	);
 	virtual ~Boss();
 
-	void Movement();
-	void Update(const float& dt);
-	void Draw(RenderTarget& target);
+	void movement();
+	void update(const float& dt);
+	void draw(RenderTarget& target);
 
 private:
 
@@ -35,11 +35,11 @@ private:
 
 		}
 
-		void Update(const float &dt) {
+		void update(const float &dt) {
 
 		}
 
-		void Draw(RenderTarget& target) {
+		void draw(RenderTarget& target) {
 			target.draw(this->gunSprite);
 		}
 

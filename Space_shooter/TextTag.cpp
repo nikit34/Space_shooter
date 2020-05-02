@@ -27,7 +27,7 @@ TextTag::TextTag(Font *font,
 
 TextTag::~TextTag() {}
 
-void TextTag::Update(const float& dt) {
+void TextTag::update(const float& dt) {
 	// Update timer
 	if (this->timer > 0.f) {
 		this->timer -= 1.f * dt * this->dtMultiplier;
@@ -54,6 +54,6 @@ void TextTag::Update(const float& dt) {
 	}		
 }
 
-void TextTag::Draw(RenderTarget &target) {
+void TextTag::draw(RenderTarget &target) {
 	target.draw(this->text);
 }

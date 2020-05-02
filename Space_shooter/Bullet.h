@@ -22,9 +22,9 @@ public:
 	inline void setPosition(Vector2f position) { this->sprite.setPosition(position); }
 
 	// Functions
-	void Movement(const float& dt);
-	void Update(const float &dt);
-	void Draw(RenderTarget& target);
+	void movement(const float& dt);
+	void update(const float &dt);
+	void draw(RenderTarget& target);
 
 private:
 	float dtMultiplier;

@@ -37,26 +37,26 @@ Boss::~Boss() {
 
 }
 
-void Boss::Movement() {
+void Boss::movement() {
 
 }
 
-void Boss::Update(const float& dt) {
+void Boss::update(const float& dt) {
 	for (size_t i = 0; i < this->guns.size(); i++) {
-		this->guns[i].Update(dt);
+		this->guns[i].update(dt);
 	}
 	for (size_t i = 0; i < this->bullets.size(); i++) {
-		this->bullets[i].Update(dt);
+		this->bullets[i].update(dt);
 	}
 }
 
-void Boss::Draw(RenderTarget& target) {
+void Boss::draw(RenderTarget& target) {
 	target.draw(this->sprite);
 
 	for (size_t i = 0; i < this->guns.size(); i++) {
-		this->guns[i].Draw(target);
+		this->guns[i].draw(target);
 	}
 	for (size_t i = 0; i < this->bullets.size(); i++) {
-		this->bullets[i].Draw(target);
+		this->bullets[i].draw(target);
 	}
 }

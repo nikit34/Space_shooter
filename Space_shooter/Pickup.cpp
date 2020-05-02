@@ -31,13 +31,13 @@ bool Pickup::checkCollision(FloatRect rect) {
 	return false;
 }
 
-void Pickup::Update(const float& dt) {
+void Pickup::update(const float& dt) {
 	if (this->aliveTimer < this->aliveTimerMax) 
 		this->aliveTimer += 1.f * dt * this->dtMultiplier;
 
 	this->sprite.rotate(5.f * dt * this->dtMultiplier);
 }
 
-void Pickup::Draw(RenderTarget& target) {
+void Pickup::draw(RenderTarget& target) {
 	target.draw(this->sprite);
 }

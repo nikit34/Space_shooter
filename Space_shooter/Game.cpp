@@ -27,10 +27,10 @@ Game::Game(RenderWindow* window) {
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
 	// Init textures
-	this->InitTextures();
+	this->initTextures();
 
 	// Init map
-	this->InitMap();
+	this->initMap();
 
 	// Init players
 	this->players.add(Player(
@@ -71,14 +71,14 @@ Game::Game(RenderWindow* window) {
 	// Init bosses
 	this->bossEncounter = false;
 
-	this->InitUI();
+	this->initUI();
 }
 
 Game::~Game() {}
 
 
 
-void Game::InitTextures() {
+void Game::initTextures() {
 	// Init Textures regular
 	this->textures.push_back(Texture());
 	this->textures[player].loadFromFile("Textures/ship.png");
@@ -198,7 +198,7 @@ void Game::InitTextures() {
 	in.close();
 }
 
-void Game::InitMap() {
+void Game::initMap() {
 	RectangleShape temp;
 	temp.setSize(Vector2f(100.f, 100.f));
 	temp.setFillColor(Color::White);
@@ -207,7 +207,7 @@ void Game::InitMap() {
 	this->walls.add(RectangleShape(temp));
 }
 
-void Game::InitUI() {
+void Game::initUI() {
 	Text tempText;
 
 	// Follow text init
@@ -262,44 +262,44 @@ void Game::InitUI() {
 
 
 
-void Game::Update(const float& dt) {
+void Game::update(const float& dt) {
 	// Timers update
-	this->UpdateTimers(dt);
+	this->updateTimers(dt);
 
 	// Fullscreen
-	this->ToggleFullscreen();
+	this->toggleFullscreen();
 
 	// Pause game
-	this->PauseGame();
+	this->pauseGame();
 
 	// Update while game paused
-	this->UpdateWhilePaused(dt);
+	this->updateWhilePaused(dt);
 
 	// Start game
 	if (this->playersAlive > 0 && !this->paused) {
 		// Update timers
-		this->UpdateTimersUnpaused(dt);
+		this->updateTimersUnpaused(dt);
 
 		// Make game harder with time
-		this->UpdateDifficulty();
+		this->updateDifficulty();
 
 		// Score timer and multipliers
-		this->UpdateScore();
+		this->updateScore();
 
 		// Update players, bullets and combat
-		this->PlayerUpdate(dt);
+		this->playerUpdate(dt);
 
 		// Update enemies
-		this->EnemyUpdate(dt);
+		this->enemyUpdate(dt);
 
 		// Update texttags
-		this->TextTagsUpdate(dt);
+		this->textTagsUpdate(dt);
 
 		// Upgrades update
-		this->UpgradesUpdate(dt);
+		this->upgradesUpdate(dt);
 
 		// Pickups update
-		this->PickupsUpdate(dt);
+		this->pickupsUpdate(dt);
 	}
 	else if (this->playersAlive <= 0 && this->scoreTime == 0) {
 		// Best score is set
@@ -308,16 +308,16 @@ void Game::Update(const float& dt) {
 
 	// Restart if all player dead
 	if (this->playersAlive <= 0) {
-		this->RestartUpdate();
+		this->restartUpdate();
 	}
 }
 
-void Game::UpdateTimers(const float& dt) {
+void Game::updateTimers(const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
 		this->keyTime += 1.f * dt * this->dtMultiplier;
 }
 
-void Game::ToggleFullscreen() {
+void Game::toggleFullscreen() {
 	if (Keyboard::isKeyPressed(Keyboard::F11) && this->keyTime >= this->keyTimeMax) {
 		this->keyTime = 0.f;
 	}
@@ -334,7 +334,7 @@ void Game::ToggleFullscreen() {
 	}
 }
 
-void Game::PauseGame() {
+void Game::pauseGame() {
 	if (Keyboard::isKeyPressed(Keyboard::P) && this->keyTime >= this->keyTimeMax) {
 		if(this->paused)	
 			this->paused = false;
@@ -345,7 +345,7 @@ void Game::PauseGame() {
 	}
 }
 
-void Game::UpdateWhilePaused(const float& dt) {
+void Game::updateWhilePaused(const float& dt) {
 	// Change accessories when paused
 	if (this->paused)
 	{
@@ -353,13 +353,13 @@ void Game::UpdateWhilePaused(const float& dt) {
 		{
 			if (this->players[i].isAlive())
 			{
-				this->players[i].ChangeAccessories(dt);
+				this->players[i].changeAccessories(dt);
 			}
 		}
 	}
 }
 
-void Game::UpdateTimersUnpaused(const float& dt) {
+void Game::updateTimersUnpaused(const float& dt) {
 	// Enemy spawn timer
 	if (this->enemySpawnTimer < this->enemySpawnTimerMax)
 		this->enemySpawnTimer += 1.f * dt * this->dtMultiplier;
@@ -378,7 +378,7 @@ void Game::UpdateTimersUnpaused(const float& dt) {
 	}
 }
 
-void Game::UpdateDifficulty() {
+void Game::updateDifficulty() {
 	if ((int)this->difficultyTimer % 1000 == 0 && this->enemySpawnTimerMax > 10) {
 		if(this->enemySpawnTimer > 10)
 			this->enemySpawnTimerMax--;
@@ -388,18 +388,18 @@ void Game::UpdateDifficulty() {
 	}
 }
 
-void Game::UpdateScore() {
+void Game::updateScore() {
 	if (this->multiplierAdder >= this->multiplierAdderMax) {
 		this->multiplierAdder = 0;
 		this->scoreMultiplier++;
 	}
 }
 
-void Game::PlayerUpdate(const float& dt) {
+void Game::playerUpdate(const float& dt) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (this->players[i].isAlive()) {
 			/// Update Players
-			this->players[i].Update(this->window->getSize(), dt);
+			this->players[i].update(this->window->getSize(), dt);
 
 			// Wall collision update
 			for (size_t k = 0; k < this->walls.size(); k++) {
@@ -415,7 +415,7 @@ void Game::PlayerUpdate(const float& dt) {
 			}
 
 			// Bullet update
-			this->PlayerBulletUpdate(dt, i);
+			this->playerBulletUpdate(dt, i);
 
 			// Update score
 			this->score = 0;
@@ -438,9 +438,9 @@ void Game::PlayerUpdate(const float& dt) {
 	}
 }
 
-void Game::PlayerBulletUpdate(const float& dt, const int i) {
+void Game::playerBulletUpdate(const float& dt, const int i) {
 	for (size_t k = 0; k < this->players[i].getBulletsSize(); k++) {
-		this->players[i].getBullet(k).Update(dt);
+		this->players[i].getBullet(k).update(dt);
 
 		// Enemy collision check
 		for (size_t j = 0; j < this->enemies.size(); j++) {
@@ -585,7 +585,7 @@ void Game::PlayerBulletUpdate(const float& dt, const int i) {
 	}
 }
 
-void Game::EnemyUpdate(const float& dt) {
+void Game::enemyUpdate(const float& dt) {
 	// Spawn enemies
 	if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 		this->enemies.add(Enemy(
@@ -604,11 +604,11 @@ void Game::EnemyUpdate(const float& dt) {
 
 	// Update Enemies
 	for (size_t i = 0; i < this->enemies.size(); i++) {
-		this->enemies[i].Update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
+		this->enemies[i].update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
 
 		// Enemy bullet update
 		for (size_t k = 0; k < this->enemies[i].getBullets().size(); k++) {
-			this->enemies[i].getBullets()[k].Update(dt);
+			this->enemies[i].getBullets()[k].update(dt);
 		}
 
 		// Eneny player collision
@@ -654,13 +654,13 @@ void Game::EnemyUpdate(const float& dt) {
 	}
 }
 
-void Game::EnemyBulletUpdate(const float& dt) {
+void Game::enemyBulletUpdate(const float& dt) {
 
 }
 
-void Game::TextTagsUpdate(const float& dt) {
+void Game::textTagsUpdate(const float& dt) {
 	for (size_t i = 0; i < this->textTags.size(); i++) {
-		this->textTags[i].Update(dt);
+		this->textTags[i].update(dt);
 
 		if (this->textTags[i].getTimer() <= 0.f) {
 			this->textTags.remove(i);
@@ -669,9 +669,9 @@ void Game::TextTagsUpdate(const float& dt) {
 	}
 }
 
-void Game::UpgradesUpdate(const float& dt) {
+void Game::upgradesUpdate(const float& dt) {
 	for (size_t i = 0; i < this->upgrades.size(); i++) {
-		this->upgrades[i].Update(dt);
+		this->upgrades[i].update(dt);
 
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->upgrades[i].checkCollision(this->players[k].getGlobalBounds())) {
@@ -798,9 +798,9 @@ void Game::UpgradesUpdate(const float& dt) {
 	}
 }
 
-void Game::PickupsUpdate(const float& dt) {
+void Game::pickupsUpdate(const float& dt) {
 	for (size_t i = 0; i < this->pickups.size(); i++) {
-		this->pickups[i].Update(dt);
+		this->pickups[i].update(dt);
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->pickups[i].checkCollision(this->players[k].getGlobalBounds())) {
 				int gainHp = this->players[k].getHpMax() / 5;
@@ -893,10 +893,10 @@ void Game::setEndingScoreboard() {
 		this->bestScoreSecond = (double)this->score / (double)this->scoreTime;
 }
 
-void Game::RestartUpdate() {
+void Game::restartUpdate() {
 	if (Keyboard::isKeyPressed(Keyboard::F1)) {
 		for (size_t i = 0; i < this->players.size(); i++) {
-			this->players[i].Reset();
+			this->players[i].reset();
 		}
 		this->playersAlive = this->players.size();
 		this->score = 0;
@@ -916,20 +916,20 @@ void Game::RestartUpdate() {
 
 
 
-void Game::Draw() {
+void Game::draw() {
 	this->window->clear();
 
 	// Draw players
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (this->players[i].isAlive()) {
-			this->players[i].Draw(*this->window);
+			this->players[i].draw(*this->window);
 
 			// UI
-			this->UpdateUIPlayer(i);
+			this->updateUIPlayer(i);
 			this->window->draw(this->followPlayerText);
 			this->window->draw(this->playerExpBar);
 
-			if(this->players[i].PlayerShowStatsIsPressed()) {
+			if(this->players[i].playerShowStatsIsPressed()) {
 				this->window->draw(this->playerStatsTextBack);
 				this->window->draw(this->playerStatsText);
 			}
@@ -937,10 +937,10 @@ void Game::Draw() {
 	}
 	// Draw enemies
 	for (size_t i = 0; i < this->enemies.size(); i++) {
-		this->enemies[i].Draw(*this->window);
+		this->enemies[i].draw(*this->window);
 
 		// UI
-		this->UpdateUIEnemy(i);
+		this->updateUIEnemy(i);
 		this->window->draw(this->enemyText);
 	}
 	// Draw map
@@ -949,17 +949,17 @@ void Game::Draw() {
 	}
 	// Draw pickups
 	for (size_t i = 0; i < this->pickups.size(); i++) {
-		this->pickups[i].Draw(*this->window);
+		this->pickups[i].draw(*this->window);
 	}
 	// Draw upgrades
 	for (size_t i = 0; i < this->upgrades.size(); i++) {
-		this->upgrades[i].Draw(*this->window);
+		this->upgrades[i].draw(*this->window);
 	}
-	this->DrawUI();
+	this->drawUI();
 	this->window->display();
 }
 
-void Game::UpdateUIPlayer(int index) {
+void Game::updateUIPlayer(int index) {
 	if (index >= 0 && index < this->players.size()) {
 		// Follow text
 		this->followPlayerText.setPosition(
@@ -988,7 +988,7 @@ void Game::UpdateUIPlayer(int index) {
 		);
 
 		// Static text
-		this->players[index].PlayerShowStatsInPressed()){
+		this->players[index].playerShowStatsInPressed()){
 			this->playerStatsText.setString(this->players[index].getStatsAsString());
 			this->playerStatsTextBack.setPosition(
 				this->players[index].getPosition().x,
@@ -1000,7 +1000,7 @@ void Game::UpdateUIPlayer(int index) {
 	}
 }
 
-void Game::UpdateUIEnemy(int index) {
+void Game::updateUIEnemy(int index) {
 	this->enemyText.setPosition(
 		this->enemies[index].getPosition().x,
 		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
@@ -1013,10 +1013,10 @@ void Game::UpdateUIEnemy(int index) {
 	);
 }
 
-void Game::DrawUI() {
+void Game::drawUI() {
 	// Draw Texttags
 	for (size_t i = 0; i < this->textTags.size(); i++)
-		this->textTags[i].Draw(*this->window);
+		this->textTags[i].draw(*this->window);
 
 	// Game over text
 	if (this->playersAlive <= 0)

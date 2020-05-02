@@ -29,7 +29,7 @@ Bullet::Bullet(
 
 Bullet::~Bullet() {}
 
-void Bullet::Movement(const float &dt) {
+void Bullet::movement(const float &dt) {
 	if (this->acceleration > 0.f) {
 		if (this->currentVelocity.x < this->maxVelocity)
 			this->currentVelocity.x += this->acceleration * this->direction.x
@@ -45,6 +45,6 @@ void Bullet::Movement(const float &dt) {
 	this->sprite.move(this->currentVelocity * dt * this->dtMultiplier);
 }
 
-void Bullet::Update(const float &dt) { this->Movement(dt); }
+void Bullet::update(const float &dt) { this->movement(dt); }
 
-void Bullet::Draw(RenderTarget& target) { target.draw(this->sprite); }
+void Bullet::draw(RenderTarget& target) { target.draw(this->sprite); }
