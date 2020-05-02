@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include"Bullet.h"
 
@@ -10,12 +10,16 @@ public:
 		dArr<Texture>& rWingTextures, 
 		dArr<Texture>& cPitTextures, 
 		dArr<Texture>& auraTextures,
-		Vector2u windowBounds,
-		int UP = 22, 
-		int DOWN = 18,
-		int LEFT = 0, 
-		int RIGHT = 3,
-		int SHOOT = 57
+		int UP = Keyboard::W, 
+		int DOWN = Keyboard::S,
+		int LEFT = Keyboard::A,
+		int RIGHT = Keyboard::D,
+		int SHOOT = Keyboard::Space,
+		int STATS = Keyboard::Tab,
+		int CHANGE_LWING = Keyboard::Num1,
+		int CHANGE_CPIT = Keyboard::Num2,
+		int CHANGE_RWING = Keyboard::Num3,
+		int CHANGE_AURA = Keyboard::Num4,
 	);
 
 	virtual ~Player();
@@ -50,7 +54,7 @@ public:
 	inline void enableShield() { this->shield = true; }
 	inline void enableDualMissiles01() { this->dualMissiles01 = true; }
 	inline void enableDualMissiles02() { this->dualMissiles02 = true; }
-	inline void upgradeHP() { this->hpMax += 10; this->hp = this->hpMax; }
+	inline void upgradeHP() { this->hpAdded += 10; this->UpdateStats(); this->hp = this->hpMax; }
 	inline bool getPiercingShot() const { return this->piercingShot; }
 	inline const int& getGunLevel() const { return this->mainGunLevel; }
 	inline void resetVelocity() { this->currentVelocity = Vector2f(0.f, 0.f); }
@@ -139,13 +143,14 @@ private:
 	int expNext;
 	int statPoints;
 
-	int cooling; // endurance
-	int plating; // vigor
-	int power; // strength
-	int wiring; // agility
+	int cooling; // endurance - выносливость
+	int plating; // vigor - сила
+	int power; // strength - прочность
+	int wiring; // agility - проворство
 
 	int hp;
 	int hpMax;
+	int hpAdded;
 
 	int damage;
 	int damageMax;

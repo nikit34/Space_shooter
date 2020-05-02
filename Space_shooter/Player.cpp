@@ -2,7 +2,7 @@
 
 unsigned Player::players = 0;
 
-enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT };
+enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AREA };
 enum weapons { LASER = 0, MISSILE01, MISSILE02 };
 
 Player::Player(
@@ -12,14 +12,13 @@ Player::Player(
 	dArr<Texture>& rWingTextures,
 	dArr<Texture>& cPitTextures,
 	dArr<Texture>& auraTextures,
-	Vector2u windowBounds,
-	int UP, int DOWN,
-	int LEFT, int RIGHT,
-	int SHOOT)
+	int UP, int DOWN, int LEFT, int RIGHT, int SHOOT, int STATS,
+	int CHANGE_LWING, int CHANGE_CPIT, int CHANGE_RWING, int CHANGE_AREA)
 	:level(1),
 	exp(0),
 	hp(10),
 	hpMax(10),
+	hpAdded(10),
 	statPoints(0), cooling(0),
 	plating(0), wiring(0), power(0),
 	damage(1),
@@ -215,7 +214,7 @@ bool Player::UpdateLeveling() {
 }
 
 void Player::UpdateStats() {
-	this->hpMax = 10 + plating * 5;
+	this->hpMax = hpAdded + plating * 5;
 	this->damageMax = 2 + power * 2;
 	this->damage = 1 + power;
 }
