@@ -2,14 +2,13 @@
 
 #include"TextTag.h"
 
-
 class Bullet {
 public:
 	Bullet(Texture* texture, 
 		Vector2f position, 
 		Vector2f scale,
-		Vector2f direction, 
-		float initialVelocity, 
+		Vector2f direction,
+		float initialVelocity,
 		float maxVelocity,
 		float acceleration
 	);
@@ -33,6 +32,7 @@ private:
 	Sprite sprite;
 
 	Vector2f currentVelocity;
+	float initialVelocity;
 	float maxVelocity;
 	float acceleration;
 	Vector2f direction;

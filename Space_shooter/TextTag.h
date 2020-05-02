@@ -17,6 +17,7 @@ public:
 
 	virtual ~TextTag();
 
+	// Accessors
 	inline const float& getTimer()const { return this->timer; }
 	
 	void update(const float& dt);

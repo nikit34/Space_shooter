@@ -12,16 +12,18 @@ Bullet::Bullet(
 	this->dtMultiplier = 60.f;
 	this->texture = texture;
 	this->maxVelocity = maxVelocity;
-	this->direction = direction;
 	this->acceleration = acceleration;
+	this->direction = direction;
 	this->currentVelocity = Vector2f(
 		initialVelocity * this->direction.x,
-		initialVelocity * this->direction.y);
+		initialVelocity * this->direction.y
+	);
 
 	this->sprite.setTexture(*this->texture);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
-		this->sprite.getGlobalBounds().height / 2);
+		this->sprite.getGlobalBounds().height / 2
+	);
 	this->sprite.setScale(scale);
 	this->sprite.setPosition(position);
 	this->sprite.setRotation(atan2(this->direction.y, this->direction.x) * 180 / 3.14 + 270);
@@ -39,8 +41,10 @@ void Bullet::movement(const float &dt) {
 			* dt * this->dtMultiplier;
 	}
 	else {
-		this->currentVelocity = Vector2f(this->maxVelocity * this->direction.x,
-			this->maxVelocity * this->direction.y);
+		this->currentVelocity = Vector2f(
+			this->maxVelocity * this->direction.x,
+			this->maxVelocity * this->direction.y
+		);
 	}
 	this->sprite.move(this->currentVelocity * dt * this->dtMultiplier);
 }
