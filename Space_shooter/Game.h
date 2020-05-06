@@ -16,36 +16,41 @@ public:
 	// Setters
 
 	// Functions
+	void initTextures();
 	void initPlayerTextures();
+	void initMapTextures();
+	void initMap();
+	void initUI();
+	void initialize();
+
+	void update(const float& dt);
+	void updateTimers(const float& dt);
 	void toggleFullscreen();
 	void pauseGame();
-	void initTextures();
-	void initUI();
-	void initMap();
-	void restartUpdate();
-	void setEndingScoreboard();
-	void updateTimers(const float& dt);
-	void updateTimersUnpaused(const float& dt);
-	void updateScore();
-	void updateDifficulty();
-	void updateUIPlayer(int index);
-	void updateUIEnemy(int index);
 	void updateWhilePaused(const float& dt);
+	void updateTimersUnpaused(const float& dt);
+	void updateDifficulty();
+	void updateScore();
 	void playerUpdate(const float& dt);
 	void playerBulletUpdate(const float& dt, const int i);
 	void enemyUpdate(const float& dt);
 	void enemyBulletUpdate(const float& dt);
 	void textTagsUpdate(const float& dt);
-	void pickupsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
-	void update(const float& dt);
-	void drawUI();
+	void mapUpdate();
+	void pickupsUpdate(const float& dt);
+	void setEndingScoreboard();
+	void restartUpdate();
+
 	void draw();
+	void updateUIPlayer(int index);
+	void updateUIEnemy(int index);
+	void drawMap();
 	void drawPlayer();
 	void drawEnemies();
-	void drawMap();
 	void drawPickups();
 	void drawUpgrades();
+	void drawUI();
 
 private:
 	// Game
@@ -91,6 +96,7 @@ private:
 
 	// Map
 	Map map;
+	dArr<Tile> tiles;
 
 	// Players
 	dArr<Player> players;

@@ -376,20 +376,20 @@ void Player::movement(Vector2u windowBounds, const float& dt) {
 		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
 
 	// Window collision
-	if (this->getPosition().x - this->getGlobalBounds().width <= 0) {
-		this->sprite.setPosition(this->getGlobalBounds().width, this->sprite.getPosition().y);
+	if (this->getPosition().x - this->getBounds().width <= 0) {
+		this->sprite.setPosition(this->getBounds().width, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
 	if (this->getPosition().y <= 0) {
 		this->sprite.setPosition(this->sprite.getPosition().x, 0);
 		this->currentVelocity.y = 0.f;
 	}
-	if (this->getPosition().x + this->getGlobalBounds().width / 2 >= windowBounds.x) {
-		this->sprite.setPosition(windowBounds.x - this->getGlobalBounds().width / 2, this->sprite.getPosition().y);
+	if (this->getPosition().x + this->getBounds().width / 2 >= windowBounds.x) {
+		this->sprite.setPosition(windowBounds.x - this->getBounds().width / 2, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
-	if (this->getPosition().y + this->getGlobalBounds().height >= windowBounds.y) {
-		this->sprite.setPosition(this->sprite.getPosition().x, windowBounds.y - this->getGlobalBounds().height);
+	if (this->getPosition().y + this->getBounds().height >= windowBounds.y) {
+		this->sprite.setPosition(this->sprite.getPosition().x, windowBounds.y - this->getBounds().height);
 		this->currentVelocity.y = 0.f;
 	}
 }

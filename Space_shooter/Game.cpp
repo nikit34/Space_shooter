@@ -23,42 +23,7 @@ Game::Game(RenderWindow* window) {
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
 
-	// Init fonts
-	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
-
-	// Init textures
-	this->initTextures();
-
-	// Init map
-	this->initMap();
-
-	// Init players
-	this->players.add(Player());
-
-	this->players.add(Player(
-		Keyboard::Numpad8,
-		Keyboard::Numpad5,
-		Keyboard::Numpad4,
-		Keyboard::Numpad6,
-		Keyboard::RControl,
-		Keyboard::Numpad7,
-		Keyboard::Numpad1,
-		Keyboard::Numpad2,
-		Keyboard::Numpad3,
-		Keyboard::Numpad0
-	));
-
-	this->playersAlive = this->players.size();
-
-	// Init enemies
-
-	this->enemySpawnTimerMax = 25.f;
-	this->enemySpawnTimer = this->enemySpawnTimerMax;
-
-	// Init bosses
-	this->bossEncounter = false;
-
-	this->initUI();
+	this->initialize();
 }
 
 Game::~Game() {}
@@ -67,6 +32,9 @@ Game::~Game() {}
 
 void Game::initTextures() {
 	Texture temp;
+
+	// Map
+	this->initMapTextures();
 
 	// Player
 	this->initPlayerTextures();
@@ -190,8 +158,18 @@ void Game::initPlayerTextures() {
 	in.close();
 }
 
+void Game::initMapTextures() {
+	Tile::tileTextures.loadFromFile("Textures/Map/textureSheet.png");
+}
+
 void Game::initMap() {
-	
+	Tile tile(IntRect(0, 0, 50, 50), 
+		Vector2f(200.f, 300.f), 
+		true, 
+		false
+	);
+
+	this->tiles.add(tile);
 }
 
 void Game::initUI() {
@@ -245,6 +223,45 @@ void Game::initUI() {
 	this->playerStatsTextBack.setFillColor(Color(50, 50, 50, 100));
 	this->playerStatsTextBack.setOutlineThickness(1.f);
 	this->playerStatsTextBack.setOutlineColor(Color(255, 255, 255, 200));
+}
+
+void Game::initialize() {
+	// Init fonts
+	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
+
+	// Init textures
+	this->initTextures();
+
+	// Init map
+	this->initMap();
+
+	// Init players
+	this->players.add(Player());
+
+	this->players.add(Player(
+		Keyboard::Numpad8,
+		Keyboard::Numpad5,
+		Keyboard::Numpad4,
+		Keyboard::Numpad6,
+		Keyboard::RControl,
+		Keyboard::Numpad7,
+		Keyboard::Numpad1,
+		Keyboard::Numpad2,
+		Keyboard::Numpad3,
+		Keyboard::Numpad0
+	));
+
+	this->playersAlive = this->players.size();
+
+	// Init enemies
+
+	this->enemySpawnTimerMax = 25.f;
+	this->enemySpawnTimer = this->enemySpawnTimerMax;
+
+	// Init bosses
+	this->bossEncounter = false;
+
+	this->initUI();
 }
 
 
@@ -389,9 +406,9 @@ void Game::playerUpdate(const float& dt) {
 			this->players[i].update(this->window->getSize(), dt);
 
 			// Wall collision update
-			/*for (size_t k = 0; k < this->walls.size(); k++) {
-				if (this->players[i].getGlobalBounds().intersects(this->walls[k].getGlobalBounds())) {
-					while (this->players[i].getGlobalBounds().intersects(this->walls[k].getGlobalBounds())) {
+			for (size_t k = 0; k < this->tiles.size(); k++) {
+				if (this->players[i].intersects(this->tiles[k].getBounds())) {
+					while (this->players[i].intersects(this->tiles[k].getBounds())) {
 						this->players[i].move(
 							20.f * -1.f * this->players[i].getNormDir().x,
 							20.f * -1.f * this->players[i].getNormDir().y
@@ -399,7 +416,7 @@ void Game::playerUpdate(const float& dt) {
 					}
 					this->players[i].resetVelocity();
 				}
-			}*/
+			}
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);
@@ -601,7 +618,7 @@ void Game::enemyUpdate(const float& dt) {
 		// Eneny player collision
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->players[k].isAlive()) {
-				if (this->players[k].getGlobalBounds().intersects(
+				if (this->players[k].getBounds().intersects(
 					this->enemies[i].getGlobalBounds()) &&
 					!this->players[k].isDamageCooldown()) {
 
@@ -661,7 +678,7 @@ void Game::upgradesUpdate(const float& dt) {
 		this->upgrades[i].update(dt);
 
 		for (size_t k = 0; k < this->players.size(); k++) {
-			if (this->upgrades[i].checkCollision(this->players[k].getGlobalBounds())) {
+			if (this->upgrades[i].checkCollision(this->players[k].getBounds())) {
 				if (this->upgrades[i].getType() != 0 && this->upgrades[i].getType() != 1)
 					this->players[k].getAcquiredUpgrades().add(this->upgrades[i].getType());
 
@@ -785,11 +802,14 @@ void Game::upgradesUpdate(const float& dt) {
 	}
 }
 
+void Game::mapUpdate() {
+}
+
 void Game::pickupsUpdate(const float& dt) {
 	for (size_t i = 0; i < this->pickups.size(); i++) {
 		this->pickups[i].update(dt);
 		for (size_t k = 0; k < this->players.size(); k++) {
-			if (this->pickups[i].checkCollision(this->players[k].getGlobalBounds())) {
+			if (this->pickups[i].checkCollision(this->players[k].getBounds())) {
 				int gainHp = this->players[k].getHpMax() / 5;
 
 				switch (this->pickups[i].getType()) {
@@ -904,48 +924,26 @@ void Game::restartUpdate() {
 
 
 void Game::draw() {
+	// Clear
 	this->window->clear();
 
+	// Draw map
+	this->drawMap();
+
 	// Draw players
-	for (size_t i = 0; i < this->players.size(); i++) {
-		if (this->players[i].isAlive()) {
-			this->players[i].draw(*this->window);
-
-			// UI
-			this->updateUIPlayer(i);
-			this->window->draw(this->followPlayerText);
-			this->window->draw(this->playerExpBar);
-
-			if(this->players[i].playerShowStatsIsPressed()) {
-				this->window->draw(this->playerStatsTextBack);
-				this->window->draw(this->playerStatsText);
-			}
-		}
-	}
+	this->drawPlayer();
 
 	// Draw enemies
-	for (size_t i = 0; i < this->enemies.size(); i++) {
-		this->enemies[i].draw(*this->window);
-
-		// UI
-		this->updateUIEnemy(i);
-		this->window->draw(this->enemyText);
-	}
-
-	// Draw map
-
-	
+	this->drawEnemies();
 
 	// Draw pickups
-	for (size_t i = 0; i < this->pickups.size(); i++) {
-		this->pickups[i].draw(*this->window);
-	}
+	this->drawPickups();
 
 	// Draw upgrades
-	for (size_t i = 0; i < this->upgrades.size(); i++) {
-		this->upgrades[i].draw(*this->window);
-	}
+	this->drawUpgrades();
+
 	this->drawUI();
+
 	this->window->display();
 }
 
@@ -1003,6 +1001,52 @@ void Game::updateUIEnemy(int index) {
 	);
 }
 
+void Game::drawMap() {
+	for (size_t i = 0; i < tiles.size(); i++) {
+		this->tiles[i].draw(*this->window);
+	}
+}
+
+void Game::drawPlayer() {
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (this->players[i].isAlive()) {
+			this->players[i].draw(*this->window);
+
+			// UI
+			this->updateUIPlayer(i);
+			this->window->draw(this->followPlayerText);
+			this->window->draw(this->playerExpBar);
+
+			if (this->players[i].playerShowStatsIsPressed()) {
+				this->window->draw(this->playerStatsTextBack);
+				this->window->draw(this->playerStatsText);
+			}
+		}
+	}
+}
+
+void Game::drawEnemies() {
+	for (size_t i = 0; i < this->enemies.size(); i++) {
+		this->enemies[i].draw(*this->window);
+
+		// UI
+		this->updateUIEnemy(i);
+		this->window->draw(this->enemyText);
+	}
+}
+
+void Game::drawPickups() {
+	for (size_t i = 0; i < this->pickups.size(); i++) {
+		this->pickups[i].draw(*this->window);
+	}
+}
+
+void Game::drawUpgrades() {
+	for (size_t i = 0; i < this->upgrades.size(); i++) {
+		this->upgrades[i].draw(*this->window);
+	}
+}
+
 void Game::drawUI() {
 	// Draw Texttags
 	for (size_t i = 0; i < this->textTags.size(); i++)
@@ -1019,6 +1063,8 @@ void Game::drawUI() {
 	if (this->paused)
 		this->window->draw(this->controlsText);
 }
+
+
 
 
 
