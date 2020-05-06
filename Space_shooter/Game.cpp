@@ -983,7 +983,7 @@ void Game::updateUIEnemy(int index) {
 }
 
 void Game::drawMap() {
-
+	stage.draw(*this->window, 0, 0, 0, 0);
 }
 
 void Game::drawPlayer() {

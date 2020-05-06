@@ -40,9 +40,18 @@ void Stage::draw(RenderTarget& target,
 	bool collider = false;
 	bool damaging = false; 
 
-	for (size_t i = fromCol; i < toCol; i++) {
-		for (size_t k = fromRow; k < toRow; k++) {
+	std::stringstream ss;
 
+	for (size_t i = 0; i < this->tiles.size(); i++) {
+		for (size_t k = 0; k < this->tiles[0].size(); k++) {
+			ss.str(this->tiles[i][k]);
+
+			this->creationTile.setTexRect(rectX, rectY, rectWidth, rectHeight);
+			this->creationTile.setPos(posX, posY);
+			this->creationTile.setIsCollider(collider);
+			this->creationTile.setIsDamaging(damaging);
+
+			this->creationTile.draw(target);
 		}
 	}
 }
