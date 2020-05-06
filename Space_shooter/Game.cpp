@@ -4,7 +4,7 @@ enum textures { player = 0, laser01, missile01 };
 
 Game::Game(RenderWindow* window) {
 	this->window = window;
-	this->window->setFramerateLimit(60);
+	this->window->setFramerateLimit(300);
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
@@ -33,22 +33,9 @@ Game::Game(RenderWindow* window) {
 	this->initMap();
 
 	// Init players
-	this->players.add(Player(
-		this->textures,
-		this->playerMainGunTextures,
-		this->lWingTextures,
-		this->rWingTextures,
-		this->cPitTextures,
-		this->auraTextures
-	));
+	this->players.add(Player());
 
 	this->players.add(Player(
-		this->textures,
-		this->playerMainGunTextures,
-		this->lWingTextures, 
-		this->rWingTextures,
-		this->cPitTextures, 
-		this->auraTextures,
 		Keyboard::Numpad8,
 		Keyboard::Numpad5,
 		Keyboard::Numpad4,
@@ -79,23 +66,10 @@ Game::~Game() {}
 
 
 void Game::initTextures() {
-	// Init Textures regular
-	this->textures.push_back(Texture());
-	this->textures[player].loadFromFile("Textures/ship.png");
-	this->textures.push_back(Texture());
-	this->textures[laser01].loadFromFile("Textures/Guns/rayTex01.png");
-	this->textures.push_back(Texture());
-	this->textures[missile01].loadFromFile("Textures/Guns/missileTex01.png");
-
 	Texture temp;
 
-	// Player guns
-	temp.loadFromFile("Textures/Guns/gun01.png");
-	this->playerMainGunTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Guns/gun02.png");
-	this->playerMainGunTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Guns/gun03.png");
-	this->playerMainGunTextures.add(Texture(temp));
+	// Player
+	this->initPlayerTextures();
 
 	// Pickup textures
 	temp.loadFromFile("Textures/Pickups/hpSupply.png");
@@ -141,6 +115,28 @@ void Game::initTextures() {
 
 	temp.loadFromFile("Textures/Bosses/Bullets/bossBullet01.png");
 	this->bossBulletTextures.add(Texture(temp));
+}
+
+void Game::initPlayerTextures() {
+	Texture temp;
+
+	// Init Textures regular
+	temp.loadFromFile("Textures/ship.png");
+	Player::playerBodyTextures.add(Texture(temp));
+
+	// Bullets
+	temp.loadFromFile("Textures/Guns/rayTex01.png");
+	Player::playerBodyTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Guns/missileTex01.png");
+	Player::playerBodyTextures.add(Texture(temp));
+
+	// Player guns
+	temp.loadFromFile("Textures/Guns/gun01.png");
+	Player::playerMainGunTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Guns/gun02.png");
+	Player::playerMainGunTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Guns/gun03.png");
+	Player::playerMainGunTextures.add(Texture(temp));
 
 	// Init accessory textures
 	std::ifstream in;
@@ -150,9 +146,8 @@ void Game::initTextures() {
 
 	if (in.is_open()) {
 		while (getline(in, fileName)) {
-			Texture temp;
 			temp.loadFromFile(fileName);
-			this->lWingTextures.add(Texture(temp));
+			Player::lWingTextures.add(Texture(temp));
 		}
 	}
 
@@ -163,9 +158,8 @@ void Game::initTextures() {
 
 	if (in.is_open()) {
 		while (getline(in, fileName)) {
-			Texture temp;
 			temp.loadFromFile(fileName);
-			this->rWingTextures.add(Texture(temp));
+			Player::rWingTextures.add(Texture(temp));
 		}
 	}
 
@@ -176,9 +170,8 @@ void Game::initTextures() {
 
 	if (in.is_open()) {
 		while (getline(in, fileName)) {
-			Texture temp;
 			temp.loadFromFile(fileName);
-			this->cPitTextures.add(Texture(temp));
+			Player::cPitTextures.add(Texture(temp));
 		}
 	}
 
@@ -189,9 +182,8 @@ void Game::initTextures() {
 
 	if (in.is_open()) {
 		while (getline(in, fileName)) {
-			Texture temp;
 			temp.loadFromFile(fileName);
-			this->auraTextures.add(Texture(temp));
+			Player::auraTextures.add(Texture(temp));
 		}
 	}
 
@@ -320,17 +312,17 @@ void Game::updateTimers(const float& dt) {
 void Game::toggleFullscreen() {
 	if (Keyboard::isKeyPressed(Keyboard::F11) && this->keyTime >= this->keyTimeMax) {
 		this->keyTime = 0.f;
-	}
 
-	if (fullscreen) {
-		this->fullscreen = false;
-		this->window->close();
-		this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Default);
-	}
-	else {
-		this->fullscreen = true;
-		this->window->close();
-		this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Fullscreen);
+		if (fullscreen) {
+			this->fullscreen = false;
+			this->window->close();
+			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Default);
+		}
+		else {
+			this->fullscreen = true;
+			this->window->close();
+			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Fullscreen);
+		}
 	}
 }
 
@@ -988,13 +980,13 @@ void Game::updateUIPlayer(int index) {
 		);
 
 		// Static text
-		this->players[index].playerShowStatsInPressed()){
+		if(this->players[index].playerShowStatsIsPressed()) {
 			this->playerStatsText.setString(this->players[index].getStatsAsString());
 			this->playerStatsTextBack.setPosition(
 				this->players[index].getPosition().x,
 				this->players[index].getPosition().y + 150.f
 			);
-			this->playerStatsTextBack.setSize(Vector2f(this->playerStatsText.getGlobalBounds().width, this->this->playerStatsText.getGlobalBounds().height));
+			this->playerStatsTextBack.setSize(Vector2f(this->playerStatsText.getGlobalBounds().width, this->playerStatsText.getGlobalBounds().height));
 			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
 		}
 	}

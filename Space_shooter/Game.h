@@ -15,6 +15,7 @@ public:
 	// Setters
 
 	// Functions
+	void initPlayerTextures();
 	void toggleFullscreen();
 	void pauseGame();
 	void initTextures();
@@ -111,7 +112,8 @@ private:
 	dArr<Upgrade> upgrades;
 
 	// Player textures
-	std::vector<Texture> textures;
+	dArr<Texture> playerBodyTextures;
+	dArr<Texture> playerBulletTextures;
 	dArr<Texture> playerMainGunTextures;
 	dArr<Texture> lWingTextures;
 	dArr<Texture> rWingTextures;

@@ -2,14 +2,12 @@
 
 #include"Bullet.h"
 
+enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AURA };
+enum weapons { LASER = 0, MISSILE01, MISSILE02 };
+
 class Player {
 public:
-	Player(std::vector<Texture>& textures,
-		dArr<Texture>& mainGunTextures,
-		dArr<Texture>& lWingTextures,
-		dArr<Texture>& rWingTextures,
-		dArr<Texture>& cPitTextures,
-		dArr<Texture>& auraTextures,
+	Player(
 		int UP = Keyboard::W,
 		int DOWN = Keyboard::S,
 		int LEFT = Keyboard::A,
@@ -19,7 +17,8 @@ public:
 		int CHANGE_LWING = Keyboard::Num1,
 		int CHANGE_CPIT = Keyboard::Num2,
 		int CHANGE_RWING = Keyboard::Num3,
-		int CHANGE_AURA = Keyboard::Num4);
+		int CHANGE_AURA = Keyboard::Num4
+	);
 	virtual ~Player();
 
 	// Accessors
@@ -84,6 +83,15 @@ public:
 	// Statics
 	static unsigned players;
 
+	// Static textures
+	static dArr<Texture> playerBodyTextures;
+	static dArr<Texture> playerBulletTextures;
+	static dArr<Texture> playerMainGunTextures;
+	static dArr<Texture> lWingTextures;
+	static dArr<Texture> rWingTextures;
+	static dArr<Texture> cPitTextures;
+	static dArr<Texture> auraTextures;
+
 	// Regular functions
 	float vectorLength(Vector2f v) {
 		return sqrt(pow(v.x, 2) + pow(v.y, 2));
@@ -97,14 +105,17 @@ public:
 	}
 
 private:
+	// Core
 	float dtMultiplier;
 	float keyTimeMax;
 	float keyTime;
 
 	unsigned playerNr;
 
+	// Position
 	Vector2f playerCenter;
 
+	// Timers
 	float shootTimer;
 	float shootTimerMax;
 	float damageTimer;
@@ -116,15 +127,7 @@ private:
 	// Accessories
 	Sprite mainGunSprite;
 	dArr<Bullet> bullets;
-	dArr<Texture>* mainGunTextures;
-	Texture* laserTexture;
-	Texture* missile01Texture;
-	Texture* missile02Texture;
 
-	dArr<Texture>* lWingTextures;
-	dArr<Texture>* rWingTextures;
-	dArr<Texture>* cPitTextures;
-	dArr<Texture>* auraTextures;
 	Sprite lWing;
 	Sprite rWing;
 	Sprite cPit;
