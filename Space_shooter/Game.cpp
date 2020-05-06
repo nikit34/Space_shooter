@@ -163,13 +163,7 @@ void Game::initMapTextures() {
 }
 
 void Game::initMap() {
-	Tile tile(IntRect(0, 0, 50, 50), 
-		Vector2f(200.f, 300.f), 
-		true, 
-		false
-	);
 
-	this->tiles.add(tile);
 }
 
 void Game::initUI() {
@@ -404,19 +398,6 @@ void Game::playerUpdate(const float& dt) {
 		if (this->players[i].isAlive()) {
 			/// Update Players
 			this->players[i].update(this->window->getSize(), dt);
-
-			// Wall collision update
-			for (size_t k = 0; k < this->tiles.size(); k++) {
-				if (this->players[i].intersects(this->tiles[k].getBounds())) {
-					while (this->players[i].intersects(this->tiles[k].getBounds())) {
-						this->players[i].move(
-							20.f * -1.f * this->players[i].getNormDir().x,
-							20.f * -1.f * this->players[i].getNormDir().y
-						);
-					}
-					this->players[i].resetVelocity();
-				}
-			}
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);
@@ -1002,9 +983,7 @@ void Game::updateUIEnemy(int index) {
 }
 
 void Game::drawMap() {
-	for (size_t i = 0; i < tiles.size(); i++) {
-		this->tiles[i].draw(*this->window);
-	}
+
 }
 
 void Game::drawPlayer() {

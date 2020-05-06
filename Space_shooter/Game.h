@@ -96,7 +96,7 @@ private:
 
 	// Map
 	Map map;
-	dArr<Tile> tiles;
+	Stage stage;
 
 	// Players
 	dArr<Player> players;
