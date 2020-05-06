@@ -1,4 +1,4 @@
-#include "Game.h"
+#include"Game.h"
 
 enum textures { player = 0, laser01, missile01 };
 
@@ -122,13 +122,13 @@ void Game::initPlayerTextures() {
 
 	// Init Textures regular
 	temp.loadFromFile("Textures/ship.png");
-	Player::playerBodyTextures.add(Texture(temp));
+	Player::playerBodyTextures.add(temp);
 
 	// Bullets
 	temp.loadFromFile("Textures/Guns/rayTex01.png");
-	Player::playerBodyTextures.add(Texture(temp));
+	Player::playerBulletTextures.add(temp);
 	temp.loadFromFile("Textures/Guns/missileTex01.png");
-	Player::playerBodyTextures.add(Texture(temp));
+	Player::playerBulletTextures.add(temp);
 
 	// Player guns
 	temp.loadFromFile("Textures/Guns/gun01.png");
@@ -191,12 +191,7 @@ void Game::initPlayerTextures() {
 }
 
 void Game::initMap() {
-	RectangleShape temp;
-	temp.setSize(Vector2f(100.f, 100.f));
-	temp.setFillColor(Color::White);
-	temp.setPosition(500.f, 500.f);
-
-	this->walls.add(RectangleShape(temp));
+	
 }
 
 void Game::initUI() {
@@ -394,7 +389,7 @@ void Game::playerUpdate(const float& dt) {
 			this->players[i].update(this->window->getSize(), dt);
 
 			// Wall collision update
-			for (size_t k = 0; k < this->walls.size(); k++) {
+			/*for (size_t k = 0; k < this->walls.size(); k++) {
 				if (this->players[i].getGlobalBounds().intersects(this->walls[k].getGlobalBounds())) {
 					while (this->players[i].getGlobalBounds().intersects(this->walls[k].getGlobalBounds())) {
 						this->players[i].move(
@@ -404,7 +399,7 @@ void Game::playerUpdate(const float& dt) {
 					}
 					this->players[i].resetVelocity();
 				}
-			}
+			}*/
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);
@@ -927,6 +922,7 @@ void Game::draw() {
 			}
 		}
 	}
+
 	// Draw enemies
 	for (size_t i = 0; i < this->enemies.size(); i++) {
 		this->enemies[i].draw(*this->window);
@@ -935,14 +931,16 @@ void Game::draw() {
 		this->updateUIEnemy(i);
 		this->window->draw(this->enemyText);
 	}
+
 	// Draw map
-	for (size_t i = 0; i < this->walls.size(); i++) {
-		this->window->draw(this->walls[i]);
-	}
+
+	
+
 	// Draw pickups
 	for (size_t i = 0; i < this->pickups.size(); i++) {
 		this->pickups[i].draw(*this->window);
 	}
+
 	// Draw upgrades
 	for (size_t i = 0; i < this->upgrades.size(); i++) {
 		this->upgrades[i].draw(*this->window);
@@ -983,8 +981,8 @@ void Game::updateUIPlayer(int index) {
 		if(this->players[index].playerShowStatsIsPressed()) {
 			this->playerStatsText.setString(this->players[index].getStatsAsString());
 			this->playerStatsTextBack.setPosition(
-				this->players[index].getPosition().x,
-				this->players[index].getPosition().y + 150.f
+				this->players[index].getPosition().x - 80.f,
+				this->players[index].getPosition().y + 100.f
 			);
 			this->playerStatsTextBack.setSize(Vector2f(this->playerStatsText.getGlobalBounds().width, this->playerStatsText.getGlobalBounds().height));
 			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());

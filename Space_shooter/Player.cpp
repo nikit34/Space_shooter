@@ -401,7 +401,7 @@ void Player::combat(const float& dt) {
 			if (this->mainGunLevel == 0) {
 				// Create bullet
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER], 
+					&Player::playerBulletTextures[LASER], 
 					Vector2f(this->playerCenter.x, this->playerCenter.y),
 					Vector2f(0.5f, 0.5f), 
 					Vector2f(1.f, 0.f), 
@@ -412,7 +412,7 @@ void Player::combat(const float& dt) {
 			}
 			else if (this->mainGunLevel == 1) {
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER],
+					&Player::playerBulletTextures[LASER],
 					Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
 					Vector2f(0.5f, 0.5f),
 					Vector2f(1.f, 0.f),
@@ -421,7 +421,7 @@ void Player::combat(const float& dt) {
 					2.f
 				));
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER],
+					&Player::playerBulletTextures[LASER],
 					Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
 					Vector2f(0.5f, 0.5f),
 					Vector2f(1.f, 0.f),
@@ -432,7 +432,7 @@ void Player::combat(const float& dt) {
 			}
 			else if (this->mainGunLevel == 2) {
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER],
+					&Player::playerBulletTextures[LASER],
 					Vector2f(this->playerCenter.x, this->playerCenter.y - 5.f),
 					Vector2f(0.5f, 0.5f),
 					Vector2f(1.f, 0.f),
@@ -441,7 +441,7 @@ void Player::combat(const float& dt) {
 					2.f
 				));
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER],
+					&Player::playerBulletTextures[LASER],
 					Vector2f(this->playerCenter.x, this->playerCenter.y),
 					Vector2f(0.5f, 0.5f),
 					Vector2f(1.f, 0.f),
@@ -450,7 +450,7 @@ void Player::combat(const float& dt) {
 					2.f
 				));
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[LASER],
+					&Player::playerBulletTextures[LASER],
 					Vector2f(this->playerCenter.x, this->playerCenter.y + 5.f),
 					Vector2f(0.5f, 0.5f),
 					Vector2f(1.f, 0.f),
@@ -465,7 +465,7 @@ void Player::combat(const float& dt) {
 		else if (this->currentWeapon == MISSILE01) {
 			// Create bullet
 			this->bullets.add(Bullet(
-				&Player::playerMainGunTextures[MISSILE01],
+				&Player::playerBulletTextures[MISSILE01],
 				Vector2f(this->playerCenter.x, this->playerCenter.y - 10.f),
 				Vector2f(0.5f, 0.2f), 
 				Vector2f(1.f, 0.f), 
@@ -476,7 +476,7 @@ void Player::combat(const float& dt) {
 			
 			if (this->dualMissiles01) {
 				this->bullets.add(Bullet(
-					&Player::playerMainGunTextures[MISSILE01],
+					&Player::playerBulletTextures[MISSILE01],
 					Vector2f(this->playerCenter.x, this->playerCenter.y + 10.f),
 					Vector2f(0.05f, 0.02f), 
 					Vector2f(1.f, 0.f), 

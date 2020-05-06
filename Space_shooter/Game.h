@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"Boss.h"
+#include"Map.h"
 
 class Game {
 public:
@@ -89,7 +90,7 @@ private:
 	dArr<TextTag> textTags;
 
 	// Map
-	dArr<RectangleShape> walls;
+	Map map;
 
 	// Players
 	dArr<Player> players;
