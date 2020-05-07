@@ -54,7 +54,7 @@ Player::Player(
 	this->sprite.setScale(0.3f, 0.3f);
 	this->sprite.setRotation(90);
 	this->sprite.setPosition(40.f, (rand() % 800) - this->sprite.getGlobalBounds().height);
-	// this->sprite.setColor(Color(10, 10, 10, 255));
+	this->sprite.setColor(Color(10, 10, 10, 255));
 
 	this->mainGunSprite.setTexture(Player::playerMainGunTextures[0]);
 	this->mainGunSprite.setOrigin(

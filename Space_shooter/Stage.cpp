@@ -12,10 +12,14 @@ Stage::Stage() {
 	this->toRow = 0;
 	
 	for (size_t i = 0; i < this->stageSizeX; i++) {
-		this->tiles.add(dArr<Tile>());
+		this->tiles.add(dArr<Tile>(stageSizeY));
 
 		for (size_t k = 0; k < this->stageSizeY; k++) {
-			this->tiles[i].add(Tile(IntRect(0, 0, 50, 50), Vector2f(i * Stage::gridSize, k * Stage::gridSize), 0, 0));
+			if (rand() % 50 > 10)
+				this->tiles[i].add(Tile(IntRect(0, 0, 0, 0), Vector2f(i * Stage::gridSize, k * Stage::gridSize), 0, 0));
+			else
+				this->tiles[i].add(Tile(IntRect(0, 0, 50, 50), Vector2f(i * Stage::gridSize, k * Stage::gridSize), 0, 0));
+
 		}
 	}
 }
@@ -39,7 +43,7 @@ void Stage::draw(
 	if (this->fromCol >= this->stageSizeX)
 		this->fromCol = this->stageSizeX;
 
-	this->toCol = (view.getCenter().x + view.getSize().x / 2) / Stage::gridSize;
+	this->toCol = (view.getCenter().x + view.getSize().x / 2) / Stage::gridSize + 1;
 	if (this->toCol <= 0)
 		this->toCol = 0;
 	if (this->toCol >= this->stageSizeX)
@@ -51,7 +55,7 @@ void Stage::draw(
 	if (this->fromRow >= this->stageSizeY)
 		this->fromRow = this->stageSizeY;
 
-	this->toRow = (view.getCenter().y + view.getSize().y / 2) / Stage::gridSize;
+	this->toRow = (view.getCenter().y + view.getSize().y / 2) / Stage::gridSize + 1;
 	if (this->toRow <= 0)
 		this->toRow = 0;
 	if (this->toRow >= this->stageSizeY)
