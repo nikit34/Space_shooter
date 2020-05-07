@@ -40,7 +40,6 @@ public:
 
 private:
 	// Core
-	int type;
 	bool isCollider;
 	bool isDamaging;
 	int damage;

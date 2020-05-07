@@ -16,13 +16,14 @@ public:
 	// Setters
 
 	// Functions
+	void initView();
 	void initTextures();
 	void initPlayerTextures();
 	void initMapTextures();
 	void initMap();
 	void initUI();
 	void initialize();
-
+	void viewUpdate();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen();
@@ -55,6 +56,7 @@ public:
 private:
 	// Game
 	RenderWindow* window;
+	View mainView;
 	bool fullscreen;
 	float dtMultiplier;
 	bool paused;

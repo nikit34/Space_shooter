@@ -29,6 +29,9 @@ Game::Game(RenderWindow* window) {
 Game::~Game() {}
 
 
+void Game::initView() {
+	this->mainView.setSize(Vector2f(this->window->getSize()));
+}
 
 void Game::initTextures() {
 	Texture temp;
@@ -220,6 +223,9 @@ void Game::initUI() {
 }
 
 void Game::initialize() {
+	// Init view
+	this->initView();
+
 	// Init fonts
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
@@ -258,7 +264,9 @@ void Game::initialize() {
 	this->initUI();
 }
 
-
+void Game::viewUpdate() {
+	this->mainView.setCenter(this->players[0].getPosition());
+}
 
 void Game::update(const float& dt) {
 	// Timers update
@@ -266,6 +274,9 @@ void Game::update(const float& dt) {
 
 	// Fullscreen
 	this->toggleFullscreen();
+
+	// View
+	this->viewUpdate();
 
 	// Pause game
 	this->pauseGame();
@@ -908,6 +919,9 @@ void Game::draw() {
 	// Clear
 	this->window->clear();
 
+	// Set view;
+	this->window->setView(this->mainView);
+
 	// Draw map
 	this->drawMap();
 
@@ -983,7 +997,7 @@ void Game::updateUIEnemy(int index) {
 }
 
 void Game::drawMap() {
-	stage.draw(*this->window, 0, 0, 0, 0);
+	stage.draw(*this->window, this->mainView);
 }
 
 void Game::drawPlayer() {
