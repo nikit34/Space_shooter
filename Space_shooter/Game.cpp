@@ -89,7 +89,7 @@ void Game::initTextures() {
 
 	// Particles
 	temp.loadFromFile("Textures/Particles/particle01.png");
-	ParticleSystem::particleTextures.add(temp);
+	Particle::particleTextures.add(temp);
 }
 
 void Game::initPlayerTextures() {
@@ -272,6 +272,8 @@ void Game::viewUpdate() {
 	this->mainView.setCenter(this->players[0].getPosition());
 }
 
+
+
 void Game::update(const float& dt) {
 	// Timers update
 	this->updateTimers(dt);
@@ -313,6 +315,9 @@ void Game::update(const float& dt) {
 
 		// Pickups update
 		this->pickupsUpdate(dt);
+
+		// Particles update
+		this->particlesUpdate(dt);
 	}
 	else if (this->playersAlive <= 0 && this->scoreTime == 0) {
 		// Best score is set
@@ -324,6 +329,8 @@ void Game::update(const float& dt) {
 		this->restartUpdate();
 	}
 }
+
+
 
 void Game::updateTimers(const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
@@ -446,6 +453,15 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 		for (size_t j = 0; j < this->enemies.size(); j++) {
 			if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 				this->enemies[j].getGlobalBounds())) {
+
+				this->particles.add(Particle(
+					this->enemies[j].getPosition(),
+					0,
+					this->players[i].getBullet(k).getNormDir(),
+					10.f,
+					10.f,
+					50.f
+				));
 
 				// Piercing shot check / remove bullet
 				if (!this->players[i].getPiercingShot()) {
@@ -801,7 +817,11 @@ void Game::upgradesUpdate(const float& dt) {
 void Game::mapUpdate() {
 }
 
-void Game::particlesUpdate(const float& dt) {}
+void Game::particlesUpdate(const float& dt) {
+	for (size_t i = 0; i < this->particles.size(); i++) {
+		this->particles[i].update(dt);
+	}
+}
 
 void Game::pickupsUpdate(const float& dt) {
 	for (size_t i = 0; i < this->pickups.size(); i++) {
@@ -921,6 +941,8 @@ void Game::restartUpdate() {
 
 
 
+
+
 void Game::draw() {
 	// Clear
 	this->window->clear();
@@ -943,10 +965,20 @@ void Game::draw() {
 	// Draw upgrades
 	this->drawUpgrades();
 
+	// Draw particles
+	this->drawParticles();
+
+	// Set view;
+	this->window->setView(this->window->getDefaultView());
+
+	// Draw UI
 	this->drawUI();
 
+	// Finish draw
 	this->window->display();
 }
+
+
 
 void Game::updateUIPlayer(int index) {
 	if (index >= 0 && index < this->players.size()) {
@@ -1046,7 +1078,11 @@ void Game::drawUpgrades() {
 	}
 }
 
-void Game::drawParticles() {}
+void Game::drawParticles() {
+	for (size_t i = 0; i < this->particles.size(); i++) {
+		this->particles[i].draw(*this->window);
+	}
+}
 
 void Game::drawUI() {
 	// Draw Texttags

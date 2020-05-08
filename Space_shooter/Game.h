@@ -123,7 +123,7 @@ private:
 	dArr<Upgrade> upgrades;
 
 	// Particles
-	ParticleSystem particleSystem;
+	dArr<Particle> particles;
 
 	// Player textures
 	dArr<Texture> playerBodyTextures;

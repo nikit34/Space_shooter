@@ -149,7 +149,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -165,7 +165,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="dArr.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileArr.h" />
