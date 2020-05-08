@@ -2,7 +2,10 @@
 
 int Stage::gridSize = 50;
 
-Stage::Stage() {
+Stage::Stage()
+	:stageSizeX(100), stageSizeY(100), 
+	tiles(stageSizeX) 
+{
 	this->stageSizeX = 100;
 	this->stageSizeY = 100;
 
@@ -11,16 +14,8 @@ Stage::Stage() {
 	this->fromRow = 0;
 	this->toRow = 0;
 	
-	for (size_t i = 0; i < this->stageSizeX; i++) {
-		this->tiles.add(dArr<Tile>(stageSizeY));
-
-		for (size_t k = 0; k < this->stageSizeY; k++) {
-			if (rand() % 50 > 10)
-				this->tiles[i].add(Tile(IntRect(0, 0, 0, 0), Vector2f(i * Stage::gridSize, k * Stage::gridSize), 0, 0));
-			else
-				this->tiles[i].add(Tile(IntRect(0, 0, 50, 50), Vector2f(i * Stage::gridSize, k * Stage::gridSize), 0, 0));
-
-		}
+	for (unsigned i = 0; i < this->stageSizeX; i++) {
+		this->tiles.push(TileArr<Tile>(stageSizeY), i);
 	}
 }
 
@@ -61,9 +56,10 @@ void Stage::draw(
 	if (this->toRow >= this->stageSizeY)
 		this->toRow = this->stageSizeY;
 
-	for (size_t i = fromCol; i < toCol; i++) {
-		for (size_t k = fromRow; k < toRow; k++) {
-			this->tiles[i][k].draw(target);
+	for (int i = fromCol; i < toCol; i++) {
+		for (int k = fromRow; k < toRow; k++) {
+			if(!this->tiles[i].isNull(k))
+				this->tiles[i][k].draw(target);
 		}
 	}
 }

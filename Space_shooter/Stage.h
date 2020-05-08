@@ -1,13 +1,13 @@
 #pragma once
 
-#include"Tile.h"
+#include"TileArr.h"
 
 class Stage {
 public:
 	Stage();
 	virtual ~Stage();
 
-	dArr<dArr<Tile>>& getTiles() { return this->tiles; }
+	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
 
 	void update(
 		int fromCol, int toCol,
@@ -20,11 +20,11 @@ public:
 	// Static variables
 	static int gridSize;
 
-private:
-	dArr<dArr<Tile>> tiles;
-	
+private:	
 	unsigned long stageSizeX; 
 	unsigned long stageSizeY;
+
+	TileArr <TileArr<Tile>> tiles;
 
 	// Optimization
 	int fromCol, toCol;

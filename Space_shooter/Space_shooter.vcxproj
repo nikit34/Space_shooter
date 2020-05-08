@@ -154,6 +154,7 @@
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="TextTag.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileArr.cpp" />
     <ClCompile Include="Upgrade.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileArr.h" />
     <ClInclude Include="Upgrade.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
