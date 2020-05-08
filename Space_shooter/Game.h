@@ -90,7 +90,10 @@ private:
 	Text controlsText;
 
 	// Bars
-	RectangleShape playerExpBar;
+	RectangleShape playerExpBar; 
+	RectangleShape playerShieldBar;
+	RectangleShape playerShieldRechargeBar;
+
 
 	// Backgrounds
 	RectangleShape playerStatsTextBack;

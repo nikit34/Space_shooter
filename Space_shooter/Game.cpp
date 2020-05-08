@@ -114,6 +114,10 @@ void Game::initPlayerTextures() {
 	temp.loadFromFile("Textures/Guns/gun03.png");
 	Player::playerMainGunTextures.add(Texture(temp));
 
+	// Player shield
+	temp.loadFromFile("Textures/Player/shield.png");
+	Player::playerShieldTextures.add(Texture(temp));
+
 	// Init accessory textures
 	std::ifstream in;
 

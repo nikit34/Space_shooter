@@ -2,7 +2,7 @@
 
 #include"Bullet.h"
 
-enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AURA };
+enum controls { UP = 0, DOWN, LEFT, RIGHT, SHOOT, SHIELD, STATS, CHANGE_LWING, CHANGE_CPIT, CHANGE_RWING, CHANGE_AURA };
 enum weapons { LASER = 0, MISSILE01, MISSILE02 };
 
 class Player {
@@ -13,6 +13,7 @@ public:
 		int LEFT = Keyboard::A,
 		int RIGHT = Keyboard::D,
 		int SHOOT = Keyboard::Space,
+		int SHIELD = Keyboard::RAlt,
 		int STATS = Keyboard::Tab,
 		int CHANGE_LWING = Keyboard::Num1,
 		int CHANGE_CPIT = Keyboard::Num2,
@@ -89,6 +90,7 @@ public:
 	static dArr<Texture> playerBodyTextures;
 	static dArr<Texture> playerBulletTextures;
 	static dArr<Texture> playerMainGunTextures;
+	static dArr<Texture> playerShieldTextures;
 	static dArr<Texture> lWingTextures;
 	static dArr<Texture> rWingTextures;
 	static dArr<Texture> cPitTextures;
@@ -122,6 +124,10 @@ private:
 	float shootTimerMax;
 	float damageTimer;
 	float damageTimerMax;
+	float shieldTimer;
+	float shieldTimerMax;
+	float shieldRechargeTimer;
+	float shieldRechargeTimerMax;
 
 	Sprite sprite;
 	RectangleShape hitBox;
@@ -129,6 +135,9 @@ private:
 	// Accessories
 	Sprite mainGunSprite;
 	dArr<Bullet> bullets;
+
+	Sprite deflectorShield;
+	bool shielding;
 
 	Sprite lWing;
 	Sprite rWing;

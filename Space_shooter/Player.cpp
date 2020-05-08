@@ -6,6 +6,7 @@ unsigned Player::players = 0;
 dArr<Texture> Player::playerBodyTextures;
 dArr<Texture> Player::playerBulletTextures;
 dArr<Texture> Player::playerMainGunTextures;
+dArr<Texture> Player::playerShieldTextures;
 dArr<Texture> Player::lWingTextures;
 dArr<Texture> Player::rWingTextures;
 dArr<Texture> Player::cPitTextures;
@@ -17,6 +18,7 @@ Player::Player(
 	int LEFT,
 	int RIGHT,
 	int SHOOT,
+	int SHIELD,
 	int STATS,
 	int CHANGE_LWING,
 	int CHANGE_CPIT,
@@ -68,6 +70,8 @@ Player::Player(
 		this->playerCenter.y
 	);
 
+	this->deflectorShield.setTexture(Player::playerShieldTextures[0]);
+
 	// Accessories
 
 	// Selectors
@@ -115,6 +119,10 @@ Player::Player(
 	this->shootTimer = this->shootTimerMax;
 	this->damageTimerMax = 40.f;
 	this->damageTimer = this->damageTimerMax;
+	this->shieldTimerMax = 50.f;
+	this->shieldTimer = this->shieldTimerMax;
+	this->shieldRechargeTimerMax = 100.f;
+	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
 
 	// Controls
 	this->controls.add(int(UP));
@@ -122,6 +130,7 @@ Player::Player(
 	this->controls.add(int(LEFT));
 	this->controls.add(int(RIGHT));
 	this->controls.add(int(SHOOT));
+	this->controls.add(int(SHIELD));
 	this->controls.add(int(STATS));
 	this->controls.add(int(CHANGE_LWING));
 	this->controls.add(int(CHANGE_CPIT));
@@ -136,6 +145,9 @@ Player::Player(
 	// Guns
 	this->currentWeapon = LASER;
 	// this->currentWeapon = MISSILE01;
+
+	// Shileds
+	this->shielding = false;
 
 	// Upgrades
 	this->mainGunLevel = 0;
@@ -258,6 +270,12 @@ void Player::updateAccessories(const float &dt) {
 	this->mainGunSprite.setPosition(
 		this->mainGunSprite.getPosition().x,
 		this->playerCenter.y
+	);
+
+	// Set the position of the shield to follow player
+	this->deflectorShield.setPosition(
+		this->sprite.getPosition().x - 2 * this->sprite.getGlobalBounds().width,
+		this->sprite.getPosition().y - this->sprite.getGlobalBounds().height
 	);
 
 	// Animate the main gun and correct it after firing
@@ -494,6 +512,21 @@ void Player::combat(const float& dt) {
 		this->shootTimer = 0;  // Reset timer
 	}
 
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHIELD]))) {
+		if (this->shieldTimer > 0 && this->shieldRechargeTimer >= this->shieldRechargeTimerMax) {
+			this->shielding = true;
+			this->shieldTimer -= 2.f * dt * this->dtMultiplier;
+
+			// Deplete shield
+			if (this->shieldTimer <= 0.f)
+				this->shieldRechargeTimer = 0.f;
+		}
+		else
+			this->shielding = false;
+	}
+	else
+		this->shielding = false;
+
 	// Damaged
 	if (this->isDamageCooldown()) {
 		if ((int)this->damageTimer % 5 == 0) {
@@ -623,6 +656,12 @@ void Player::update(Vector2u windowBounds, const float& dt) {
 	if (this->damageTimer < this->damageTimerMax) 
 		this->damageTimer += 1 * dt * this->dtMultiplier;
 
+	if (this->shieldRechargeTimer < this->shieldRechargeTimerMax)
+		this->shieldRechargeTimer += 1 * dt * this->dtMultiplier;
+
+	if (this->shieldTimer < this->shieldTimerMax && this->shieldRechargeTimer < this->shieldRechargeTimerMax)
+		this->shieldTimer += 1 * dt * this->dtMultiplier;
+
 	this->movement(windowBounds, dt);
 	this->changeAccessories(dt);
 	this->updateAccessories(dt);
@@ -641,6 +680,9 @@ void Player::draw(RenderTarget& target) {
 	target.draw(this->rWing);
 	target.draw(this->cPit);
 	target.draw(this->mainGunSprite);
+
+	if (this->shielding)
+		target.draw(this->deflectorShield);
 }
 
 
