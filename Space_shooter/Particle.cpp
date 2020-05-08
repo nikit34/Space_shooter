@@ -40,12 +40,23 @@ void Particle::update(const float& dt) {
 	if (this->lifeTime > 0) {
 		this->lifeTime -= 1.f * dt * this->dtMultiplier;
 
-		// Reduce alpha
-		if (this->sprite.getColor().a > 0) {
-			this->sprite.setColor(Color(255, 255, 255, this->sprite.getColor().a - (rand() % 50 + 150) * dt * this->dtMultiplier));
+		//Reduce alpha
+		if (this->sprite.getColor().a > 0)
+		{
+			this->sprite.setColor(Color(
+				this->color.r,
+				this->color.g,
+				this->color.b,
+				this->sprite.getColor().a - 6.5f * dt * this->dtMultiplier)
+			);
 
 			if (this->sprite.getColor().a > 255)
-				this->sprite.setColor(Color(255, 255, 255, 0));
+				this->sprite.setColor(Color(
+					this->color.r,
+					this->color.g,
+					this->color.b,
+					0)
+				);
 		}
 
 		// Movement

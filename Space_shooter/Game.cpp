@@ -4,7 +4,7 @@ enum textures { player = 0, laser01, missile01 };
 
 Game::Game(RenderWindow* window) {
 	this->window = window;
-	this->window->setFramerateLimit(300);
+	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
@@ -454,14 +454,14 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 			if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 				this->enemies[j].getGlobalBounds())) {
 
-				int nrOfPart = rand() % 5 + 10;
+				int nrOfPart = rand() % 10 + 3;
 				for (size_t l = 0; l < nrOfPart; l++) {
 					this->particles.add(Particle(
 						this->players[i].getBullet(k).getPosition(),
 						0,
 						this->players[i].getBullet(k).getVel(),
 						rand() % 20 + 10,
-						rand() % 100 + 50,
+						-(rand() % 100) - 50,
 						30.f,
 						Color(255,255,255,255)
 					));

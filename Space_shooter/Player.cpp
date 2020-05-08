@@ -578,10 +578,10 @@ bool Player::playerShowStatsIsPressed() {
 std::string Player::getStatsAsString()const {
 	return
 		"Level: " + std::to_string(this->level) +
-		"\nExp: " + std::to_string(this->exp) + "/" + std::to_string(this->expNext) +
+		"\nExp: " + std::to_string(this->exp) + " / " + std::to_string(this->expNext) +
 		"\nStatpoints: " + std::to_string(this->statPoints) +
-		"\nHP: " + std::to_string(this->hp) + "/" + std::to_string(this->hpMax) + " ( +" + std::to_string(this->hpAdded) + ") "
-		"\nDamage: " + std::to_string(this->damage) + "/" + std::to_string(this->damageMax) +
+		"\nHP: " + std::to_string(this->hp) + " / " + std::to_string(this->hpMax) + " ( +" + std::to_string(this->hpAdded) + ") "
+		"\nDamage: " + std::to_string(this->damage) + " - " + std::to_string(this->damageMax) +
 		"\n\nScore: " + std::to_string(this->score) +
 		"\n\nPower: " + std::to_string(this->power) +
 		"\nPlating: " + std::to_string(this->plating) +
