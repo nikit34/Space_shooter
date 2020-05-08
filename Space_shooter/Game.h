@@ -39,6 +39,7 @@ public:
 	void textTagsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
 	void mapUpdate();
+	void particlesUpdate(const float& dt);
 	void pickupsUpdate(const float& dt);
 	void setEndingScoreboard();
 	void restartUpdate();
@@ -51,6 +52,7 @@ public:
 	void drawEnemies();
 	void drawPickups();
 	void drawUpgrades();
+	void drawParticles();
 	void drawUI();
 
 private:
@@ -119,6 +121,9 @@ private:
 
 	// Upgrades
 	dArr<Upgrade> upgrades;
+
+	// Particles
+	ParticleSystem particleSystem;
 
 	// Player textures
 	dArr<Texture> playerBodyTextures;

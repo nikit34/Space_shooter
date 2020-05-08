@@ -86,6 +86,10 @@ void Game::initTextures() {
 
 	temp.loadFromFile("Textures/Bosses/Bullets/bossBullet01.png");
 	this->bossBulletTextures.add(Texture(temp));
+
+	// Particles
+	temp.loadFromFile("Textures/Particles/particle01.png");
+	ParticleSystem::particleTextures.add(temp);
 }
 
 void Game::initPlayerTextures() {
@@ -797,6 +801,8 @@ void Game::upgradesUpdate(const float& dt) {
 void Game::mapUpdate() {
 }
 
+void Game::particlesUpdate(const float& dt) {}
+
 void Game::pickupsUpdate(const float& dt) {
 	for (size_t i = 0; i < this->pickups.size(); i++) {
 		this->pickups[i].update(dt);
@@ -1039,6 +1045,8 @@ void Game::drawUpgrades() {
 		this->upgrades[i].draw(*this->window);
 	}
 }
+
+void Game::drawParticles() {}
 
 void Game::drawUI() {
 	// Draw Texttags
