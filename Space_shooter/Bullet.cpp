@@ -5,12 +5,13 @@ Bullet::Bullet(
 	Vector2f position, 
 	Vector2f scale,
 	Vector2f direction, 
-	float initialVelocity, 
+	float initialVelocity,
 	float maxVelocity,
 	float acceleration
 ) {
 	this->dtMultiplier = 60.f;
 	this->texture = texture;
+	this->initialVelocity = initialVelocity;
 	this->maxVelocity = maxVelocity;
 	this->acceleration = acceleration;
 	this->direction = direction;

@@ -18,9 +18,13 @@ public:
 	float dtMultiplier;
 	Sprite sprite;
 	Vector2f dir;
+	Vector2f currentVel;
 	float maxVel;
+	float deceleration;
 	float maxRotation;
+	float lifeTimeMax;
 	float lifeTime;
+	Color color;
 
 	Particle(
 		Vector2f pos,
@@ -28,7 +32,8 @@ public:
 		Vector2f dir,
 		float maxVel,
 		float maxRotation,
-		float lifeTime
+		float lifeTime,
+		Color color
 	);
 	~Particle();
 
@@ -38,6 +43,15 @@ public:
 
 	static dArr<Texture> particleTextures;
 
-private:
+	//Regular functions
+	float vectorLength(Vector2f v) {
+		return sqrt(pow(v.x, 2) + pow(v.y, 2));
+	}
 
+	Vector2f normalize(Vector2f v, float length) {
+		if (length == 0)
+			return Vector2f(0.f, 0.f);
+		else
+			return v / length;
+	}
 };

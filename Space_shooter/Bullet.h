@@ -20,6 +20,7 @@ public:
 	inline const Vector2f& getPosition() const { return this->sprite.getPosition(); }
 	inline void setPosition(Vector2f position) { this->sprite.setPosition(position); }
 	inline Vector2f getNormDir() { return normalize(this->currentVelocity, vectorLength(this->currentVelocity)); }
+	inline Vector2f getVel()const { return this->currentVelocity; }
 
 	// Functions
 	void movement(const float& dt);

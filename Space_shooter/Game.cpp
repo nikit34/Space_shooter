@@ -454,14 +454,18 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 			if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 				this->enemies[j].getGlobalBounds())) {
 
-				this->particles.add(Particle(
-					this->enemies[j].getPosition(),
-					0,
-					this->players[i].getBullet(k).getNormDir(),
-					10.f,
-					10.f,
-					50.f
-				));
+				int nrOfPart = rand() % 5 + 10;
+				for (size_t l = 0; l < nrOfPart; l++) {
+					this->particles.add(Particle(
+						this->players[i].getBullet(k).getPosition(),
+						0,
+						this->players[i].getBullet(k).getVel(),
+						rand() % 20 + 10,
+						rand() % 100 + 50,
+						30.f,
+						Color(255,255,255,255)
+					));
+				}
 
 				// Piercing shot check / remove bullet
 				if (!this->players[i].getPiercingShot()) {
