@@ -23,7 +23,7 @@ public:
 	void initMap();
 	void initUI();
 	void initialize();
-	void viewUpdate();
+	void updateView();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen();

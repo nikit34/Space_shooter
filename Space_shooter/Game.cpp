@@ -31,6 +31,7 @@ Game::~Game() {}
 
 void Game::initView() {
 	this->mainView.setSize(Vector2f(this->window->getSize()));
+	this->mainView.setCenter(Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
 }
 
 void Game::initTextures() {
@@ -268,7 +269,7 @@ void Game::initialize() {
 	this->initUI();
 }
 
-void Game::viewUpdate() {
+void Game::updateView() {
 	this->mainView.setCenter(this->players[0].getPosition());
 }
 
@@ -282,7 +283,7 @@ void Game::update(const float& dt) {
 	this->toggleFullscreen();
 
 	// View
-	this->viewUpdate();
+	this->updateView();
 
 	// Pause game
 	this->pauseGame();

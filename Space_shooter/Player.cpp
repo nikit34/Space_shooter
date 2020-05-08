@@ -347,7 +347,7 @@ void Player::movement(Vector2u windowBounds, const float& dt) {
 		if (this->currentVelocity.x < 0) 
 			this->currentVelocity.x = 0;
 	}
-	else if (this->currentVelocity.x < 0) {
+	if (this->currentVelocity.x < 0) {
 		this->currentVelocity.x += this->stabilizerForce * dt * this->dtMultiplier;
 		if (this->currentVelocity.x > 0) 
 			this->currentVelocity.x = 0;
@@ -357,7 +357,7 @@ void Player::movement(Vector2u windowBounds, const float& dt) {
 		if (this->currentVelocity.y < 0) 
 			this->currentVelocity.y = 0;
 	}
-	else if (this->currentVelocity.y < 0) {
+	if (this->currentVelocity.y < 0) {
 		this->currentVelocity.y += this->stabilizerForce * dt * this->dtMultiplier;
 		if (this->currentVelocity.y > 0) 
 			this->currentVelocity.y = 0;
@@ -380,15 +380,15 @@ void Player::movement(Vector2u windowBounds, const float& dt) {
 		this->sprite.setPosition(this->getBounds().width, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
+	else if (this->getPosition().x + this->getBounds().width / 2 >= windowBounds.x) {
+		this->sprite.setPosition(windowBounds.x - this->getBounds().width / 2, this->sprite.getPosition().y);
+		this->currentVelocity.x = 0.f;
+	}
 	if (this->getPosition().y <= 0) {
 		this->sprite.setPosition(this->sprite.getPosition().x, 0);
 		this->currentVelocity.y = 0.f;
 	}
-	if (this->getPosition().x + this->getBounds().width / 2 >= windowBounds.x) {
-		this->sprite.setPosition(windowBounds.x - this->getBounds().width / 2, this->sprite.getPosition().y);
-		this->currentVelocity.x = 0.f;
-	}
-	if (this->getPosition().y + this->getBounds().height >= windowBounds.y) {
+	else if (this->getPosition().y + this->getBounds().height >= windowBounds.y) {
 		this->sprite.setPosition(this->sprite.getPosition().x, windowBounds.y - this->getBounds().height);
 		this->currentVelocity.y = 0.f;
 	}
