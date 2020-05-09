@@ -635,11 +635,6 @@ void Game::enemyUpdate(const float& dt) {
 	for (size_t i = 0; i < this->enemies.size(); i++) {
 		this->enemies[i].update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
 
-		// Enemy bullet update
-		for (size_t k = 0; k < this->enemies[i].getBullets().size(); k++) {
-			this->enemies[i].getBullets()[k].update(dt);
-		}
-
 		// Eneny player collision
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->players[k].isAlive()) {
@@ -674,13 +669,77 @@ void Game::enemyUpdate(const float& dt) {
 				}
 			}
 		}
+
 		// Enemies out of bounds
 		if (this->enemies[i].getPosition().x < 0 -
 			this->enemies[i].getGlobalBounds().width) {
 			this->enemies.remove(i);
 			return;
 		}
+    }
+
+	// Enemy bullet update
+	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
+		Enemy::enemyBullets[i].update(dt);
+
+		// Player collision check
+		for (size_t k = 0; k < this->players.size(); k++) {
+			if (Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
+				int damage = this->enemies[i].getDamage();
+
+				// player take bullet damage
+				if (!this->players[k].isShielding()) {
+					this->players[k].takeDamage(damage);
+
+					// Player take damage tag
+					this->textTags.add(TextTag(
+						&this->font,
+						"- " + std::to_string(damage),
+						Color::Red,
+						Vector2f(this->players[k].getPosition().x + 20.f,
+							this->players[k].getPosition().y - 20.f),
+						Vector2f(-1.f, 0.f),
+						30,
+						20.f,
+						true
+					));
+
+					// Player death
+					if (!this->players[k].isAlive())
+						this->playersAlive--;
+				}
+				else {
+					// Player shielded tag
+					this->textTags.add(TextTag(
+						&this->font,
+						"- " + std::to_string(0),
+						Color::Cyan,
+						Vector2f(this->players[k].getPosition().x + 20.f,
+							this->players[k].getPosition().y - 20.f),
+						Vector2f(-1.f, 0.f),
+						30,
+						20.f,
+						true
+					));
+
+				}
+				
+				Enemy::enemyBullets.remove(i);
+				return;
+			}
+		}
+
+		// Window bounds check
+		if (Enemy::enemyBullets[i].getPosition().x > this->window->getSize().x ||
+			Enemy::enemyBullets[i].getPosition().x < 0 ||
+			Enemy::enemyBullets[i].getPosition().y > this->window->getSize().y ||
+			Enemy::enemyBullets[i].getPosition().y < 0) {
+
+			Enemy::enemyBullets.remove(i);
+			return;
+		}
 	}
+
 }
 
 void Game::enemyBulletUpdate(const float& dt) {
@@ -1103,6 +1162,11 @@ void Game::drawEnemies() {
 		// UI
 		this->updateUIEnemy(i);
 		this->window->draw(this->enemyText);
+	}
+
+	// Enemy bullets
+	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
+		Enemy::enemyBullets[i].draw(*this->window);
 	}
 }
 

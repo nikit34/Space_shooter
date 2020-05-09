@@ -1,5 +1,7 @@
 #include"Enemy.h"
 
+dArr<Bullet> Enemy::enemyBullets;
+
 enum eTypes { MOVELEFT = 0, FOLLOW, MOVELEFTSHOOT, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
 enum bulletTypes { REGULAR = 0, MISSILE };
 
@@ -151,14 +153,14 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 		this->normalizedMoveDir = normalize(this->moveDirection, vectorLength(this->moveDirection));
 
 		if (this->shootTimer >= this->shootTimerMax) {
-			this->bullets.add(Bullet(
+			Enemy::enemyBullets.add(Bullet(
 				&(*this->bulletTextures)[REGULAR],
 				this->sprite.getPosition(),
-				Vector2f(0.2f, 0.2f),
+				Vector2f(0.4f, 0.4f),
 				this->normalizedLookDir,
-				1.f,
+				1.5f,
 				5,
-				10.f
+				0.5f
 			));
 			this->shootTimer = 0.f;
 		}
@@ -184,7 +186,4 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 
 void Enemy::draw(RenderTarget& target) { 
 	target.draw(this->sprite); 
-	for (size_t i = 0; i < this->bullets.size(); i++) {
-		this->bullets[i].draw(target);
-	}
 }

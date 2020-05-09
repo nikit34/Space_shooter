@@ -23,13 +23,15 @@ public:
 	inline FloatRect getGlobalBounds() const { return this->sprite.getGlobalBounds(); }
 	inline Vector2f getPosition() const { return this->sprite.getPosition(); }
 	inline const int& getPlayerFollowNr() const { return this->playerFollowNr; }
-	inline dArr<Bullet>& getBullets() { return this->bullets; }
 
 	// Functions
 	void collision();
 	void takeDamage(int damage);
 	void update(const float &dt, Vector2f playerPosition);
 	void draw(RenderTarget& target);
+
+	// Static
+	static dArr<Bullet> enemyBullets;
 
 	float vectorLength(Vector2f v) { return sqrt(pow(v.x, 2) + pow(v.y, 2)); }
 
@@ -53,7 +55,6 @@ private:
 	float maxVelocity;
 
 	dArr<Texture>* bulletTextures;
-	dArr<Bullet> bullets;
 
 	float damageTimerMax;
 	float damageTimer;

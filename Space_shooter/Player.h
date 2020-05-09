@@ -55,6 +55,7 @@ public:
 	inline float getShieldTimerMax() const { return this->shieldTimerMax; }
 	inline float getShieldRechargeTimer() const { return this->shieldRechargeTimer; }
 	inline float getShieldRechargeTimerMax() const { return this->shieldRechargeTimerMax; }
+	inline bool isShielding() const { return this->shielding; }
 
 	inline void addStatPoint() { this->statPoints++; }
 	void addStatPointRandom();
