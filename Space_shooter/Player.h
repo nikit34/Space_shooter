@@ -51,6 +51,10 @@ public:
 	inline const int& getExp() const { return this->exp; }
 	inline const int& getExpNext() const { return this->expNext; }
 	bool gainExp(int exp);
+	inline float getShieldTimer() const { return this->shieldTimer; }
+	inline float getShieldTimerMax() const { return this->shieldTimerMax; }
+	inline float getShieldRechargeTimer() const { return this->shieldRechargeTimer; }
+	inline float getShieldRechargeTimerMax() const { return this->shieldRechargeTimerMax; }
 
 	inline void addStatPoint() { this->statPoints++; }
 	void addStatPointRandom();
@@ -60,7 +64,7 @@ public:
 	inline void gainScore(int score) { this->score += score; }
 	inline const int getScore() const { return this->score; }
 
-	inline bool isDamageCooldown() { return this->damageTimer < this->damageTimerMax; }
+	inline bool isDamageCooldown() const { return this->damageTimer < this->damageTimerMax; }
 
 	void setGunLevel(int gunLevel);
 	inline const int& getGunLevel() const { return this->mainGunLevel; }

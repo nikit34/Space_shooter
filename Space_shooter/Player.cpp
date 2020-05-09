@@ -66,11 +66,15 @@ Player::Player(
 	this->mainGunSprite.setRotation(270);
 	this->mainGunSprite.setScale(0.5f, 0.5f);
 	this->mainGunSprite.setPosition(
-		this->playerCenter.x - 20.f,
+		this->playerCenter.x - 40.f,
 		this->playerCenter.y
 	);
 
 	this->deflectorShield.setTexture(Player::playerShieldTextures[0]);
+	this->deflectorShield.setOrigin(
+		this->deflectorShield.getGlobalBounds().width / 2,
+		this->deflectorShield.getGlobalBounds().height / 2
+	);
 
 	// Accessories
 
@@ -272,25 +276,25 @@ void Player::updateAccessories(const float &dt) {
 		this->playerCenter.y
 	);
 
-	// Set the position of the shield to follow player
-	this->deflectorShield.setPosition(
-		this->sprite.getPosition().x - 2 * this->sprite.getGlobalBounds().width,
-		this->sprite.getPosition().y - this->sprite.getGlobalBounds().height
-	);
-
 	// Animate the main gun and correct it after firing
-	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 20.f) {
+	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 40.f) {
 		this->mainGunSprite.move(
 			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 
 			0.f
 		);
 	}
-	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 20.f) {
+	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 40.f) {
 		this->mainGunSprite.setPosition(
-			this->playerCenter.x - 20.f,
+			this->playerCenter.x - 40.f,
 			this->playerCenter.y
 		);
 	}
+
+	// Set the position of the shield to follow player
+	this->deflectorShield.setPosition(
+		playerCenter.x - this->sprite.getGlobalBounds().width,
+		playerCenter.y - 10.f
+	);
 
 	// Left wing
 	this->lWing.setScale(0.3f, 0.3f);

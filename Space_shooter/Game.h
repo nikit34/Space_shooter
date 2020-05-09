@@ -92,8 +92,6 @@ private:
 	// Bars
 	RectangleShape playerExpBar; 
 	RectangleShape playerShieldBar;
-	RectangleShape playerShieldRechargeBar;
-
 
 	// Backgrounds
 	RectangleShape playerStatsTextBack;
