@@ -123,7 +123,7 @@ Player::Player(
 	this->shootTimer = this->shootTimerMax;
 	this->damageTimerMax = 40.f;
 	this->damageTimer = this->damageTimerMax;
-	this->shieldTimerMax = 50.f;
+	this->shieldTimerMax = 50.f + this->cooling + (this->wiring / 2);
 	this->shieldTimer = this->shieldTimerMax;
 	this->shieldRechargeTimerMax = 100.f;
 	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
@@ -221,10 +221,11 @@ bool Player::updateLeveling() {
 	return false;
 }
 
-void Player::updateStats() {
-	this->hpMax = hpAdded + plating * 5;
-	this->damageMax = 2 + power * 2;
-	this->damage = 1 + power;
+void Player::updateStats()		 {
+	this->hpMax = this->hpAdded + this->plating * 5;
+	this->damageMax = 2 + this->power * 2;
+	this->damage = 1 + this->power;
+	this->shieldTimerMax = 50.f + this->cooling + (this->wiring / 2);
 }
 
 void Player::changeAccessories(const float& dt) {
@@ -516,7 +517,7 @@ void Player::combat(const float& dt) {
 		this->shootTimer = 0;  // Reset timer
 	}
 
-	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHIELD]))) {
+	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHIELD])) && this->shield) {
 		if (this->shieldTimer > 0 && this->shieldRechargeTimer >= this->shieldRechargeTimerMax) {
 			this->shielding = true;
 			this->shieldTimer -= 2.f * dt * this->dtMultiplier;

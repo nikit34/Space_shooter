@@ -463,38 +463,24 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 			if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 				this->enemies[j].getGlobalBounds())) {
 
-				int nrOfPart = rand() % 10 + 3;
-				for (size_t l = 0; l < nrOfPart; l++) {
-					this->particles.add(Particle(
-						this->players[i].getBullet(k).getPosition(),
-						0,
-						this->players[i].getBullet(k).getVel(),
-						rand() % 20 + 10,
-						-(rand() % 100) - 50,
-						30.f,
-						Color(255,255,255,255)
-					));
-				}
-
-				// Piercing shot check / remove bullet
-				if (!this->players[i].getPiercingShot()) {
-					this->players[i].removeBullet(k);
-				}
-				else {
-					this->players[i].getBullet(k).setPosition(
-						Vector2f(this->enemies[j].getPosition().x +
-							this->enemies[j].getGlobalBounds().width +
-							this->players[i].getBullet(k).getGlobalBounds().width / 2 +
-							1.f,
-							this->players[i].getBullet(k).getPosition().y
-						)
-					);
-				}
-
 				// Enemy take damage
 				int damage = this->players[i].getDamage();
 				if (this->enemies[j].getHp() > 0) {
 					this->enemies[j].takeDamage(damage);
+
+					// Add particles on enemy damage
+					int nrOfPart = rand() % 3 + 1;
+					for (size_t l = 0; l < nrOfPart; l++) {
+						this->particles.add(Particle(
+							this->players[i].getBullet(k).getPosition(),
+							0,
+							this->players[i].getBullet(k).getVel(),
+							rand() % 20 + 10,
+							-(rand() % 100) - 50,
+							30.f,
+							Color(255, 255, 255, 255)
+						));
+					}
 
 					// Create text tag
 					this->textTags.add(TextTag(
@@ -512,6 +498,20 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 
 				// Enemy dead
 				if (this->enemies[j].getHp() <= 0) {
+
+					// Add particles on enemy dead
+					int nrOfPart = rand() % 5 + 5;
+					for (size_t l = 0; l < nrOfPart; l++) {
+						this->particles.add(Particle(
+							this->players[i].getBullet(k).getPosition(),
+							0,
+							this->players[i].getBullet(k).getVel(),
+							rand() % 20 + 10,
+							-(rand() % 100) - 50,
+							30.f,
+							Color(255, 255, 255, 255)
+						));
+					}
 
 					// Gain score & reset multiplier timer
 					this->multiplierTimer = this->multiplierTimerMax;
@@ -601,6 +601,21 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 					}
 					this->enemies.remove(j);
 				}
+
+				// Piercing shot check / remove bullet
+				if (!this->players[i].getPiercingShot()) {
+					this->players[i].removeBullet(k);
+				}
+				else {
+					this->players[i].getBullet(k).setPosition(
+						Vector2f(this->enemies[j].getPosition().x +
+							this->enemies[j].getGlobalBounds().width +
+							this->players[i].getBullet(k).getGlobalBounds().width / 2 +
+							1.f,
+							this->players[i].getBullet(k).getPosition().y
+						)
+					);
+				}
 				return;
 			}
 		}
@@ -685,7 +700,7 @@ void Game::enemyUpdate(const float& dt) {
 		// Player collision check
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
-				int damage = this->enemies[i].getDamage();
+				int damage = rand() % 10 + 1;
 
 				// player take bullet damage
 				if (!this->players[k].isShielding()) {
@@ -709,6 +724,20 @@ void Game::enemyUpdate(const float& dt) {
 						this->playersAlive--;
 				}
 				else {
+					// Add particles on shielding
+					int nrOfPart = rand() % 3 + 1;
+					for (size_t l = 0; l < nrOfPart; l++) {
+						this->particles.add(Particle(
+							Enemy::enemyBullets[i].getPosition(),
+							0,
+							Enemy::enemyBullets[i].getVel(),
+							rand() % 20 + 10,
+							-(rand() % 100) - 50,
+							30.f,
+							Color(255, 255, 255, 255)
+						));
+					}
+
 					// Player shielded tag
 					this->textTags.add(TextTag(
 						&this->font,

@@ -159,7 +159,7 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 				Vector2f(0.4f, 0.4f),
 				this->normalizedLookDir,
 				1.5f,
-				5,
+				7.f,
 				0.5f
 			));
 			this->shootTimer = 0.f;
