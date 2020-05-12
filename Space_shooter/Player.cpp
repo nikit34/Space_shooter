@@ -517,6 +517,7 @@ void Player::combat(const float& dt) {
 		this->shootTimer = 0;  // Reset timer
 	}
 
+	// Shielding
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHIELD])) && this->shield) {
 		if (this->shieldTimer > 0 && this->shieldRechargeTimer >= this->shieldRechargeTimerMax) {
 			this->shielding = true;

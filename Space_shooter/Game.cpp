@@ -257,6 +257,7 @@ void Game::initialize() {
 		Keyboard::Numpad4,
 		Keyboard::Numpad6,
 		Keyboard::RControl,
+		Keyboard::RShift,
 		Keyboard::Numpad7,
 		Keyboard::Numpad1,
 		Keyboard::Numpad2,
@@ -599,22 +600,21 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 							));
 						}
 					}
+					// Piercing shot check / remove bullet
+					if (!this->players[i].getPiercingShot()) {
+						this->players[i].removeBullet(k);
+					}
+					else {
+						this->players[i].getBullet(k).setPosition(
+							Vector2f(this->enemies[j].getPosition().x +
+								this->enemies[j].getGlobalBounds().width +
+								this->players[i].getBullet(k).getGlobalBounds().width / 2 +
+								1.f,
+								this->players[i].getBullet(k).getPosition().y
+							)
+						);
+					}
 					this->enemies.remove(j);
-				}
-
-				// Piercing shot check / remove bullet
-				if (!this->players[i].getPiercingShot()) {
-					this->players[i].removeBullet(k);
-				}
-				else {
-					this->players[i].getBullet(k).setPosition(
-						Vector2f(this->enemies[j].getPosition().x +
-							this->enemies[j].getGlobalBounds().width +
-							this->players[i].getBullet(k).getGlobalBounds().width / 2 +
-							1.f,
-							this->players[i].getBullet(k).getPosition().y
-						)
-					);
 				}
 				return;
 			}
@@ -646,7 +646,7 @@ void Game::enemyUpdate(const float& dt) {
 		this->enemySpawnTimer = 0;  // Reset timer
 	}
 
-	// Update Enemies
+	// Update enemies
 	for (size_t i = 0; i < this->enemies.size(); i++) {
 		this->enemies[i].update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
 
@@ -694,13 +694,14 @@ void Game::enemyUpdate(const float& dt) {
     }
 
 	// Enemy bullet update
-	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
+	bool bulletRemoved = false;
+	for (size_t i = 0; i < Enemy::enemyBullets.size() && !bulletRemoved; i++) {
 		Enemy::enemyBullets[i].update(dt);
 
 		// Player collision check
 		for (size_t k = 0; k < this->players.size(); k++) {
-			if (Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
-				int damage = rand() % 10 + 1;
+			if (!bulletRemoved && Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
+				int damage = rand() % 2 + 1;
 
 				// player take bullet damage
 				if (!this->players[k].isShielding()) {
@@ -734,7 +735,7 @@ void Game::enemyUpdate(const float& dt) {
 							rand() % 20 + 10,
 							-(rand() % 100) - 50,
 							30.f,
-							Color(255, 255, 255, 255)
+							Color(0, 50, 255, 255)
 						));
 					}
 
@@ -754,21 +755,21 @@ void Game::enemyUpdate(const float& dt) {
 				}
 				
 				Enemy::enemyBullets.remove(i);
-				return;
+				bulletRemoved = true;
 			}
 		}
 
 		// Window bounds check
-		if (Enemy::enemyBullets[i].getPosition().x > this->window->getSize().x ||
+		if (!bulletRemoved && 
+			(Enemy::enemyBullets[i].getPosition().x > this->window->getSize().x ||
 			Enemy::enemyBullets[i].getPosition().x < 0 ||
 			Enemy::enemyBullets[i].getPosition().y > this->window->getSize().y ||
-			Enemy::enemyBullets[i].getPosition().y < 0) {
-
+			Enemy::enemyBullets[i].getPosition().y < 0
+			)) {
 			Enemy::enemyBullets.remove(i);
-			return;
+			bulletRemoved = true;
 		}
 	}
-
 }
 
 void Game::enemyBulletUpdate(const float& dt) {
