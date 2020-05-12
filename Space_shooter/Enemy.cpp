@@ -152,6 +152,7 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 
 		this->normalizedMoveDir = normalize(this->moveDirection, vectorLength(this->moveDirection));
 
+		// Shoot
 		if (this->shootTimer >= this->shootTimerMax) {
 			Enemy::enemyBullets.add(Bullet(
 				&(*this->bulletTextures)[REGULAR],

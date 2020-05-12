@@ -456,11 +456,14 @@ void Game::playerUpdate(const float& dt) {
 }
 
 void Game::playerBulletUpdate(const float& dt, const int i) {
-	for (size_t k = 0; k < this->players[i].getBulletsSize(); k++) {
+	bool enemyRemoved = false;
+	bool bulletRemoved = false;
+
+	for (size_t k = 0; k < this->players[i].getBulletsSize() && !bulletRemoved; k++) {
 		this->players[i].getBullet(k).update(dt);
 
 		// Enemy collision check
-		for (size_t j = 0; j < this->enemies.size(); j++) {
+		for (size_t j = 0; j < this->enemies.size() && !enemyRemoved; j++) {
 			if (this->players[i].getBullet(k).getGlobalBounds().intersects(
 				this->enemies[j].getGlobalBounds())) {
 
@@ -600,32 +603,34 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 							));
 						}
 					}
-					// Piercing shot check / remove bullet
-					if (!this->players[i].getPiercingShot()) {
-						this->players[i].removeBullet(k);
-					}
-					else {
-						this->players[i].getBullet(k).setPosition(
-							Vector2f(this->enemies[j].getPosition().x +
-								this->enemies[j].getGlobalBounds().width +
-								this->players[i].getBullet(k).getGlobalBounds().width / 2 +
-								1.f,
-								this->players[i].getBullet(k).getPosition().y
-							)
-						);
-					}
-					this->enemies.remove(j);
+					enemyRemoved = true;
 				}
-				return;
+				// Piercing shot check / remove bullet
+				if (!this->players[i].getPiercingShot()) {
+					bulletRemoved = true;
+				}
+				else {
+					this->players[i].getBullet(k).setPosition(
+						Vector2f(this->enemies[j].getPosition().x +
+							this->enemies[j].getGlobalBounds().width +
+							this->players[i].getBullet(k).getGlobalBounds().width / 2 +
+							1.f,
+							this->players[i].getBullet(k).getPosition().y
+						)
+					);
+				}
 			}
+			if(enemyRemoved)
+				this->enemies.remove(j);
 		}
 
 		// Window bounds check
 		if (this->players[i].getBullet(k).getPosition().x >
-			this->window->getSize().x) {
-			this->players[i].removeBullet(k);
-			return;
+			this->window->getSize().x + this->mainView.getSize().x / 2) {
+			bulletRemoved = true;
 		}
+		if(bulletRemoved)
+			this->players[i].removeBullet(k);
 	}
 }
 
@@ -647,11 +652,15 @@ void Game::enemyUpdate(const float& dt) {
 	}
 
 	// Update enemies
-	for (size_t i = 0; i < this->enemies.size(); i++) {
+	bool enemyRemoved = false;
+	bool playerKilled = false;
+
+	// Update enemies
+	for (size_t i = 0; i < this->enemies.size() && !enemyRemoved; i++) {
 		this->enemies[i].update(dt, this->players[this->enemies[i].getPlayerFollowNr()].getPosition());
 
 		// Eneny player collision
-		for (size_t k = 0; k < this->players.size(); k++) {
+		for (size_t k = 0; k < this->players.size() && !playerKilled; k++) {
 			if (this->players[k].isAlive()) {
 				if (this->players[k].getBounds().intersects(
 					this->enemies[i].getGlobalBounds()) &&
@@ -679,28 +688,34 @@ void Game::enemyUpdate(const float& dt) {
 
 					// Player death
 					if (!this->players[k].isAlive())
-						this->playersAlive--;
-					return;
+						playerKilled = true;
 				}
 			}
+			if (playerKilled)
+				this->playersAlive--;
 		}
 
 		// Enemies out of bounds
 		if (this->enemies[i].getPosition().x < 0 -
 			this->enemies[i].getGlobalBounds().width) {
-			this->enemies.remove(i);
-			return;
+			enemyRemoved = true;
 		}
+		if (enemyRemoved)
+			this->enemies.remove(i);
     }
+	this->enemyBulletUpdate(dt);
+}
 
+void Game::enemyBulletUpdate(const float& dt) {
 	// Enemy bullet update
 	bool bulletRemoved = false;
+	bool playerKilled = false;
 	for (size_t i = 0; i < Enemy::enemyBullets.size() && !bulletRemoved; i++) {
 		Enemy::enemyBullets[i].update(dt);
 
 		// Player collision check
-		for (size_t k = 0; k < this->players.size(); k++) {
-			if (!bulletRemoved && Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
+		for (size_t k = 0; k < this->players.size() && !playerKilled; k++) {
+			if (Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
 				int damage = rand() % 2 + 1;
 
 				// player take bullet damage
@@ -722,7 +737,7 @@ void Game::enemyUpdate(const float& dt) {
 
 					// Player death
 					if (!this->players[k].isAlive())
-						this->playersAlive--;
+						playerKilled = true;
 				}
 				else {
 					// Add particles on shielding
@@ -751,51 +766,57 @@ void Game::enemyUpdate(const float& dt) {
 						20.f,
 						true
 					));
-
 				}
-				
-				Enemy::enemyBullets.remove(i);
 				bulletRemoved = true;
 			}
+			if (playerKilled)
+				this->playersAlive--;
 		}
 
 		// Window bounds check
-		if (!bulletRemoved && 
+		if (!bulletRemoved &&
 			(Enemy::enemyBullets[i].getPosition().x > this->window->getSize().x ||
-			Enemy::enemyBullets[i].getPosition().x < 0 ||
-			Enemy::enemyBullets[i].getPosition().y > this->window->getSize().y ||
-			Enemy::enemyBullets[i].getPosition().y < 0
-			)) {
-			Enemy::enemyBullets.remove(i);
+				Enemy::enemyBullets[i].getPosition().x < 0 ||
+				Enemy::enemyBullets[i].getPosition().y > this->window->getSize().y ||
+				Enemy::enemyBullets[i].getPosition().y < 0
+				)) {
 			bulletRemoved = true;
 		}
+		if (bulletRemoved)
+			Enemy::enemyBullets.remove(i);
 	}
 }
 
-void Game::enemyBulletUpdate(const float& dt) {
-
-}
-
 void Game::textTagsUpdate(const float& dt) {
-	for (size_t i = 0; i < this->textTags.size(); i++) {
+	bool textTagRemoved = false;
+	for (size_t i = 0; i < this->textTags.size() && !textTagRemoved; i++) {
 		this->textTags[i].update(dt);
 
 		if (this->textTags[i].getTimer() <= 0.f) {
-			this->textTags.remove(i);
-			break;
+			textTagRemoved = true;
 		}
+		if (textTagRemoved)
+			this->textTags.remove(i);
 	}
 }
 
 void Game::upgradesUpdate(const float& dt) {
-	for (size_t i = 0; i < this->upgrades.size(); i++) {
+	bool upgradeRemoved = false;
+	bool hasUpgrade = false;
+	for (size_t i = 0; i < this->upgrades.size() && !upgradeRemoved; i++) {
 		this->upgrades[i].update(dt);
 
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->upgrades[i].checkCollision(this->players[k].getBounds())) {
-				if (this->upgrades[i].getType() != 0 && this->upgrades[i].getType() != 1)
-					this->players[k].getAcquiredUpgrades().add(this->upgrades[i].getType());
-
+				if (this->upgrades[i].getType() != 0 && this->upgrades[i].getType() != 1) {
+					for (size_t j = 0; j < this->players[k].getAcquiredUpgrades().size() && !hasUpgrade; j++) {
+						if (this->upgrades[i].getType() == this->players[k].getAcquiredUpgrades()[j])
+							hasUpgrade = true;
+					}
+					if (!hasUpgrade)
+						this->players[k].getAcquiredUpgrades().add(this->upgrades[i].getType());
+				}
+					
 				switch (this->upgrades[i].getType()) {
 
 				case 0: // Statpoint
@@ -905,14 +926,14 @@ void Game::upgradesUpdate(const float& dt) {
 				default:
 					break;
 				}
-				this->upgrades.remove(i);
-				return;
+				upgradeRemoved = true;
 			}
 		}
 		if (this->upgrades[i].canDelete()) {
-			this->upgrades.remove(i);
-			break;
+			upgradeRemoved = true;
 		}
+		if (upgradeRemoved)
+			this->upgrades.remove(i);
 	}
 }
 
@@ -920,13 +941,21 @@ void Game::mapUpdate() {
 }
 
 void Game::particlesUpdate(const float& dt) {
-	for (size_t i = 0; i < this->particles.size(); i++) {
+	bool particleRemoved = false;
+	for (size_t i = 0; i < this->particles.size() && !particleRemoved; i++) {
 		this->particles[i].update(dt);
+	
+		if (this->particles[i].readyToDel())
+			particleRemoved = true;
+
+		if(particleRemoved)
+			this->particles.remove(i);
 	}
 }
 
 void Game::pickupsUpdate(const float& dt) {
-	for (size_t i = 0; i < this->pickups.size(); i++) {
+	bool pickupRemoved = false;
+	for (size_t i = 0; i < this->pickups.size() && !pickupRemoved; i++) {
 		this->pickups[i].update(dt);
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->pickups[i].checkCollision(this->players[k].getBounds())) {
@@ -991,14 +1020,14 @@ void Game::pickupsUpdate(const float& dt) {
 				default:
 					break;
 				}
-				this->pickups.remove(i);
-				return;
+				pickupRemoved = true;
 			}
 		}
 		if (this->pickups[i].canDelete()) {
-			this->pickups.remove(i);
-			break;
+			pickupRemoved = true;
 		}
+		if (pickupRemoved)
+			this->pickups.remove(i);
 	}
 }
 
