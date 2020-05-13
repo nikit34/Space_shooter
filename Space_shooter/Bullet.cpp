@@ -34,10 +34,12 @@ Bullet::~Bullet() {}
 
 void Bullet::movement(const float &dt) {
 	if (this->acceleration > 0.f) {
-		if (this->currentVelocity.x < this->maxVelocity)
+		if (this->currentVelocity.x < this->maxVelocity && this->direction.x > 0.f ||
+			this->currentVelocity.x > -this->maxVelocity && this->direction.x < 0.f)
 			this->currentVelocity.x += this->acceleration * this->direction.x
 			* dt * this->dtMultiplier;
-		if (this->currentVelocity.y < this->maxVelocity)
+		if (this->currentVelocity.y < this->maxVelocity && this->direction.y > 0.f ||
+			this->currentVelocity.y > -this->maxVelocity && this->direction.y < 0.f)
 			this->currentVelocity.y += this->acceleration * this->direction.y
 			* dt * this->dtMultiplier;
 	}

@@ -91,30 +91,32 @@ Player::Player(
 	this->aura.setTexture(Player::auraTextures[this->auraSelect]);
 
 	// Init Accessories
+	float accScale = 0.3f;
 	this->lWing.setOrigin(
 		this->lWing.getGlobalBounds().width / 2,
-		this->lWing.getGlobalBounds().height / 2
-	);
+		this->lWing.getGlobalBounds().height / 2);
+	this->lWing.setScale(accScale, accScale);
 	this->lWing.setPosition(this->playerCenter);
 	this->lWing.setRotation(90.f);
+
 	this->rWing.setOrigin(
 		this->rWing.getGlobalBounds().width / 2,
-		this->rWing.getGlobalBounds().height / 2
-	);
+		this->rWing.getGlobalBounds().height / 2);
+	this->rWing.setScale(accScale, accScale);
 	this->rWing.setPosition(this->playerCenter);
 	this->rWing.setRotation(90.f);
 
 	this->cPit.setOrigin(
 		this->cPit.getGlobalBounds().width / 2,
-		this->cPit.getGlobalBounds().height / 2
-	);
+		this->cPit.getGlobalBounds().height / 2);
+	this->cPit.setScale(accScale, accScale);
 	this->cPit.setPosition(this->playerCenter);
 	this->cPit.setRotation(90.f);
 
 	this->aura.setOrigin(
 		this->aura.getGlobalBounds().width / 2,
-		this->aura.getGlobalBounds().height / 2
-	);
+		this->aura.getGlobalBounds().height / 2);
+	this->aura.setScale(accScale, accScale);
 	this->aura.setPosition(this->playerCenter);
 	this->aura.setRotation(90.f);
 
@@ -274,56 +276,49 @@ void Player::updateAccessories(const float &dt) {
 	// Set the position of gun to follow player
 	this->mainGunSprite.setPosition(
 		this->mainGunSprite.getPosition().x,
-		this->playerCenter.y
-	);
+		this->playerCenter.y);
 
 	// Animate the main gun and correct it after firing
 	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 40.f) {
 		this->mainGunSprite.move(
 			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 
-			0.f
-		);
+			0.f);
 	}
 	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 40.f) {
 		this->mainGunSprite.setPosition(
 			this->playerCenter.x - 40.f,
-			this->playerCenter.y
-		);
+			this->playerCenter.y);
 	}
 
 	// Set the position of the shield to follow player
+	this->deflectorShield.setScale(1.f, 1.f);
 	this->deflectorShield.setPosition(
 		playerCenter.x - this->sprite.getGlobalBounds().width,
-		playerCenter.y - 10.f
-	);
+		playerCenter.y - 10.f);
 
 	// Left wing
 	this->lWing.setScale(0.3f, 0.3f);
 	this->lWing.setPosition(
 		playerCenter.x - 80.f - abs(this->currentVelocity.x),
-		playerCenter.y - abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2)
-	);
+		playerCenter.y - abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2));
 
 	// Right wing
 	this->rWing.setScale(0.3f, 0.3f);
 	this->rWing.setPosition(
 		playerCenter.x - 80.f - abs(this->currentVelocity.x),
-		playerCenter.y + abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2)
-	);
+		playerCenter.y + abs(this->currentVelocity.x / 2 + this->currentVelocity.y / 2));
 
 	// Cockpit
 	this->cPit.setScale(0.3f, 0.3f);
 	this->cPit.setPosition(
 		playerCenter.x - 90.f + this->currentVelocity.x,
-		playerCenter.y
-	);
+		playerCenter.y);
 	
 	// Aura
 	this->aura.setScale(0.2f, 0.2f);
 	this->aura.setPosition(
 		playerCenter.x - 90.f,
-		playerCenter.y - 35.f
-	);
+		playerCenter.y - 35.f);
 	this->aura.rotate(1.2f * dt * this->dtMultiplier);
 }
 
