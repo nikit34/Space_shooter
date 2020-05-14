@@ -15,7 +15,6 @@ using namespace sf;
 class Upgrade {
 public:
 	Upgrade(
-		dArr<Texture>& textures, 
 		Vector2f position,
 		int type,
 		float aliveTimerMax
@@ -30,6 +29,10 @@ public:
 	void update(const float& dt);
 	void draw(RenderTarget& target);
 
+	// Static
+	static int nrOfUpgrades;
+	static dArr<Texture> upgradeTextures;
+
 private:
 	float dtMultiplier;
 
@@ -37,8 +40,6 @@ private:
 	
 	float aliveTimer;
 	float aliveTimerMax;
-
-	dArr<Texture>* textures;
 
 	Sprite sprite;
 };

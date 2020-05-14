@@ -77,12 +77,20 @@ public:
 
 	inline dArr<int>& getAcquiredUpgrades() { return this->upgradesAcquired; }
 
+	inline float getPowerupTimer()const { return this->powerupTimer; }
+	inline float getPowerupTimerMax()const { return this->powerupTimerMax; }
+	inline bool getPowerupRF()const { return this->powerupRF; }
+	inline bool getPowerupXP()const { return this->powerupXP; }
+	inline void enablePowerupRF() { this->powerupRF = true; this->powerupTimer = this->powerupTimerMax; }
+	inline void enablePowerupXP() { this->powerupXP = true; this->powerupTimer = this->powerupTimerMax; }
+
 	// Functions
 	void reset();
 	bool updateLeveling();
 	void updateStats();
 	void changeAccessories(const float& dt);
 	void updateAccessories(const float& dt);
+	void updatePowerups();
 	void combat(const float& dt);
 	void movement(Vector2u windowBounds, const float& dt);
 	void update(Vector2u windowBounds, const float& dt);
@@ -133,6 +141,8 @@ private:
 	float shieldTimerMax;
 	float shieldRechargeTimer;
 	float shieldRechargeTimerMax;
+	float powerupTimer;
+	float powerupTimerMax;
 
 	Sprite sprite;
 	RectangleShape hitBox;
@@ -190,4 +200,8 @@ private:
 	bool shield;
 	bool dualMissiles01;
 	bool dualMissiles02;
+
+	// Powerups
+	bool powerupRF;
+	bool powerupXP;
 };

@@ -7,14 +7,16 @@ Bullet::Bullet(
 	Vector2f direction, 
 	float initialVelocity,
 	float maxVelocity,
-	float acceleration
+	float acceleration,
+	int damage
 ) {
 	this->dtMultiplier = 60.f;
 	this->texture = texture;
+	this->direction = direction;
 	this->initialVelocity = initialVelocity;
 	this->maxVelocity = maxVelocity;
 	this->acceleration = acceleration;
-	this->direction = direction;
+	this->damage = damage;
 	this->currentVelocity = Vector2f(
 		initialVelocity * this->direction.x,
 		initialVelocity * this->direction.y

@@ -157,11 +157,12 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 			Enemy::enemyBullets.add(Bullet(
 				&(*this->bulletTextures)[REGULAR],
 				this->sprite.getPosition(),
-				Vector2f(0.7f, 0.7f),
+				Vector2f(0.75f, 0.75f),
 				this->normalizedLookDir,
 				1.5f,
 				7.f,
-				0.5f
+				0.5f,
+				this->getDamage()
 			));
 			this->shootTimer = 0.f;
 		}

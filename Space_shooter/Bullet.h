@@ -10,7 +10,8 @@ public:
 		Vector2f direction,
 		float initialVelocity,
 		float maxVelocity,
-		float acceleration
+		float acceleration,
+		int damage
 	);
 
 	virtual ~Bullet();
@@ -21,6 +22,7 @@ public:
 	inline void setPosition(Vector2f position) { this->sprite.setPosition(position); }
 	inline Vector2f getNormDir() { return normalize(this->currentVelocity, vectorLength(this->currentVelocity)); }
 	inline Vector2f getVel()const { return this->currentVelocity; }
+	inline int getDamage()const { return this->damage; }
 
 	// Functions
 	void movement(const float& dt);
@@ -51,4 +53,5 @@ private:
 	float maxVelocity;
 	float acceleration;
 	Vector2f direction;
+	int damage;
 };

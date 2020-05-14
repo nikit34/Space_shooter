@@ -38,6 +38,7 @@ public:
 	void enemyBulletUpdate(const float& dt);
 	void textTagsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
+	void powerupsUpdate(const float& dt);
 	void mapUpdate();
 	void particlesUpdate(const float& dt);
 	void pickupsUpdate(const float& dt);
@@ -52,6 +53,7 @@ public:
 	void drawEnemies();
 	void drawPickups();
 	void drawUpgrades();
+	void drawPowerups();
 	void drawParticles();
 	void drawUI();
 
@@ -123,25 +125,15 @@ private:
 	// Upgrades
 	dArr<Upgrade> upgrades;
 
+	// Powerups
+	dArr<Powerup>powerups;
+
 	// Particles
 	dArr<Particle> particles;
-
-	// Player textures
-	dArr<Texture> playerBodyTextures;
-	dArr<Texture> playerBulletTextures;
-	dArr<Texture> playerMainGunTextures;
-	dArr<Texture> lWingTextures;
-	dArr<Texture> rWingTextures;
-	dArr<Texture> cPitTextures;
-	dArr<Texture> auraTextures;
 
 	// Pickup textures
 	unsigned nrOfPickups;
 	dArr<Texture> pickupTextures;
-
-	// Upgrade textures
-	unsigned nrOfUpgrades;
-	dArr<Texture> upgradeTextures;
 
 	// Enemy textures
 	dArr<Texture> enemyTextures;

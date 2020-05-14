@@ -1,20 +1,21 @@
 #include"Upgrade.h"
 
+
+int Upgrade::nrOfUpgrades;
+dArr<Texture> Upgrade::upgradeTextures;
+
 Upgrade::Upgrade(
-	dArr<Texture> &textures,
 	Vector2f position,
 	int type, 
 	float aliveTimerMax
 ) {
 	this->dtMultiplier = 60.f;
-
-	this->aliveTimerMax = aliveTimerMax;
-
+	
 	this->type = type;
+	this->aliveTimerMax = aliveTimerMax;
+	this->aliveTimer = 0;
 
-	this->textures = &textures;
-
-	this->sprite.setTexture((*this->textures)[this->type]);
+	this->sprite.setTexture(Upgrade::upgradeTextures[this->type]);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2

@@ -54,18 +54,24 @@ void Game::initTextures() {
 
 	// Upgrades
 	temp.loadFromFile("Textures/Upgrades/statpoint.png");
-	this->upgradeTextures.add(Texture(temp));
+	Upgrade::upgradeTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/Upgrades/healthtank.png");
-	this->upgradeTextures.add(Texture(temp));
+	Upgrade::upgradeTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/Upgrades/doubleray.png");
-	this->upgradeTextures.add(Texture(temp));
+	Upgrade::upgradeTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/Upgrades/tripleray.png");
-	this->upgradeTextures.add(Texture(temp));
+	Upgrade::upgradeTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/Upgrades/piercingshot.png");
-	this->upgradeTextures.add(Texture(temp));
+	Upgrade::upgradeTextures.add(Texture(temp));
 	temp.loadFromFile("Textures/Upgrades/shield.png");
-	this->upgradeTextures.add(Texture(temp));
-	this->nrOfUpgrades = this->upgradeTextures.size();
+	Upgrade::upgradeTextures.add(Texture(temp));
+	Upgrade::nrOfUpgrades = Upgrade::upgradeTextures.size();
+
+	// Powerup
+	temp.loadFromFile("Textures/Powerups/powerupRF.png");
+	Powerup::powerupTextures.add(Texture(temp));
+	temp.loadFromFile("Textures/Powerups/powerupXP.png");
+	Powerup::powerupTextures.add(Texture(temp));
 
 	// Enemies
 	temp.loadFromFile("Textures/enemyMoveLeft.png");
@@ -326,6 +332,9 @@ void Game::update(const float& dt) {
 		// Pickups update
 		this->pickupsUpdate(dt);
 
+		// Powerups update
+		this->powerupsUpdate(dt);
+
 		// Particles update
 		this->particlesUpdate(dt);
 	}
@@ -468,7 +477,7 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 				this->enemies[j].getGlobalBounds())) {
 
 				// Enemy take damage
-				int damage = this->players[i].getDamage();
+				int damage = this->players[i].getBullet(k).getDamage();
 				if (this->enemies[j].getHp() > 0) {
 					this->enemies[j].takeDamage(damage);
 
@@ -528,6 +537,39 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						+ (rand() % this->enemies[j].getHpMax() + 1)
 						* this->scoreMultiplier;
 
+					if (this->players[i].getPowerupXP()) {
+						exp *= 2;
+						std::cout << 1;
+						// Gain exp tag
+						this->textTags.add(TextTag(
+							&this->font,
+							"+ " + std::to_string(exp) +
+							" ( x" + std::to_string(this->scoreMultiplier) +
+							" x2 PowerUp!) EXP",
+							Color::Cyan,
+							Vector2f(this->enemies[j].getPosition()),
+							Vector2f(1.f, 0.f),
+							24,
+							40.f,
+							true
+						));
+					}
+					else {
+						// Gain exp tag
+						this->textTags.add(TextTag(
+							&this->font,
+							"+ " + std::to_string(exp) +
+							" ( x" + std::to_string(this->scoreMultiplier) +
+							" ) EXP",
+							Color::Cyan,
+							Vector2f(this->enemies[j].getPosition()),
+							Vector2f(1.f, 0.f),
+							24,
+							40.f,
+							true
+						));
+					}
+
 					// Score text tag
 					this->textTags.add(TextTag(
 						&this->font,
@@ -557,51 +599,53 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						));
 					}
 
-					// Gain exp tag
-					this->textTags.add(TextTag(
-						&this->font,
-						"+ " + std::to_string(exp) +
-						" ( x" + std::to_string(this->scoreMultiplier) +
-						" ) EXP",
-						Color::Cyan,
-						Vector2f(this->enemies[j].getPosition()),
-						Vector2f(1.f, 0.f),
-						24,
-						40.f,
-						true
-					));
-
 					// Add upgrade
-					int dropChance = rand() % 100 + 1;
+					int dropChance = rand() % 3;
 					int uType = 0;
-					if (dropChance > 80) {
-						// Add pickup
-						dropChance = rand() % 100 + 1;
-						if (dropChance > 80)
-							this->pickups.add(Pickup(
-								this->pickupTextures,
-								this->enemies[j].getPosition(),
-								0,
-								150.f
-							));
-					}
-					else {
-						// Add upgrade
-						dropChance = rand() % 100 + 1;
-						if (dropChance > 90) {
-							uType = rand() % this->nrOfUpgrades;
-							for (size_t k = 0; k < this->players[i].getAcquiredUpgrades().size(); k++) {
-								if (uType == this->players[i].getAcquiredUpgrades()[k]) {
-									uType = rand() % 1;
-								}
+					switch (dropChance) {
+						case 0:
+							// Add pickup
+							dropChance = rand() % 100 + 1;
+							if (dropChance > 80) {
+								this->pickups.add(Pickup(
+									this->pickupTextures,
+									this->enemies[j].getPosition(),
+									0,
+									150.f
+								));
 							}
-							this->upgrades.add(Upgrade(
-								this->upgradeTextures,
-								this->enemies[j].getPosition(),
-								uType,
-								500.f
-							));
-						}
+							break;
+						case 1:
+							// Add upgrade
+							dropChance = rand() % 100 + 1;
+							if (dropChance > 90) {
+								uType = rand() % Upgrade::nrOfUpgrades;
+								for (size_t k = 0; k < this->players[i].getAcquiredUpgrades().size(); k++) {
+									if (uType == this->players[i].getAcquiredUpgrades()[k]) {
+										uType = rand() % 1;
+									}
+								}
+								this->upgrades.add(Upgrade(
+									this->enemies[j].getPosition(),
+									uType,
+									500.f
+								));
+							}
+							break;
+						case 2:
+							// Add powerup
+							dropChance = rand() % 100 + 1;
+							if (dropChance > 0) { // TODO:90
+								uType = rand() % Powerup::nrOfPowerups;
+								this->powerups.add(Powerup(
+									uType,
+									300.f,
+									this->enemies[j].getPosition()
+								));
+							}
+							break;
+						default:
+							break;
 					}
 					enemyRemoved = true;
 				}
@@ -716,7 +760,7 @@ void Game::enemyBulletUpdate(const float& dt) {
 		// Player collision check
 		for (size_t k = 0; k < this->players.size() && !playerKilled; k++) {
 			if (Enemy::enemyBullets[i].getGlobalBounds().intersects(this->players[k].getBounds()) && this->players[k].isAlive()) {
-				int damage = rand() % 2 + 1;
+				int damage = Enemy::enemyBullets[i].getDamage();
 
 				// player take bullet damage
 				if (!this->players[k].isShielding()) {
@@ -937,6 +981,35 @@ void Game::upgradesUpdate(const float& dt) {
 	}
 }
 
+void Game::powerupsUpdate(const float& dt) {
+	bool powerupRemoved = false;
+	for (size_t i = 0; i < this->powerups.size(); i++) {
+		this->powerups[i].update(dt);
+
+		for (size_t k = 0; k < this->players.size(); k++) {
+			if (this->powerups[i].collide(this->players[k].getBounds())) {
+				switch (this->powerups[i].getType()) {
+				case 0: // RF
+					this->players[k].enablePowerupRF();
+					break;
+				case 1: // XP
+					this->players[k].enablePowerupXP();
+					break;
+				default:
+					break;
+				}
+				powerupRemoved = true;
+			}
+		}
+
+		if (this->powerups[i].canRemove()) {
+			powerupRemoved = true;
+		}
+		if (powerupRemoved)
+			this->powerups.remove(i);
+	}
+}
+
 void Game::mapUpdate() {
 }
 
@@ -1096,6 +1169,9 @@ void Game::draw() {
 	// Draw upgrades
 	this->drawUpgrades();
 
+	// Draw powerups
+	this->drawPowerups();
+
 	// Draw particles
 	this->drawParticles();
 
@@ -1238,6 +1314,12 @@ void Game::drawPickups() {
 void Game::drawUpgrades() {
 	for (size_t i = 0; i < this->upgrades.size(); i++) {
 		this->upgrades[i].draw(*this->window);
+	}
+}
+
+void Game::drawPowerups() {
+	for (size_t i = 0; i < this->powerups.size(); i++) {
+		this->powerups[i].draw(*this->window);
 	}
 }
 

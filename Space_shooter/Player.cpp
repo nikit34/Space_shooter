@@ -121,14 +121,17 @@ Player::Player(
 	this->aura.setRotation(90.f);
 
 	// Timers
-	this->shootTimerMax = 25.f;
+	this->shootTimerMax = 20.f;
 	this->shootTimer = this->shootTimerMax;
 	this->damageTimerMax = 40.f;
 	this->damageTimer = this->damageTimerMax;
 	this->shieldTimerMax = 50.f + this->cooling + (this->wiring / 2);
 	this->shieldTimer = this->shieldTimerMax;
-	this->shieldRechargeTimerMax = 100.f;
+	this->shieldRechargeTimerMax = 300.f;
 	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
+	this->powerupTimerMax = 100.f;
+	this->powerupTimer = 0.f;
+
 
 	// Controls
 	this->controls.add(int(UP));
@@ -161,6 +164,10 @@ Player::Player(
 	this->shield = false;
 	this->dualMissiles01 = false;
 	this->dualMissiles02 = false;
+
+	// Powerups
+	this->powerupRF = false;
+	this->powerupXP = false;
 
 	this->setGunLevel(0);
 
@@ -322,6 +329,13 @@ void Player::updateAccessories(const float &dt) {
 	this->aura.rotate(1.2f * dt * this->dtMultiplier);
 }
 
+void Player::updatePowerups() {
+	if (this->powerupTimer <= 0.f) {
+		this->powerupRF = false;
+		this->powerupXP = false;
+	}
+}
+
 void Player::movement(Vector2u windowBounds, const float& dt) {
 	// Update normalized direction
 	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
@@ -425,7 +439,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f), 
 					2.f, 
 					70.f, 
-					2.f
+					2.f,
+					this->getDamage()
 				));
 			}
 			else if (this->mainGunLevel == 1) {
@@ -436,7 +451,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f),
 					2.f,
 					70.f,
-					2.f
+					2.f,
+					this->getDamage()
 				));
 				this->bullets.add(Bullet(
 					&Player::playerBulletTextures[LASER],
@@ -445,7 +461,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f),
 					2.f,
 					70.f,
-					2.f
+					2.f,
+					this->getDamage()
 				));
 			}
 			else if (this->mainGunLevel == 2) {
@@ -456,7 +473,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f),
 					2.f,
 					70.f,
-					2.f
+					2.f,
+					this->getDamage()
 				));
 				this->bullets.add(Bullet(
 					&Player::playerBulletTextures[LASER],
@@ -465,7 +483,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f),
 					2.f,
 					70.f,
-					2.f
+					2.f,
+					this->getDamage()
 				));
 				this->bullets.add(Bullet(
 					&Player::playerBulletTextures[LASER],
@@ -474,7 +493,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f),
 					2.f,
 					70.f,
-					2.f
+					2.f,
+					this->getDamage()
 				));
 			}
 			// Animate gun
@@ -489,7 +509,8 @@ void Player::combat(const float& dt) {
 				Vector2f(1.f, 0.f), 
 				2.f, 
 				45.f, 
-				1.f
+				1.f,
+				this->getDamage()
 			));
 			
 			if (this->dualMissiles01) {
@@ -500,7 +521,8 @@ void Player::combat(const float& dt) {
 					Vector2f(1.f, 0.f), 
 					2.f, 
 					45.f, 
-					1.f
+					1.f,
+					this->getDamage()
 				));
 			}
 		}
@@ -628,6 +650,7 @@ void Player::reset() {
 	this->hp = this->hpMax;
 	this->sprite.setPosition(Vector2f(100.f, 100.f));
 	this->bullets.clear();
+	this->upgradesAcquired.clear();
 	this->setGunLevel(0);
 	this->wiring = 0;
 	this->cooling = 0;
@@ -651,21 +674,33 @@ void Player::reset() {
 
 void Player::update(Vector2u windowBounds, const float& dt) {
 	// Update timers
-	if (this->shootTimer < this->shootTimerMax)
-		this->shootTimer += 1 * dt * this->dtMultiplier;
+	if (this->powerupRF) {
+		this->shootTimerMax = 10.f;
+		if (this->shootTimer < this->shootTimerMax)
+			this->shootTimer += 1.f * dt * this->dtMultiplier;
+	}
+	else {
+		this->shootTimerMax = 20.f;
+		if (this->shootTimer < this->shootTimerMax)
+			this->shootTimer += 1.f * dt * this->dtMultiplier;
+	}
 
 	if (this->damageTimer < this->damageTimerMax) 
-		this->damageTimer += 1 * dt * this->dtMultiplier;
+		this->damageTimer += 1.f * dt * this->dtMultiplier;
 
 	if (this->shieldRechargeTimer < this->shieldRechargeTimerMax)
-		this->shieldRechargeTimer += 1 * dt * this->dtMultiplier;
+		this->shieldRechargeTimer += 1.f * dt * this->dtMultiplier;
 
-	if (this->shieldTimer < this->shieldTimerMax && this->shieldRechargeTimer < this->shieldRechargeTimerMax)
-		this->shieldTimer += 1 * dt * this->dtMultiplier;
+	if (this->shieldTimer < this->shieldTimerMax && this->shieldRechargeTimer >= this->shieldRechargeTimerMax)
+		this->shieldTimer += 1.f * dt * this->dtMultiplier;
+
+	if (this->powerupTimer > 0.f)
+		this->powerupTimer -= 1.f * dt * this->dtMultiplier;
 
 	this->movement(windowBounds, dt);
 	this->changeAccessories(dt);
 	this->updateAccessories(dt);
+	this->updatePowerups();
 	this->combat(dt);
 }
 
