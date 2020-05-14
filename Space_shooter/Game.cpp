@@ -204,6 +204,9 @@ void Game::initUI() {
 	this->playerShieldBar.setSize(Vector2f(40.f, 5.f));
 	this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
 
+	this->playerPowerupBar.setSize(Vector2f(40.f, 5.f));
+	this->playerPowerupBar.setFillColor(Color(0.f, 100.f, 100.f, 200.f));
+
 	// Enemy text init
 	this->enemyText.setFont(this->font);
 	this->enemyText.setCharacterSize(14);
@@ -537,10 +540,10 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						+ (rand() % this->enemies[j].getHpMax() + 1)
 						* this->scoreMultiplier;
 
+					// Gain exp tag
 					if (this->players[i].getPowerupXP()) {
 						exp *= 2;
-						std::cout << 1;
-						// Gain exp tag
+
 						this->textTags.add(TextTag(
 							&this->font,
 							"+ " + std::to_string(exp) +
@@ -555,7 +558,6 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						));
 					}
 					else {
-						// Gain exp tag
 						this->textTags.add(TextTag(
 							&this->font,
 							"+ " + std::to_string(exp) +
@@ -1192,51 +1194,47 @@ void Game::updateUIPlayer(int index) {
 		// Follow text
 		this->followPlayerText.setPosition(
 			this->players[index].getPosition().x - 75.f,
-			this->players[index].getPosition().y - 5.f
-		);
+			this->players[index].getPosition().y - 5.f);
 		this->followPlayerText.setString(
 			std::to_string(this->players[index].getPlayerNr())
 			+ "           " +
 			this->players[index].getHpAsString()
 			+ "\n\n\n\n"
-			+ std::to_string(this->players[index].getLevel())
-		);
+			+ std::to_string(this->players[index].getLevel()));
 
 		// Bars
 		this->playerExpBar.setPosition(
 			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 70.f
-		);
+			this->players[index].getPosition().y + 70.f);
 		this->playerExpBar.setScale(
 			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
-			1.f
-		);
+			1.f);
 
 		this->playerShieldBar.setPosition(
 			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 80.f
-		);
+			this->players[index].getPosition().y + 80.f);
 		if (this->players[index].getShieldRechargeTimer() < this->players[index].getShieldRechargeTimerMax()) {
-			this->playerShieldBar.setScale(
-				(static_cast<float>
-					(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()
-					),
-				1.f
-			);
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()),
+				1.f);
 			if (static_cast<int>(this->players[index].getShieldRechargeTimer()) % 5 == 0)
 				this->playerShieldBar.setFillColor(Color::Red);
 			else
 				this->playerShieldBar.setFillColor(Color(200.f, 200.f, 200.f, 200.f));
 		}
 		else {
-			this->playerShieldBar.setScale(
-				(static_cast<float>
-					(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()
-					),
-				1.f
-			);
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()),
+				1.f);
 			this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
 		}
+
+		this->playerPowerupBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 90.f);
+		this->playerPowerupBar.setScale((static_cast<float>
+			(this->players[index].getPowerupTimer()) / this->players[index].getPowerupTimerMax()),
+			1.f);
 
 		// Statics box with text
 		if(this->players[index].playerShowStatsIsPressed()) {
@@ -1281,7 +1279,8 @@ void Game::drawPlayer() {
 			this->window->draw(this->followPlayerText);
 			this->window->draw(this->playerExpBar);
 			this->window->draw(this->playerShieldBar);
-
+			this->window->draw(this->playerPowerupBar);
+			
 			if (this->players[i].playerShowStatsIsPressed()) {
 				this->window->draw(this->playerStatsTextBack);
 				this->window->draw(this->playerStatsText);

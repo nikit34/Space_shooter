@@ -129,7 +129,7 @@ Player::Player(
 	this->shieldTimer = this->shieldTimerMax;
 	this->shieldRechargeTimerMax = 300.f;
 	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
-	this->powerupTimerMax = 100.f;
+	this->powerupTimerMax = 300.f;
 	this->powerupTimer = 0.f;
 
 
