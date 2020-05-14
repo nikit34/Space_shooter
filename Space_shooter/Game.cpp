@@ -637,7 +637,7 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						case 2:
 							// Add powerup
 							dropChance = rand() % 100 + 1;
-							if (dropChance > 0) { // TODO:90
+							if (dropChance > 90) {
 								uType = rand() % Powerup::nrOfPowerups;
 								this->powerups.add(Powerup(
 									uType,
@@ -1241,7 +1241,7 @@ void Game::updateUIPlayer(int index) {
 			this->playerStatsText.setString(this->players[index].getStatsAsString());
 			this->playerStatsTextBack.setPosition(
 				this->players[index].getPosition().x - 80.f,
-				this->players[index].getPosition().y + 100.f
+				this->players[index].getPosition().y + 110.f
 			);
 			this->playerStatsTextBack.setSize(Vector2f(
 				this->playerStatsText.getGlobalBounds().width, 

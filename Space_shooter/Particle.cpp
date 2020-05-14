@@ -47,16 +47,16 @@ void Particle::update(const float& dt) {
 				this->color.r,
 				this->color.g,
 				this->color.b,
-				this->sprite.getColor().a - 6.5f * dt * this->dtMultiplier)
-			);
+				this->sprite.getColor().a
+			));
 
 			if (this->sprite.getColor().a > 255)
 				this->sprite.setColor(Color(
 					this->color.r,
 					this->color.g,
 					this->color.b,
-					0)
-				);
+					0
+				));
 		}
 
 		// Movement

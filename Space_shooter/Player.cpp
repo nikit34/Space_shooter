@@ -42,8 +42,7 @@ Player::Player(
 	this->expNext = 20 + static_cast<int>(
 		(50 / 3) * ((pow(level, 3) - 
 		6 * pow(level, 2)) + 
-		17 * level - 12)
-	);
+		17 * level - 12));
 	
 	// Update positions
 	this->playerCenter.x =
@@ -61,20 +60,17 @@ Player::Player(
 	this->mainGunSprite.setTexture(Player::playerMainGunTextures[0]);
 	this->mainGunSprite.setOrigin(
 		this->mainGunSprite.getGlobalBounds().width / 2,
-		this->mainGunSprite.getGlobalBounds().height / 2
-	);
+		this->mainGunSprite.getGlobalBounds().height / 2);
 	this->mainGunSprite.setRotation(270);
 	this->mainGunSprite.setScale(0.5f, 0.5f);
 	this->mainGunSprite.setPosition(
-		this->playerCenter.x - 40.f,
-		this->playerCenter.y
-	);
+		this->playerCenter.x,
+		this->playerCenter.y);
 
 	this->deflectorShield.setTexture(Player::playerShieldTextures[0]);
 	this->deflectorShield.setOrigin(
 		this->deflectorShield.getGlobalBounds().width / 2,
-		this->deflectorShield.getGlobalBounds().height / 2
-	);
+		this->deflectorShield.getGlobalBounds().height / 2);
 
 	// Accessories
 
@@ -288,7 +284,7 @@ void Player::updateAccessories(const float &dt) {
 	// Animate the main gun and correct it after firing
 	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 40.f) {
 		this->mainGunSprite.move(
-			this->currentVelocity.x * dt * this->dtMultiplier + 2.f * dt * this->dtMultiplier, 
+			this->currentVelocity.x * dt * this->dtMultiplier + 4.f * dt * this->dtMultiplier, 
 			0.f);
 	}
 	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 40.f) {
@@ -642,7 +638,8 @@ std::string Player::getStatsAsString()const {
 		"\n\nPower: " + std::to_string(this->power) +
 		"\nPlating: " + std::to_string(this->plating) +
 		"\nWiring: " + std::to_string(this->wiring) +
-		"\nCooling: " + std::to_string(this->cooling);
+		"\nCooling: " + std::to_string(this->cooling) +
+		"\n\nShield Capacity: " + std::to_string(this->shieldTimerMax);
 }
 
 void Player::reset() {
