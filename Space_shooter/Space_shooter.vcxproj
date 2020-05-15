@@ -159,6 +159,7 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileArr.cpp" />
     <ClCompile Include="Upgrade.cpp" />
+    <ClCompile Include="Wingman.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TextTag.h" />
+    <ClInclude Include="Wingman.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

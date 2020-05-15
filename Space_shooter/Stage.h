@@ -17,9 +17,6 @@ public:
 		RenderTarget& target, 
 		View &view);
 
-	// Static variables
-	static int gridSize;
-
 private:	
 	unsigned long stageSizeX; 
 	unsigned long stageSizeY;

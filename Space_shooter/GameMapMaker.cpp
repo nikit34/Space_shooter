@@ -75,7 +75,7 @@ void GameMapMaker::initMap() {
 }
 
 void GameMapMaker::initUI() {
-
+	this->selector.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
 }
 
 
@@ -84,6 +84,9 @@ void GameMapMaker::update(const float& dt) {
 	// Timers update
 	this->updateTimers(dt);
 
+	// Mouse positions
+	this->updateMousePositions();
+	
 	// Fullscreen
 	this->toggleFullscreen();
 
@@ -91,7 +94,7 @@ void GameMapMaker::update(const float& dt) {
 	this->mapUpdate();
 
 	// View
-	this->updateView();
+	this->updateView(dt);
 }
 
 void GameMapMaker::updateTimers(const float& dt) {
@@ -99,12 +102,30 @@ void GameMapMaker::updateTimers(const float& dt) {
 		this->keyTime += 1.f * dt * this->dtMultiplier;
 }
 
+void GameMapMaker::updateMousePositions() {
+	this->mousePosWindow = Mouse::getPosition(*this->window);
+	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow);
+	this->mousePosGrid.x = this->mousePosWorld.x / Wingman::gridSize;
+	this->mousePosGrid.y = this->mousePosWorld.y / Wingman::gridSize;
+}
+
 void GameMapMaker::mapUpdate() {
 
 }
 
-void GameMapMaker::updateView() {
-	// this->mainView.setCenter(this->players[0].getPosition());
+void GameMapMaker::updateView(const float &dt) {
+	if (Keyboard::isKeyPressed(Keyboard::W)) {
+		this->mainView.move(0.f, -10.f * dt * this->dtMultiplier);
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::S)) {
+		this->mainView.move(0.f, 10.f * dt * this->dtMultiplier);
+	}
+	if (Keyboard::isKeyPressed(Keyboard::A)) {
+		this->mainView.move(-10.f * dt * this->dtMultiplier, 0.f);
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::D)) {
+		this->mainView.move(10.f * dt * this->dtMultiplier, 0.f);
+	}
 }
 
 

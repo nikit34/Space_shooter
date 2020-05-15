@@ -10,6 +10,7 @@
 #include<fstream>
 #include<sstream>
 #include"dArr.h"
+#include"Wingman.h"
 
 using namespace sf;
 

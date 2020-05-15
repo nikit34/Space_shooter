@@ -1,6 +1,5 @@
 #include"Stage.h"
 
-int Stage::gridSize = 50;
 
 Stage::Stage()
 	:stageSizeX(100), stageSizeY(100), 
@@ -32,25 +31,25 @@ void Stage::draw(
 	RenderTarget& target, 
 	View& view
 ) {
-	this->fromCol = (view.getCenter().x - view.getSize().x / 2) / Stage::gridSize;
+	this->fromCol = (view.getCenter().x - view.getSize().x / 2) / Wingman::gridSize;
 	if (this->fromCol <= 0)
 		this->fromCol = 0;
 	if (this->fromCol >= this->stageSizeX)
 		this->fromCol = this->stageSizeX;
 
-	this->toCol = (view.getCenter().x + view.getSize().x / 2) / Stage::gridSize + 1;
+	this->toCol = (view.getCenter().x + view.getSize().x / 2) / Wingman::gridSize + 1;
 	if (this->toCol <= 0)
 		this->toCol = 0;
 	if (this->toCol >= this->stageSizeX)
 		this->toCol = this->stageSizeX;
 	
-	this->fromRow = (view.getCenter().y - view.getSize().y / 2) / Stage::gridSize;
+	this->fromRow = (view.getCenter().y - view.getSize().y / 2) / Wingman::gridSize;
 	if (this->fromRow <= 0)
 		this->fromRow = 0;
 	if (this->fromRow >= this->stageSizeY)
 		this->fromRow = this->stageSizeY;
 
-	this->toRow = (view.getCenter().y + view.getSize().y / 2) / Stage::gridSize + 1;
+	this->toRow = (view.getCenter().y + view.getSize().y / 2) / Wingman::gridSize + 1;
 	if (this->toRow <= 0)
 		this->toRow = 0;
 	if (this->toRow >= this->stageSizeY)

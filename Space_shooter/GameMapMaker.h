@@ -26,7 +26,8 @@ public:
 	void initUI();
 	void initialize();
 	
-	void updateView();
+	void updateMousePositions();
+	void updateView(const float& dt);
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	
@@ -45,7 +46,14 @@ private:
 	float keyTimeMax;
 	float keyTime;
 
+	// Mouse positions
+	Vector2i mousePosWindow;
+	Vector2f mousePosWorld;
+	Vector2i mousePosGrid;
+
 	// UI
+	RectangleShape selector;
+
 	// Text
 	Font font;
 
