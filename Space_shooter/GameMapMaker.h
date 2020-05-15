@@ -28,6 +28,7 @@ public:
 	
 	void updateMousePositions();
 	void updateView(const float& dt);
+	void updateAddTiles();
 	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
@@ -59,6 +60,5 @@ private:
 	Font font;
 
 	// Map
-	Map map;
-	Stage stage;
+	Stage *stage;
 };

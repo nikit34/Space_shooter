@@ -14,7 +14,9 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->initialize();
 }
 
-GameMapMaker::~GameMapMaker() {}
+GameMapMaker::~GameMapMaker() {
+	delete this->stage;
+}
 
 
 
@@ -71,7 +73,7 @@ void GameMapMaker::initMapTextures() {
 }
 
 void GameMapMaker::initMap() {
-
+	this->stage = new Stage(1000, 1000);
 }
 
 void GameMapMaker::initUI() {
@@ -113,9 +115,18 @@ void GameMapMaker::updateMousePositions() {
 	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow);
 	this->mousePosGrid.x = this->mousePosWorld.x / Wingman::gridSize;
 	this->mousePosGrid.y = this->mousePosWorld.y / Wingman::gridSize;
+
+	if (this->mousePosGrid.x < 0)
+		this->mousePosGrid.x = 0;
+	if (this->mousePosGrid.y < 0)
+		this->mousePosGrid.y = 0;
 }
 
 void GameMapMaker::mapUpdate() {
+
+}
+
+void GameMapMaker::updateAddTiles() {
 
 }
 
@@ -163,7 +174,7 @@ void GameMapMaker::draw() {
 }
 
 void GameMapMaker::drawMap() {
-	stage.draw(*this->window, this->mainView);
+	this->stage->draw(*this->window, this->mainView);
 }
 
 void GameMapMaker::drawUI() {

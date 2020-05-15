@@ -1,8 +1,8 @@
 #include"Stage.h"
 
 
-Stage::Stage()
-	:stageSizeX(100), stageSizeY(100), 
+Stage::Stage(unsigned long sizeX, unsigned long sizeY)
+	:stageSizeX(sizeX), stageSizeY(sizeY), 
 	tiles(stageSizeX) 
 {
 	this->stageSizeX = 100;
@@ -19,6 +19,10 @@ Stage::Stage()
 }
 
 Stage::~Stage() {}
+
+void Stage::addTile(const Tile tile, unsigned row, unsigned col) {
+	this->tiles[row].push(tile, col);
+}
 
 void Stage::update(
 	int fromCol, int toCol,

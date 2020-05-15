@@ -4,10 +4,16 @@
 
 class Stage {
 public:
-	Stage();
+	Stage(unsigned long sizeX, unsigned long sizeY);
 	virtual ~Stage();
 
 	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
+
+	// Accessors
+	inline int getSizeX()const { return this->stageSizeX; }
+	inline int getSizeY()const { return this->stageSizeY; }
+
+	void addTile(const Tile tile, unsigned row, unsigned col);
 
 	void update(
 		int fromCol, int toCol,
