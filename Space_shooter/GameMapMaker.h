@@ -28,6 +28,7 @@ public:
 	
 	void updateMousePositions();
 	void updateView(const float& dt);
+	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	

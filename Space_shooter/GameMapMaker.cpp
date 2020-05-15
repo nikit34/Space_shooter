@@ -76,6 +76,9 @@ void GameMapMaker::initMap() {
 
 void GameMapMaker::initUI() {
 	this->selector.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
+	this->selector.setFillColor(Color::Transparent);
+	this->selector.setOutlineColor(Color::Red);
+	this->selector.setOutlineThickness(2.f);
 }
 
 
@@ -92,6 +95,9 @@ void GameMapMaker::update(const float& dt) {
 
 	// Map
 	this->mapUpdate();
+
+	// UI update
+	this->updateUI();
 
 	// View
 	this->updateView(dt);
@@ -111,6 +117,12 @@ void GameMapMaker::updateMousePositions() {
 
 void GameMapMaker::mapUpdate() {
 
+}
+
+void GameMapMaker::updateUI() {
+	this->selector.setPosition(
+		this->mousePosGrid.x * Wingman::gridSize,
+		this->mousePosGrid.y * Wingman::gridSize);
 }
 
 void GameMapMaker::updateView(const float &dt) {
@@ -155,7 +167,7 @@ void GameMapMaker::drawMap() {
 }
 
 void GameMapMaker::drawUI() {
-
+	this->window->draw(this->selector);
 }
 
 
