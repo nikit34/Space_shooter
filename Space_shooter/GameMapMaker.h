@@ -37,7 +37,8 @@ public:
 
 	void draw();
 	void drawMap();
-	void drawUI();
+	void drawUIView();
+	void drawUIWindow();
 
 private:
 	// GameMapMaker
@@ -55,6 +56,8 @@ private:
 
 	// UI
 	RectangleShape selector;
+
+	Sprite textureSelector;
 
 	// Text
 	Font font;

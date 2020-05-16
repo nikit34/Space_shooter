@@ -83,6 +83,8 @@ void GameMapMaker::initUI() {
 	this->selector.setFillColor(Color::Transparent);
 	this->selector.setOutlineColor(Color::Red);
 	this->selector.setOutlineThickness(2.f);
+
+	this->textureSelector.setTexture(Tile::tileTextures);
 }
 
 
@@ -139,7 +141,8 @@ void GameMapMaker::updateAddTiles() {
 	if (Mouse::isButtonPressed(Mouse::Left)) {
 		this->stage->addTile(
 			Tile(IntRect(0, 0, 50, 50),
-				this->selector.getPosition(),
+				Vector2f(this->mousePosGrid.x * Wingman::gridSize, 
+					this->mousePosGrid.y * Wingman::gridSize),
 				false,
 				false),
 			this->mousePosGrid.x, 
@@ -185,7 +188,8 @@ void GameMapMaker::draw() {
 	this->window->setView(this->window->getDefaultView());
 
 	// Draw UI
-	this->drawUI();
+	this->drawUIWindow();
+	this->drawUIView();
 
 	// Finish draw
 	this->window->display();
@@ -195,8 +199,11 @@ void GameMapMaker::drawMap() {
 	this->stage->draw(*this->window, this->mainView);
 }
 
-void GameMapMaker::drawUI() {
-	this->window->draw(this->selector);
+void GameMapMaker::drawUIWindow() {
+	this->window->draw(this->textureSelector);
 }
 
+void GameMapMaker::drawUIView() {
+	this->window->draw(this->selector);
+}
 
