@@ -17,8 +17,8 @@ public:
 
 	void update(
 		int fromCol, int toCol,
-		int fromRow, int toRow
-	);
+		int fromRow, int toRow);
+
 	void draw(
 		RenderTarget& target, 
 		View &view);

@@ -21,9 +21,7 @@ public:
 private:
 	unsigned cap;
 	unsigned nrOfTiles;
-
 	T** tiles;
-
 	void initialize(unsigned from);
 };
 
@@ -31,9 +29,7 @@ template<typename T>
 TileArr<T>::TileArr(unsigned cap) {
 	this->cap = cap;
 	this->nrOfTiles = 0;
-
 	this->tiles = new T * [this->cap];
-
 	this->initialize(0);
 }
 
@@ -50,7 +46,6 @@ TileArr<T>::TileArr(const TileArr& obj) {
 		else
 			this->tiles[i] = nullptr;
 	}
-	this->initialize(0);
 }
 
 template<typename T>
@@ -78,16 +73,13 @@ void TileArr<T>::operator=(const TileArr& obj) {
 
 	this->cap = obj.cap;
 	this->nrOfTiles = obj.nrOfTiles;
-
 	this->tiles = new Tile * [this->cap];
-
 	for (size_t i = 0; i < this->cap; i++) {
 		if (obj.tiles[i] != nullptr)
 			this->tiles[i] = new Tile(*obj.tiles[i]);
 		else
 			this->tiles[i] = nullptr;
 	}
-	this->initialize(0);
 }
 
 template<typename T>

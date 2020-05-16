@@ -1,6 +1,5 @@
 #include"Game.h"
 
-enum textures { player = 0, laser01, missile01 };
 
 Game::Game(RenderWindow* window) {
 	this->window = window;
@@ -19,6 +18,8 @@ Game::Game(RenderWindow* window) {
 	this->difficulty = 0;
 	this->difficultyTimer = 0.f;
 
+	this->stage = nullptr;
+
 	this->paused = true;
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
@@ -26,7 +27,9 @@ Game::Game(RenderWindow* window) {
 	this->initialize();
 }
 
-Game::~Game() {}
+Game::~Game() {
+	delete this->stage;
+}
 
 
 void Game::initView() {
@@ -181,7 +184,7 @@ void Game::initMapTextures() {
 }
 
 void Game::initMap() {
-
+	this->stage = new Stage(10, 10);
 }
 
 void Game::initUI() {
@@ -1013,6 +1016,7 @@ void Game::powerupsUpdate(const float& dt) {
 }
 
 void Game::mapUpdate() {
+
 }
 
 void Game::particlesUpdate(const float& dt) {
@@ -1266,7 +1270,7 @@ void Game::updateUIEnemy(int index) {
 }
 
 void Game::drawMap() {
-	stage.draw(*this->window, this->mainView);
+	stage->draw(*this->window, this->mainView);
 }
 
 void Game::drawPlayer() {

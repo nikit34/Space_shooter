@@ -103,8 +103,7 @@ private:
 	dArr<TextTag> textTags;
 
 	// Map
-	Map map;
-	Stage stage;
+	Stage *stage;
 
 	// Players
 	dArr<Player> players;

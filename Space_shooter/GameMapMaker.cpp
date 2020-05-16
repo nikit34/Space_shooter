@@ -8,6 +8,8 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
 
+	this->stage = nullptr;
+
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
 
@@ -73,7 +75,7 @@ void GameMapMaker::initMapTextures() {
 }
 
 void GameMapMaker::initMap() {
-	this->stage = new Stage(1000, 1000);
+	this->stage = new Stage(10, 10);
 }
 
 void GameMapMaker::initUI() {
@@ -98,6 +100,9 @@ void GameMapMaker::update(const float& dt) {
 	// Map
 	this->mapUpdate();
 
+	// Add tiles
+	this->updateAddTiles();
+
 	// UI update
 	this->updateUI();
 
@@ -120,6 +125,10 @@ void GameMapMaker::updateMousePositions() {
 		this->mousePosGrid.x = 0;
 	if (this->mousePosGrid.y < 0)
 		this->mousePosGrid.y = 0;
+	if (this->mousePosGrid.x >= this->stage->getSizeX())
+		this->mousePosGrid.x = this->stage->getSizeX() - 1;
+	if (this->mousePosGrid.y >= this->stage->getSizeY())
+		this->mousePosGrid.y = this->stage->getSizeY() - 1;
 }
 
 void GameMapMaker::mapUpdate() {
@@ -127,7 +136,16 @@ void GameMapMaker::mapUpdate() {
 }
 
 void GameMapMaker::updateAddTiles() {
-
+	if (Mouse::isButtonPressed(Mouse::Left)) {
+		this->stage->addTile(
+			Tile(IntRect(0, 0, 50, 50),
+				this->selector.getPosition(),
+				false,
+				false),
+			this->mousePosGrid.x, 
+			this->mousePosGrid.y
+		);
+	}
 }
 
 void GameMapMaker::updateUI() {
