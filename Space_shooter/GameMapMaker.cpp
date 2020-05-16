@@ -225,17 +225,24 @@ void GameMapMaker::updateUI() {
 }
 
 void GameMapMaker::updateView(const float &dt) {
+	float speed = 0.f;
+	if (Keyboard::isKeyPressed(Keyboard::LShift)) {
+		speed = 40.f;
+	}
+	else { 
+		speed = 20.f; 
+	}
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->mainView.move(0.f, -10.f * dt * this->dtMultiplier);
+		this->mainView.move(0.f, -speed * dt * this->dtMultiplier);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::S)) {
-		this->mainView.move(0.f, 10.f * dt * this->dtMultiplier);
+		this->mainView.move(0.f, speed * dt * this->dtMultiplier);
 	}
 	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		this->mainView.move(-10.f * dt * this->dtMultiplier, 0.f);
+		this->mainView.move(-speed * dt * this->dtMultiplier, 0.f);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::D)) {
-		this->mainView.move(10.f * dt * this->dtMultiplier, 0.f);
+		this->mainView.move(speed * dt * this->dtMultiplier, 0.f);
 	}
 }
 

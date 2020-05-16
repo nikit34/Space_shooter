@@ -19,6 +19,7 @@ public:
 	void saveStage(std::string fileName);
 	void loadStage(std::string fileName);
 
+	void updateBackground(const float& dt, Vector2f pos);
 	void update(
 		int fromCol, int toCol,
 		int fromRow, int toRow);
@@ -28,10 +29,12 @@ public:
 		View &view);
 
 private:	
+	float dtMultiplier;
 	unsigned long stageSizeX; 
 	unsigned long stageSizeY;
 
-	TileArr <TileArr<Tile>> tiles;
+	TileArr<TileArr<Tile>> tiles;
+	dArr<Sprite> background;
 
 	// Optimization
 	int fromCol, toCol;

@@ -5,6 +5,8 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	:stageSizeX(sizeX), stageSizeY(sizeY), 
 	tiles(stageSizeX) 
 {
+	this->dtMultiplier = 60.f;
+
 	this->fromCol = 0;
 	this->toCol = 0;
 	this->fromRow = 0;
@@ -38,7 +40,20 @@ void Stage::saveStage(std::string fileName) {
 }
 
 void Stage::loadStage(std::string fileName) {
+	// Load map size
 
+	// Set tile arr size
+
+	// Load backgrounds
+
+	// Load tiles
+}
+
+void Stage::updateBackground(float const& dt, Vector2f pos) {
+	for (size_t i = 0; i < background.size(); i++)
+	{
+
+	}
 }
 
 void Stage::update(

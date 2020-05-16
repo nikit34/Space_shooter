@@ -114,3 +114,5 @@ void TileArr<T>::remove(const unsigned index) {
 	this->tiles[index] = nullptr;
 	this->nrOfTiles--;
 }
+
+// Resize
