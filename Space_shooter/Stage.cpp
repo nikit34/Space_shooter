@@ -25,6 +25,14 @@ void Stage::addTile(const Tile tile, unsigned row, unsigned col) {
 		this->tiles[row].push(tile, col);
 }
 
+void Stage::removeTile(unsigned row, unsigned col) {
+	if (row >= this->stageSizeX || col >= this->stageSizeY)
+		throw("OUT OF BOUNDS STAGE REMOVETILE");
+
+	if (!this->tiles[row].isNull(col))
+		this->tiles[row].remove(col);
+}
+
 void Stage::update(
 	int fromCol, int toCol,
 	int fromRow, int toRow

@@ -14,6 +14,7 @@ public:
 	inline int getSizeY()const { return this->stageSizeY; }
 
 	void addTile(const Tile tile, unsigned row, unsigned col);
+	void removeTile(unsigned row, unsigned col);
 
 	void update(
 		int fromCol, int toCol,

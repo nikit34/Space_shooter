@@ -81,6 +81,8 @@ void GameMapMaker::initMap() {
 void GameMapMaker::initUI() {
 	this->windowUI = true;
 
+	this->textureX = 0;
+	this->textureY = 0;
 	this->selector.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
 	this->selector.setFillColor(Color::Transparent);
 	this->selector.setOutlineColor(Color::Red);
@@ -104,9 +106,12 @@ void GameMapMaker::update(const float& dt) {
 	// Map
 	this->mapUpdate();
 
+	// General controls
+	this->updateControls();
+
 	// Add tiles
 	if (!this->windowUI)
-		this->updateAddTiles();
+		this->updateAddRemoveTiles();
 
 	// UI update
 	this->updateUI();
@@ -146,10 +151,32 @@ void GameMapMaker::mapUpdate() {
 
 }
 
-void GameMapMaker::updateAddTiles() {
+void GameMapMaker::updateControls() {
+	if (Keyboard::isKeyPressed(Keyboard::Tab) && this->keyTime >= this->keyTimeMax) {
+		if (this->windowUI)
+			this->windowUI = false;
+		else
+			this->windowUI = true;
+
+		this->keyTime = 0;
+	}
+	if (this->windowUI) {
+		// Select texture
+		if (Mouse::isButtonPressed(Mouse::Left)) {
+			this->textureX = this->mousePosGrid.x * (Wingman::gridSize + 1);
+			this->textureY = this->mousePosGrid.y * (Wingman::gridSize + 1);
+		}
+	}
+	else {
+		this->updateAddRemoveTiles();
+	}
+}
+
+void GameMapMaker::updateAddRemoveTiles() {
 	if (Mouse::isButtonPressed(Mouse::Left)) {
 		this->stage->addTile(
-			Tile(IntRect(0, 0, 50, 50),
+			Tile(IntRect(this->textureX, this->textureY, 
+					Wingman::gridSize, Wingman::gridSize),
 				Vector2f(this->mousePosGrid.x * Wingman::gridSize, 
 					this->mousePosGrid.y * Wingman::gridSize),
 				false,
@@ -157,6 +184,9 @@ void GameMapMaker::updateAddTiles() {
 			this->mousePosGrid.x, 
 			this->mousePosGrid.y
 		);
+	}
+	else if (Mouse::isButtonPressed(Mouse::Right)) {
+		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y);
 	}
 }
 
@@ -219,8 +249,8 @@ void GameMapMaker::drawMap() {
 }
 
 void GameMapMaker::drawUIWindow() {
-	this->window->draw(this->selector);
 	this->window->draw(this->textureSelector);
+	this->window->draw(this->selector);
 }
 
 void GameMapMaker::drawUIView() {

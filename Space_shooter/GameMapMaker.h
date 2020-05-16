@@ -28,7 +28,8 @@ public:
 	
 	void updateMousePositions();
 	void updateView(const float& dt);
-	void updateAddTiles();
+	void updateControls();
+	void updateAddRemoveTiles();
 	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
@@ -56,6 +57,9 @@ private:
 
 	// UI
 	bool windowUI;
+
+	int textureX;
+	int textureY;
 	RectangleShape selector;
 	Sprite textureSelector;
 
