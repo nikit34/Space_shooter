@@ -16,6 +16,9 @@ public:
 	void addTile(const Tile tile, unsigned row, unsigned col);
 	void removeTile(unsigned row, unsigned col);
 
+	void saveStage(std::string fileName);
+	void loadStage(std::string fileName);
+
 	void update(
 		int fromCol, int toCol,
 		int fromRow, int toRow);

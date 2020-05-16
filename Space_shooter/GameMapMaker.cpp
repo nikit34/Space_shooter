@@ -39,7 +39,21 @@ void GameMapMaker::toggleFullscreen() {
 	}
 }
 
+void GameMapMaker::newMap() {
+	unsigned mapSizeX = 0;
+	unsigned mapSizeY = 0;
+	std::cout << "New Map\n";
+	std::cout << "Map Name: ";
+	getline(std::cin, this->stageName);
+	std::cout << "\nsize X: ";
+	std::cin >> mapSizeX;
+	std::cout << "\nsize Y: ";
+	std::cin >> mapSizeY;
 
+	delete this->stage;
+	this->stage = new Stage(mapSizeX, mapSizeY);
+	std::cin.ignore(100, '\n');
+}
 
 void GameMapMaker::initialize() {
 	// Init view
@@ -75,6 +89,7 @@ void GameMapMaker::initMapTextures() {
 }
 
 void GameMapMaker::initMap() {
+	this->stageName = "EMPTY";
 	this->stage = new Stage(10, 10);
 }
 
@@ -152,14 +167,16 @@ void GameMapMaker::mapUpdate() {
 }
 
 void GameMapMaker::updateControls() {
+	// Switch Window/View UI
 	if (Keyboard::isKeyPressed(Keyboard::Tab) && this->keyTime >= this->keyTimeMax) {
 		if (this->windowUI)
 			this->windowUI = false;
 		else
 			this->windowUI = true;
 
-		this->keyTime = 0;
+		this->keyTime = 0.f;
 	}
+	// Add/Remove tiles
 	if (this->windowUI) {
 		// Select texture
 		if (Mouse::isButtonPressed(Mouse::Left)) {
@@ -169,6 +186,10 @@ void GameMapMaker::updateControls() {
 	}
 	else {
 		this->updateAddRemoveTiles();
+	}
+	if (Keyboard::isKeyPressed(Keyboard::N) && this->keyTime >= this->keyTimeMax) {
+		this->newMap();
+		this->keyTime = 0.f;
 	}
 }
 

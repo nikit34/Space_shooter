@@ -19,6 +19,8 @@ public:
 	// Functions
 	void toggleFullscreen();
 
+	void newMap();
+
 	void initView();
 	void initTextures();
 	void initMapTextures();
@@ -67,5 +69,6 @@ private:
 	Font font;
 
 	// Map
+	std::string stageName;
 	Stage *stage;
 };

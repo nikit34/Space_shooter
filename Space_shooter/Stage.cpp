@@ -33,6 +33,14 @@ void Stage::removeTile(unsigned row, unsigned col) {
 		this->tiles[row].remove(col);
 }
 
+void Stage::saveStage(std::string fileName) {
+
+}
+
+void Stage::loadStage(std::string fileName) {
+
+}
+
 void Stage::update(
 	int fromCol, int toCol,
 	int fromRow, int toRow
