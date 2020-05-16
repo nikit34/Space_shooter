@@ -55,8 +55,8 @@ private:
 	Vector2i mousePosGrid;
 
 	// UI
+	bool windowUI;
 	RectangleShape selector;
-
 	Sprite textureSelector;
 
 	// Text

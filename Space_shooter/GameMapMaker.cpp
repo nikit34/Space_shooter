@@ -79,6 +79,8 @@ void GameMapMaker::initMap() {
 }
 
 void GameMapMaker::initUI() {
+	this->windowUI = true;
+
 	this->selector.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
 	this->selector.setFillColor(Color::Transparent);
 	this->selector.setOutlineColor(Color::Red);
@@ -103,7 +105,8 @@ void GameMapMaker::update(const float& dt) {
 	this->mapUpdate();
 
 	// Add tiles
-	this->updateAddTiles();
+	if (!this->windowUI)
+		this->updateAddTiles();
 
 	// UI update
 	this->updateUI();
@@ -120,17 +123,23 @@ void GameMapMaker::updateTimers(const float& dt) {
 void GameMapMaker::updateMousePositions() {
 	this->mousePosWindow = Mouse::getPosition(*this->window);
 	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow);
-	this->mousePosGrid.x = this->mousePosWorld.x / Wingman::gridSize;
-	this->mousePosGrid.y = this->mousePosWorld.y / Wingman::gridSize;
 
-	if (this->mousePosGrid.x < 0)
-		this->mousePosGrid.x = 0;
-	if (this->mousePosGrid.y < 0)
-		this->mousePosGrid.y = 0;
-	if (this->mousePosGrid.x >= this->stage->getSizeX())
-		this->mousePosGrid.x = this->stage->getSizeX() - 1;
-	if (this->mousePosGrid.y >= this->stage->getSizeY())
-		this->mousePosGrid.y = this->stage->getSizeY() - 1;
+	if (this->windowUI) {
+		this->mousePosGrid.x = this->mousePosWindow.x / (Wingman::gridSize + 1);
+		this->mousePosGrid.y = this->mousePosWindow.y / (Wingman::gridSize + 1);
+	}
+	else {
+		this->mousePosGrid.x = this->mousePosWorld.x / Wingman::gridSize;
+		this->mousePosGrid.y = this->mousePosWorld.y / Wingman::gridSize;
+		if (this->mousePosGrid.x < 0)
+			this->mousePosGrid.x = 0;
+		if (this->mousePosGrid.y < 0)
+			this->mousePosGrid.y = 0;
+		if (this->mousePosGrid.x >= this->stage->getSizeX())
+			this->mousePosGrid.x = this->stage->getSizeX() - 1;
+		if (this->mousePosGrid.y >= this->stage->getSizeY())
+			this->mousePosGrid.y = this->stage->getSizeY() - 1;
+	}
 }
 
 void GameMapMaker::mapUpdate() {
@@ -152,9 +161,16 @@ void GameMapMaker::updateAddTiles() {
 }
 
 void GameMapMaker::updateUI() {
-	this->selector.setPosition(
-		this->mousePosGrid.x * Wingman::gridSize,
-		this->mousePosGrid.y * Wingman::gridSize);
+	if (this->windowUI) {
+		this->selector.setPosition(
+			this->mousePosGrid.x * (Wingman::gridSize + 1),
+			this->mousePosGrid.y * (Wingman::gridSize + 1));
+	}
+	else {
+		this->selector.setPosition(
+			this->mousePosGrid.x * Wingman::gridSize,
+			this->mousePosGrid.y * Wingman::gridSize);
+	}
 }
 
 void GameMapMaker::updateView(const float &dt) {
@@ -185,11 +201,14 @@ void GameMapMaker::draw() {
 	this->drawMap();
 
 	// Set view;
-	this->window->setView(this->window->getDefaultView());
-
-	// Draw UI
-	this->drawUIWindow();
-	this->drawUIView();
+	if (this->windowUI) {
+		this->window->setView(this->window->getDefaultView());
+		this->drawUIWindow();
+	}
+	else {
+		this->window->setView(this->mainView);
+		this->drawUIView();
+	}
 
 	// Finish draw
 	this->window->display();
@@ -200,6 +219,7 @@ void GameMapMaker::drawMap() {
 }
 
 void GameMapMaker::drawUIWindow() {
+	this->window->draw(this->selector);
 	this->window->draw(this->textureSelector);
 }
 
