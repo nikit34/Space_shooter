@@ -24,6 +24,7 @@ public:
 	inline void setTexRect(int x, int y, int width, int height) { this->sprite.setTextureRect(IntRect(x, y, width, height)); }
 	inline void setIsDamaging(bool isDamaging) { this->isDamaging = isDamaging; }
 	inline void setIsCollider(bool isCollider) { this->isCollider = isCollider; }
+	std::string getAsString()const;
 
 	void update();
 	void draw(RenderTarget &target);

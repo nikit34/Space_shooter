@@ -19,7 +19,8 @@ public:
 	// Functions
 	void toggleFullscreen();
 
-	void newMap();
+	void newStage();
+	void saveStage();
 
 	void initView();
 	void initTextures();

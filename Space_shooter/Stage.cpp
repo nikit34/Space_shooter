@@ -36,7 +36,28 @@ void Stage::removeTile(unsigned row, unsigned col) {
 }
 
 void Stage::saveStage(std::string fileName) {
+	std::ofstream out;
+	out.open(fileName.c_str());
+	if (out.is_open()) {
+		// Save map size
+		out << std::to_string(this->stageSizeX) << " ";
+		out << std::to_string(this->stageSizeY) << " ";
 
+		// Save background path
+		out << "NONE ";
+		out << "\n";
+		for (size_t i = 0; i < this->stageSizeX; i++) {
+			for (size_t k = 0; k < this->stageSizeY; k++) {
+				if(!this->tiles[i].isNull(k))
+					out << this->tiles[i][k].getAsString() << " ";
+			}
+		}
+		out << "\n";
+	}
+	else {
+		std::cout << "\nCould not open map file\n";
+	}
+	out.close();
 }
 
 void Stage::loadStage(std::string fileName) {

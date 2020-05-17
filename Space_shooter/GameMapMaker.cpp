@@ -39,7 +39,7 @@ void GameMapMaker::toggleFullscreen() {
 	}
 }
 
-void GameMapMaker::newMap() {
+void GameMapMaker::newStage() {
 	unsigned mapSizeX = 0;
 	unsigned mapSizeY = 0;
 	std::cout << "New Map\n";
@@ -53,6 +53,39 @@ void GameMapMaker::newMap() {
 	delete this->stage;
 	this->stage = new Stage(mapSizeX, mapSizeY);
 	std::cin.ignore(100, '\n');
+}
+
+void GameMapMaker::saveStage() {
+	std::cout << "Save Stage\n";
+	bool canSave = false;
+	int choice = 0;
+	std::ifstream in;
+	in.open(this->stageName);
+	if (in.is_open()) {
+		std::cout << "File already exists! Overwrite? (NO 0 / YES 1)\n";
+		std::cout << "Choice: ";
+		std::cin >> choice;
+		while (std::cin.fail() || choice > 1) {
+			std::cout << "\nFaulty input!\n";
+			std::cin.clear();
+			std::cin.ignore(100, '\n');
+			std::cout << "Choice NO 0 / YES 1: ";
+			std::cin >> choice;
+		}
+		std::cin.ignore(100, '\n');
+		std::cout << '\n';
+		if (choice == 0) {
+			std::cout << "\nDid not overwrite\n";
+		}
+		else {
+			this->stage->saveStage(this->stageName);
+			std::cout << "\nStage overwrite and save\n";
+		}
+	}
+	else {
+		this->stage->saveStage(this->stageName);
+		std::cout << "\nStage save\n";
+	}
 }
 
 void GameMapMaker::initialize() {
@@ -188,7 +221,12 @@ void GameMapMaker::updateControls() {
 		this->updateAddRemoveTiles();
 	}
 	if (Keyboard::isKeyPressed(Keyboard::N) && this->keyTime >= this->keyTimeMax) {
-		this->newMap();
+		this->newStage();
+		this->keyTime = 0.f;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
+		Keyboard::isKeyPressed(Keyboard::S) && this->keyTime >= this->keyTimeMax) {
+		this->saveStage();
 		this->keyTime = 0.f;
 	}
 }
