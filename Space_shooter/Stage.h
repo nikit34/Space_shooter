@@ -17,7 +17,7 @@ public:
 	void removeTile(unsigned row, unsigned col);
 
 	void saveStage(std::string fileName);
-	void loadStage(std::string fileName);
+	bool loadStage(std::string fileName);
 
 	void updateBackground(const float& dt, Vector2f pos);
 	void update(
@@ -34,7 +34,9 @@ private:
 	unsigned long stageSizeY;
 
 	TileArr<TileArr<Tile>> tiles;
-	dArr<Sprite> background;
+	Texture backgroundTexture;
+	Sprite background1;
+	Sprite background2;
 
 	// Optimization
 	int fromCol, toCol;

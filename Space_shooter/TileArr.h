@@ -18,6 +18,9 @@ public:
 	bool isNull(const unsigned index);
 	void push(const T tile, const unsigned index);
 	void remove(const unsigned index);
+	void clear();
+	void resize(unsigned newCap);
+	void resizeClear(unsigned newCap);
 private:
 	unsigned cap;
 	unsigned nrOfTiles;
@@ -115,4 +118,42 @@ void TileArr<T>::remove(const unsigned index) {
 	this->nrOfTiles--;
 }
 
-// Resize
+template<typename T>
+void TileArr<T>::clear() {
+	for (size_t i = 0; i < this->cap; i++) {
+		delete this->tiles[i];
+	}
+	this->initialize(0);
+}
+
+template<typename T>
+void TileArr<T>::resize(unsigned newCap) {
+	if (newCap <= 0)
+		throw("BAD NEWCAP TILEARR RESIZE");
+
+	T** tempArr = new T * [newCap];
+	for (size_t i = 0; i < newCap; i++) {
+		tempArr[i] = this->tiles[i];
+	}
+	for (size_t i = this->cap; i < newCap; i++) {
+		tempArr[i] = nullptr;
+	}
+	for (size_t i = newCap; i < this->cap; i++) {
+		delete this->tiles[i];
+	}
+	delete[] this->tiles;
+	this->tiles = tempArr;
+}
+
+template<typename T>
+void TileArr<T>::resizeClear(unsigned newCap) {
+	if (newCap <= 0)
+		throw("INVALID CAP TILEARR RESIZECLEAR");
+	for (size_t i = 0; i < this->cap; i++) {
+		delete this->tiles[i];
+	}
+	delete[] this->tiles;
+	this->cap += newCap;
+	this->tiles = new T * [this->cap];
+	this->initialize(0);
+}

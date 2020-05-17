@@ -45,19 +45,39 @@ void GameMapMaker::newStage() {
 	std::cout << "New Map\n";
 	std::cout << "Map Name: ";
 	getline(std::cin, this->stageName);
-	std::cout << "\nsize X: ";
+	if(!this->stageName.find(".wmap"))
+		this->stageName.append(".wmap");
+
+	std::cout << "\nSize X: ";
 	std::cin >> mapSizeX;
-	std::cout << "\nsize Y: ";
+	while (std::cin.fail() || mapSizeX <= 0) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "Size X: ";
+		std::cin >> mapSizeX;
+	}
+	std::cin.ignore(100, '\n');
+	std::cout << '\n';
+
+	std::cout << "\nSize Y: ";
 	std::cin >> mapSizeY;
+	while (std::cin.fail() || mapSizeY <= 0) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "Size Y: ";
+		std::cin >> mapSizeY;
+	}
+	std::cin.ignore(100, '\n');
+	std::cout << '\n';
 
 	delete this->stage;
 	this->stage = new Stage(mapSizeX, mapSizeY);
-	std::cin.ignore(100, '\n');
 }
 
 void GameMapMaker::saveStage() {
 	std::cout << "Save Stage\n";
-	bool canSave = false;
 	int choice = 0;
 	std::ifstream in;
 	in.open(this->stageName);
@@ -86,6 +106,15 @@ void GameMapMaker::saveStage() {
 		this->stage->saveStage(this->stageName);
 		std::cout << "\nStage save\n";
 	}
+}
+
+void GameMapMaker::loadStage() {
+	std::cout << "Load Stage\n";
+	std::string fileName = "";
+	std::cout << "File name: ";
+	getline(std::cin, fileName);
+	if (this->stage->loadStage(fileName))
+		this->stageName = fileName;
 }
 
 void GameMapMaker::initialize() {
@@ -227,6 +256,11 @@ void GameMapMaker::updateControls() {
 	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
 		Keyboard::isKeyPressed(Keyboard::S) && this->keyTime >= this->keyTimeMax) {
 		this->saveStage();
+		this->keyTime = 0.f;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::LControl) &&
+		Keyboard::isKeyPressed(Keyboard::L) && this->keyTime >= this->keyTimeMax) {
+		this->loadStage();
 		this->keyTime = 0.f;
 	}
 }

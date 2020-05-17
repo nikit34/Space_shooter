@@ -48,9 +48,6 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="TileArr.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>

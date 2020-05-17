@@ -25,6 +25,8 @@ void Stage::addTile(const Tile tile, unsigned row, unsigned col) {
 	
 	if (this->tiles[row].isNull(col))
 		this->tiles[row].push(tile, col);
+	else
+		std::cout << "Already tile in that position\n";
 }
 
 void Stage::removeTile(unsigned row, unsigned col) {
@@ -32,7 +34,9 @@ void Stage::removeTile(unsigned row, unsigned col) {
 		throw("OUT OF BOUNDS STAGE REMOVETILE");
 
 	if (!this->tiles[row].isNull(col))
-		this->tiles[row].remove(col);
+		this->tiles[row].remove(col);	
+	else
+		std::cout << "No tile in that position\n";
 }
 
 void Stage::saveStage(std::string fileName) {
@@ -60,21 +64,68 @@ void Stage::saveStage(std::string fileName) {
 	out.close();
 }
 
-void Stage::loadStage(std::string fileName) {
-	// Load map size
+bool Stage::loadStage(std::string fileName) {
+	std::ifstream in;
+	bool loadSuccess = false;
 
-	// Set tile arr size
+	unsigned sizeX = 0;
+	unsigned sizeY = 0;
+	std::string backgroundPath;
+	int rectLeft = 0;
+	int rectTop = 0;
+	int rectWidth = 0;
+	int rectHeight = 0;
+	int gridPosX = 0;
+	int gridPosY = 0;
+	int isCollider = 0;
+	int isDamaging = 0;
+	int damage = 0;
 
-	// Load backgrounds
+	// Open file
+	in.open(fileName);
+	if (in.is_open()) {
+		in >> sizeX >> sizeY;
+		this->stageSizeX = sizeX;
+		this->stageSizeY = sizeY;
+		in.ignore();
+		std::getline(in, backgroundPath);
+		this->backgroundTexture.loadFromFile(backgroundPath);
+		this->background1.setTexture(this->backgroundTexture);
+		this->background2.setTexture(this->backgroundTexture);
 
-	// Load tiles
+		// Clear old stage
+		this->tiles.resizeClear(this->stageSizeX);
+		for (size_t i = 0; i < this->tiles.size(); i++) {
+			this->tiles.resizeClear(this->stageSizeY);
+		}
+		std::cout << "\nCleared\n";
+
+		// Load new stage
+		while (in.eof()) {
+			in >> rectLeft >> rectTop >> rectWidth >> rectHeight;
+			in >> gridPosX >> gridPosY;
+			in >> isCollider >> isDamaging >> damage;
+			this->tiles[gridPosX].push(
+				Tile(
+					IntRect(),
+					Vector2f(),
+					isCollider,
+					isDamaging),
+				gridPosY
+			);
+		}
+		in.ignore();
+		loadSuccess = true;
+	}
+	else {
+		loadSuccess = false;
+	}
+	in.close();
+	return loadSuccess;
 }
 
 void Stage::updateBackground(float const& dt, Vector2f pos) {
-	for (size_t i = 0; i < background.size(); i++)
-	{
 
-	}
 }
 
 void Stage::update(

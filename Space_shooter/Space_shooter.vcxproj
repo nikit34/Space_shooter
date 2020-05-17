@@ -157,7 +157,6 @@
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="TextTag.cpp" />
     <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="TileArr.cpp" />
     <ClCompile Include="Upgrade.cpp" />
     <ClCompile Include="Wingman.cpp" />
   </ItemGroup>
