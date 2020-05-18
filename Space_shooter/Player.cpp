@@ -332,7 +332,7 @@ void Player::updatePowerups() {
 	}
 }
 
-void Player::movement(Vector2u windowBounds, const float& dt) {
+void Player::movement(View& view, const float& dt) {
 	// Update normalized direction
 	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
 
@@ -404,20 +404,24 @@ void Player::movement(Vector2u windowBounds, const float& dt) {
 		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
 
 	// Window collision
-	if (this->getPosition().x - this->getBounds().width <= 0) {
-		this->sprite.setPosition(this->getBounds().width, this->sprite.getPosition().y);
+	// Left
+	if (this->getPosition().x <= view.getCenter().x - view.getSize().x / 2) {
+		this->sprite.setPosition(view.getCenter().x - view.getSize().x / 2 + 10.f, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
-	else if (this->getPosition().x + this->getBounds().width / 2 >= windowBounds.x) {
-		this->sprite.setPosition(windowBounds.x - this->getBounds().width / 2, this->sprite.getPosition().y);
+	// Right
+	else if (this->getPosition().x + this->getBounds().width >= view.getCenter().x + view.getSize().x / 2) {
+		this->sprite.setPosition(view.getCenter().x + view.getSize().x / 2 - this->getBounds().width, this->sprite.getPosition().y);
 		this->currentVelocity.x = 0.f;
 	}
-	if (this->getPosition().y <= 0) {
-		this->sprite.setPosition(this->sprite.getPosition().x, 0);
+	// Top
+	if (this->getPosition().y <= view.getCenter().y - view.getSize().y / 2) {
+		this->sprite.setPosition(this->sprite.getPosition().x, view.getCenter().y - view.getSize().y / 2);
 		this->currentVelocity.y = 0.f;
 	}
-	else if (this->getPosition().y + this->getBounds().height >= windowBounds.y) {
-		this->sprite.setPosition(this->sprite.getPosition().x, windowBounds.y - this->getBounds().height);
+	// Bottom
+	else if (this->getPosition().y + this->getBounds().height >= view.getCenter().y + view.getSize().y / 2) {
+		this->sprite.setPosition(this->sprite.getPosition().x, view.getCenter().y + view.getSize().y / 2 - this->getBounds().height);
 		this->currentVelocity.y = 0.f;
 	}
 }
@@ -669,7 +673,7 @@ void Player::reset() {
 	this->score = 0;
 }
 
-void Player::update(Vector2u windowBounds, const float& dt) {
+void Player::update(View& view, const float& dt) {
 	// Update timers
 	if (this->powerupRF) {
 		this->shootTimerMax = 10.f;
@@ -694,7 +698,7 @@ void Player::update(Vector2u windowBounds, const float& dt) {
 	if (this->powerupTimer > 0.f)
 		this->powerupTimer -= 1.f * dt * this->dtMultiplier;
 
-	this->movement(windowBounds, dt);
+	this->movement(view, dt);
 	this->changeAccessories(dt);
 	this->updateAccessories(dt);
 	this->updatePowerups();

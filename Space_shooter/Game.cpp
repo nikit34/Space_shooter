@@ -185,6 +185,7 @@ void Game::initMapTextures() {
 
 void Game::initMap() {
 	this->stage = new Stage(10, 10);
+	this->stage->loadStage("test.wmap", this->mainView);
 }
 
 void Game::initUI() {
@@ -277,6 +278,19 @@ void Game::initialize() {
 		Keyboard::Numpad0
 	));
 
+	//	this->players.add(Player(
+		//	Keyboard::I,
+		//	Keyboard::K,
+		//	Keyboard::J,
+		//	Keyboard::L,
+		//	Keyboard::RAlt,
+		//	Keyboard::Period,
+		//	Keyboard::Comma,
+		//	Keyboard::Num8,
+		//	Keyboard::Num9,
+		//	Keyboard::Num0,
+		//	Keyboard::Add));
+
 	this->playersAlive = this->players.size();
 
 	// Init enemies
@@ -291,7 +305,7 @@ void Game::initialize() {
 }
 
 void Game::updateView() {
-	this->mainView.setCenter(this->players[0].getPosition());
+	this->mainView.move(this->stage->getScrollSpeed(), 0.f);
 }
 
 
@@ -322,6 +336,9 @@ void Game::update(const float& dt) {
 
 		// Score timer and multipliers
 		this->updateScore();
+
+		//Map update
+		this->mapUpdate(dt);
 
 		// Update players, bullets and combat
 		this->playerUpdate(dt);
@@ -444,7 +461,7 @@ void Game::playerUpdate(const float& dt) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (this->players[i].isAlive()) {
 			/// Update Players
-			this->players[i].update(this->window->getSize(), dt);
+			this->players[i].update(this->mainView, dt);
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);
@@ -672,10 +689,9 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 			if(enemyRemoved)
 				this->enemies.remove(j);
 		}
-
 		// Window bounds check
 		if (this->players[i].getBullet(k).getPosition().x >
-			this->window->getSize().x + this->mainView.getSize().x / 2) {
+			this->mainView.getCenter().x + this->mainView.getSize().x / 2) {
 			bulletRemoved = true;
 		}
 		if(bulletRemoved)
@@ -689,7 +705,7 @@ void Game::enemyUpdate(const float& dt) {
 		this->enemies.add(Enemy(
 			this->enemyTextures,
 			this->enemyBulletTextures,
-			this->window->getSize(),
+			this->mainView,
 			Vector2f(0.f, 0.f),
 			Vector2f(-1.f, 0.f),
 			rand() % 3,
@@ -745,7 +761,7 @@ void Game::enemyUpdate(const float& dt) {
 		}
 
 		// Enemies out of bounds
-		if (this->enemies[i].getPosition().x < 0 -
+		if (this->enemies[i].getPosition().x < this->mainView.getCenter().x - this->mainView.getSize().x / 2 -
 			this->enemies[i].getGlobalBounds().width) {
 			enemyRemoved = true;
 		}
@@ -824,10 +840,10 @@ void Game::enemyBulletUpdate(const float& dt) {
 
 		// Window bounds check
 		if (!bulletRemoved &&
-			(Enemy::enemyBullets[i].getPosition().x > this->window->getSize().x ||
-				Enemy::enemyBullets[i].getPosition().x < 0 ||
-				Enemy::enemyBullets[i].getPosition().y > this->window->getSize().y ||
-				Enemy::enemyBullets[i].getPosition().y < 0
+			(Enemy::enemyBullets[i].getPosition().x > this->mainView.getCenter().x + this->mainView.getSize().x / 2 ||
+				Enemy::enemyBullets[i].getPosition().x < this->mainView.getCenter().x - this->mainView.getSize().x / 2 ||
+				Enemy::enemyBullets[i].getPosition().y > this->mainView.getCenter().y + this->mainView.getSize().y / 2 ||
+				Enemy::enemyBullets[i].getPosition().y < this->mainView.getCenter().y - this->mainView.getSize().y / 2
 				)) {
 			bulletRemoved = true;
 		}
@@ -1015,8 +1031,8 @@ void Game::powerupsUpdate(const float& dt) {
 	}
 }
 
-void Game::mapUpdate() {
-
+void Game::mapUpdate(const float& dt) {
+	this->stage->update(dt, this->mainView, false);
 }
 
 void Game::particlesUpdate(const float& dt) {
@@ -1270,7 +1286,7 @@ void Game::updateUIEnemy(int index) {
 }
 
 void Game::drawMap() {
-	stage->draw(*this->window, this->mainView);
+	stage->draw(*this->window, this->mainView, false);
 }
 
 void Game::drawPlayer() {

@@ -8,7 +8,7 @@ enum bulletTypes { REGULAR = 0, MISSILE };
 Enemy::Enemy(
 	dArr<Texture>& textures, 
 	dArr<Texture>& bulletTextures,
-	Vector2u windowBounds, 
+	View& view,
 	Vector2f position,
 	Vector2f moveDirection,
 	int type, 
@@ -16,7 +16,6 @@ Enemy::Enemy(
 	int playerFollowNr
 ) {
 	this->dtMultiplier = 60.f;
-	this->windowBounds = windowBounds;
 
 	this->textures = &textures;
 	this->bulletTextures = &bulletTextures;
@@ -82,10 +81,8 @@ Enemy::Enemy(
 
 	this->playerFollowNr = playerFollowNr;
 
-	this->sprite.setPosition(
-		this->windowBounds.x,
-		(rand() % this->windowBounds.y) - this->sprite.getGlobalBounds().height
-	);
+	this->sprite.setPosition((view.getCenter().x + view.getSize().x / 2),
+		(rand() % static_cast<int>(view.getCenter().y + view.getSize().y) + static_cast<int>(view.getCenter().y - view.getSize().y)));
 }
 
 Enemy::~Enemy() {}

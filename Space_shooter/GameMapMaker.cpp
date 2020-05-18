@@ -7,6 +7,7 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
+	this->backgroundTile = false;
 
 	this->stage = nullptr;
 
@@ -44,9 +45,8 @@ void GameMapMaker::newStage() {
 	unsigned mapSizeY = 0;
 	std::cout << "New Map\n";
 	std::cout << "Map Name: ";
-	getline(std::cin, this->stageName);
-	if(!this->stageName.find(".wmap"))
-		this->stageName.append(".wmap");
+	std::getline(std::cin, this->stageName);
+	this->stageName.append(".wmap");
 
 	std::cout << "\nSize X: ";
 	std::cin >> mapSizeX;
@@ -57,9 +57,6 @@ void GameMapMaker::newStage() {
 		std::cout << "Size X: ";
 		std::cin >> mapSizeX;
 	}
-	std::cin.ignore(100, '\n');
-	std::cout << '\n';
-
 	std::cout << "\nSize Y: ";
 	std::cin >> mapSizeY;
 	while (std::cin.fail() || mapSizeY <= 0) {
@@ -74,15 +71,16 @@ void GameMapMaker::newStage() {
 
 	delete this->stage;
 	this->stage = new Stage(mapSizeX, mapSizeY);
+	std::cout << "Stage " << this->stageName << " created\n";
 }
 
 void GameMapMaker::saveStage() {
 	std::cout << "Save Stage\n";
-	int choice = 0;
 	std::ifstream in;
+	int choice = 0;
 	in.open(this->stageName);
 	if (in.is_open()) {
-		std::cout << "File already exists! Overwrite? (NO 0 / YES 1)\n";
+		std::cout << "File " << this->stageName << " already exists! Overwrite? (NO 0 / YES 1)\n";
 		std::cout << "Choice: ";
 		std::cin >> choice;
 		while (std::cin.fail() || choice > 1) {
@@ -99,12 +97,12 @@ void GameMapMaker::saveStage() {
 		}
 		else {
 			this->stage->saveStage(this->stageName);
-			std::cout << "\nStage overwrite and save\n";
+			std::cout << "\nStage " << this->stageName << " overwrite and save\n";
 		}
 	}
 	else {
 		this->stage->saveStage(this->stageName);
-		std::cout << "\nStage save\n";
+		std::cout << "\nStage " << this->stageName << " saved\n";
 	}
 }
 
@@ -112,9 +110,16 @@ void GameMapMaker::loadStage() {
 	std::cout << "Load Stage\n";
 	std::string fileName = "";
 	std::cout << "File name: ";
-	getline(std::cin, fileName);
-	if (this->stage->loadStage(fileName))
+	std::getline(std::cin, fileName);
+	fileName.append(".wmap");
+	if (this->stage->loadStage(fileName, this->mainView)) {
 		this->stageName = fileName;
+		std::cout << "\n" << fileName << " loaded\n";
+	}
+	else {
+		std::cout << "\n" << "Could not load " << fileName << "\n";
+	}
+		
 }
 
 void GameMapMaker::initialize() {
@@ -180,15 +185,11 @@ void GameMapMaker::update(const float& dt) {
 	// Fullscreen
 	this->toggleFullscreen();
 
-	// Map
-	this->mapUpdate();
-
 	// General controls
 	this->updateControls();
 
-	// Add tiles
-	if (!this->windowUI)
-		this->updateAddRemoveTiles();
+	// Map
+	this->mapUpdate(dt);
 
 	// UI update
 	this->updateUI();
@@ -224,8 +225,8 @@ void GameMapMaker::updateMousePositions() {
 	}
 }
 
-void GameMapMaker::mapUpdate() {
-
+void GameMapMaker::mapUpdate(const float &dt) {
+	this->stage->update(dt, this->mainView, true);
 }
 
 void GameMapMaker::updateControls() {
@@ -249,8 +250,17 @@ void GameMapMaker::updateControls() {
 	else {
 		this->updateAddRemoveTiles();
 	}
-	if (Keyboard::isKeyPressed(Keyboard::N) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
+		Keyboard::isKeyPressed(Keyboard::N) && this->keyTime >= this->keyTimeMax) {
 		this->newStage();
+		this->keyTime = 0.f;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::LControl) &&
+		Keyboard::isKeyPressed(Keyboard::B) && this->keyTime >= this->keyTimeMax) {
+		if (!this->backgroundTile)
+			this->backgroundTile = true;
+		else
+			this->backgroundTile = false;
 		this->keyTime = 0.f;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
@@ -275,11 +285,12 @@ void GameMapMaker::updateAddRemoveTiles() {
 				false,
 				false),
 			this->mousePosGrid.x, 
-			this->mousePosGrid.y
+			this->mousePosGrid.y,
+			this->backgroundTile
 		);
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right)) {
-		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y);
+		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, this->backgroundTile);
 	}
 }
 
@@ -345,7 +356,7 @@ void GameMapMaker::draw() {
 }
 
 void GameMapMaker::drawMap() {
-	this->stage->draw(*this->window, this->mainView);
+	this->stage->draw(*this->window, this->mainView, true);
 }
 
 void GameMapMaker::drawUIWindow() {

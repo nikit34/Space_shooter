@@ -14,6 +14,7 @@ Tile::Tile(
 
 	this->isCollider = isCollider;
 	this->isDamaging = isDamaging;
+	this->damage = 0;
 }
 
 Tile::~Tile() {}
@@ -34,7 +35,7 @@ std::string Tile::getAsString()const {
 		std::to_string(damage) + " ";
 }
 
-void Tile::update() {
+void Tile::update(const float &dt) {
 
 }
 

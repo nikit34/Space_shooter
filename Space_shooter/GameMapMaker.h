@@ -37,8 +37,7 @@ public:
 	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
-	
-	void mapUpdate();
+	void mapUpdate(const float& dt);
 
 	void draw();
 	void drawMap();
@@ -49,10 +48,11 @@ private:
 	// GameMapMaker
 	RenderWindow* window;
 	View mainView;
-	bool fullscreen;
 	float dtMultiplier;
+	bool fullscreen;
 	float keyTimeMax;
 	float keyTime;
+	bool backgroundTile;
 
 	// Mouse positions
 	Vector2i mousePosWindow;

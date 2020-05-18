@@ -76,10 +76,10 @@ void TileArr<T>::operator=(const TileArr& obj) {
 
 	this->cap = obj.cap;
 	this->nrOfTiles = obj.nrOfTiles;
-	this->tiles = new Tile * [this->cap];
+	this->tiles = new T * [this->cap];
 	for (size_t i = 0; i < this->cap; i++) {
 		if (obj.tiles[i] != nullptr)
-			this->tiles[i] = new Tile(*obj.tiles[i]);
+			this->tiles[i] = new T(*obj.tiles[i]);
 		else
 			this->tiles[i] = nullptr;
 	}

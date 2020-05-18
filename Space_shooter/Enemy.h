@@ -6,7 +6,7 @@ class Enemy {
 public:
 	Enemy(dArr<Texture>& textures,
 		dArr<Texture>& bulletTextures,
-		Vector2u windowBounds,
+		View& view,
 		Vector2f position,
 		Vector2f direction,
 		int type,
@@ -47,7 +47,7 @@ private:
 
 	dArr<Texture>* textures;
 	Sprite sprite;
-	Vector2u windowBounds;
+
 	Vector2f moveDirection;
 	Vector2f normalizedMoveDir;
 	Vector2f lookDirection;
