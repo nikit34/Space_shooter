@@ -123,6 +123,7 @@ void TileArr<T>::clear() {
 	for (size_t i = 0; i < this->cap; i++) {
 		delete this->tiles[i];
 	}
+	this->nrOfTiles = 0;
 	this->initialize(0);
 }
 
@@ -153,7 +154,8 @@ void TileArr<T>::resizeClear(unsigned newCap) {
 		delete this->tiles[i];
 	}
 	delete[] this->tiles;
-	this->cap += newCap;
+	this->cap = newCap;
 	this->tiles = new T * [this->cap];
+	this->nrOfTiles = 0;
 	this->initialize(0);
 }

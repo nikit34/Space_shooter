@@ -34,6 +34,10 @@ private:
 	unsigned long stageSizeY;
 
 	TileArr<TileArr<Tile>> tiles;
+	
+	Sprite backgroundTilesSprite;
+	Image backgroundTilesImage;
+	Texture backgroundTilesTexture;
 	Texture backgroundTexture;
 	Sprite background1;
 	Sprite background2;

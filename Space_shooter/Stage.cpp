@@ -3,7 +3,7 @@
 
 Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	:stageSizeX(sizeX), stageSizeY(sizeY), 
-	tiles(stageSizeX) 
+	tiles(stageSizeX)
 {
 	this->dtMultiplier = 60.f;
 
@@ -11,7 +11,7 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	this->toCol = 0;
 	this->fromRow = 0;
 	this->toRow = 0;
-	
+
 	for (unsigned i = 0; i < this->stageSizeX; i++) {
 		this->tiles.push(TileArr<Tile>(stageSizeY), i);
 	}
@@ -87,28 +87,29 @@ bool Stage::loadStage(std::string fileName) {
 		in >> sizeX >> sizeY;
 		this->stageSizeX = sizeX;
 		this->stageSizeY = sizeY;
-		in.ignore();
-		std::getline(in, backgroundPath);
+		
+        in >> backgroundPath;
 		this->backgroundTexture.loadFromFile(backgroundPath);
 		this->background1.setTexture(this->backgroundTexture);
 		this->background2.setTexture(this->backgroundTexture);
 
 		// Clear old stage
 		this->tiles.resizeClear(this->stageSizeX);
-		for (size_t i = 0; i < this->tiles.size(); i++) {
-			this->tiles.resizeClear(this->stageSizeY);
+		for (size_t i = 0; i < this->stageSizeX; i++) {
+			this->tiles.push(TileArr<Tile>(stageSizeY), i);
 		}
 		std::cout << "\nCleared\n";
 
 		// Load new stage
-		while (in.eof()) {
-			in >> rectLeft >> rectTop >> rectWidth >> rectHeight;
-			in >> gridPosX >> gridPosY;
-			in >> isCollider >> isDamaging >> damage;
+		while (in >> 
+			rectLeft >> rectTop >> rectWidth >> rectHeight >> 
+			gridPosX >> gridPosY >> 
+			isCollider >> isDamaging >> damage
+		) {
 			this->tiles[gridPosX].push(
 				Tile(
-					IntRect(),
-					Vector2f(),
+					IntRect(rectLeft, rectTop, rectWidth, rectHeight),
+					Vector2f(gridPosX * Wingman::gridSize, gridPosY * Wingman::gridSize),
 					isCollider,
 					isDamaging),
 				gridPosY
