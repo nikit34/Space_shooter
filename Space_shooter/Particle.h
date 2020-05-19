@@ -31,8 +31,6 @@ public:
 	void update(const float& dt);
 	void draw(RenderTarget& target);
 
-	static dArr<Texture> particleTextures;
-
 	//Regular functions
 	float vectorLength(Vector2f v) {
 		return sqrt(pow(v.x, 2) + pow(v.y, 2));
@@ -44,4 +42,11 @@ public:
 		else
 			return v / length;
 	}
+
+	// Static
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
+
+	enum particles { TRIANGULAR = 0 };
 };

@@ -27,8 +27,14 @@ public:
 	void draw(RenderTarget &target);
 
 	// Static
-	static int nrOfPowerups;
-	static dArr<Texture> powerupTextures;
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
+
+	enum powerups {
+		RAPIDFIRE = 0,
+		EXPERIENCE_DOUBLE
+	};
 
 private:
 	float dtMultiplier;

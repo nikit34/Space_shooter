@@ -20,7 +20,7 @@ public:
 	void update(const float& dt);
 	void draw(RenderTarget& target);
 
-	// Static variables
+	// Static 
 	static dArr<Texture> textures;
 	static int nrOfTextures;
 	static void initTextures();

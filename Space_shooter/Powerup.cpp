@@ -1,8 +1,18 @@
 #include "Powerup.h"
 
 
-int Powerup::nrOfPowerups = 2;
-dArr<Texture> Powerup::powerupTextures;
+dArr<Texture> Powerup::textures;
+int Powerup::nrOfTextures;
+void Powerup::initTextures() {
+	Texture temp;
+
+	temp.loadFromFile("Textures/Powerups/powerupRF.png");
+	Powerup::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/Powerups/powerupXP.png");
+	Powerup::textures.add(Texture(temp));
+
+	Powerup::nrOfTextures = Powerup::textures.size();
+}
 
 Powerup::Powerup(
 	int type, 
@@ -10,11 +20,19 @@ Powerup::Powerup(
 	Vector2f pos
 ) {
 	this->dtMultiplier = 60.f;
+
+	if (type >= Powerup::nrOfTextures) {
+		type = Powerup::nrOfTextures - 1;
+	}
+	else if (type < 0) {
+		type = 0;
+	}
+
 	this->type = type;
 	this->timerMax = timerMax;
 	this->timer = this->timerMax;
 
-	this->sprite.setTexture(Powerup::powerupTextures[this->type]);
+	this->sprite.setTexture(Powerup::textures[this->type]);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2);

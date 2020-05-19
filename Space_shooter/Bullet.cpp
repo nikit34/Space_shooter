@@ -1,7 +1,26 @@
 #include "Bullet.h"
 
+
+// Static define
+dArr<Texture> Bullet::textures;
+int Bullet::nrOfTextures;
+void Bullet::initTextures() {
+	Texture temp;
+
+	temp.loadFromFile("Textures/Guns/rayTex01.png");
+	Bullet::textures.add(temp);
+	temp.loadFromFile("Textures/Guns/missileTex01.png");
+	Bullet::textures.add(temp);
+	temp.loadFromFile("Textures/Guns/missileHTex01.png");
+	Bullet::textures.add(temp);
+	temp.loadFromFile("Textures/Guns/roundBulletRed.png");
+	Bullet::textures.add(temp);
+
+	Bullet::nrOfTextures = Bullet::textures.size();
+}
+
 Bullet::Bullet(
-	Texture* texture, 
+	int type, 
 	Vector2f position, 
 	Vector2f scale,
 	Vector2f direction, 
@@ -11,7 +30,15 @@ Bullet::Bullet(
 	int damage
 ) {
 	this->dtMultiplier = 60.f;
-	this->texture = texture;
+
+	if (type >= Bullet::nrOfTextures) {
+		type = Bullet::nrOfTextures - 1;
+	}
+	else if (type < 0) {
+		type = 0;
+	}
+
+	this->type = type;
 	this->direction = direction;
 	this->initialVelocity = initialVelocity;
 	this->maxVelocity = maxVelocity;
@@ -22,7 +49,7 @@ Bullet::Bullet(
 		initialVelocity * this->direction.y
 	);
 
-	this->sprite.setTexture(*this->texture);
+	this->sprite.setTexture(Bullet::textures[this->type]);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2

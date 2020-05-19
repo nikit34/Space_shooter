@@ -25,7 +25,6 @@ public:
 
 	void initView();
 	void initTextures();
-	void initMapTextures();
 	void initMap();
 	void initUI();
 	void initialize();

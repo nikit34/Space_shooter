@@ -4,7 +4,6 @@
 // Static define
 dArr<Texture> Pickup::textures;
 int Pickup::nrOfTextures;
-
 void Pickup::initTextures() {
 	Texture temp;
 	temp.loadFromFile("Textures/Pickups/hpSupply.png");
@@ -22,6 +21,13 @@ Pickup::Pickup(
 	float duration
 ) {
 	this->dtMultiplier = 60.f;
+
+	if (type >= Pickup::nrOfTextures) {
+		type = Pickup::nrOfTextures - 1;
+	}
+	else if (type < 0) {
+		type = 0;
+	}
 
 	this->type = type;
 

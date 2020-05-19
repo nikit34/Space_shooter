@@ -41,157 +41,31 @@ void Game::initTextures() {
 	Texture temp;
 
 	// Map
-	this->initMapTextures();
+	Tile::initTextures();
+
+	// Bullet
+	Bullet::initTextures();
 
 	// Player
-	this->initPlayerTextures();
+	Player::initTextures();
 
-	// Pickup textures
+	// Pickup 
 	Pickup::initTextures();
 
 	// Upgrades
-	temp.loadFromFile("Textures/Upgrades/statpoint.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Upgrades/healthtank.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Upgrades/doubleray.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Upgrades/tripleray.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Upgrades/piercingshot.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Upgrades/shield.png");
-	Upgrade::upgradeTextures.add(Texture(temp));
-	Upgrade::nrOfUpgrades = Upgrade::upgradeTextures.size();
+	Upgrade::initTextures();
 
 	// Powerup
-	temp.loadFromFile("Textures/Powerups/powerupRF.png");
-	Powerup::powerupTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Powerups/powerupXP.png");
-	Powerup::powerupTextures.add(Texture(temp));
+	Powerup::initTextures();
 
 	// Enemies
-	temp.loadFromFile("Textures/enemyMoveLeft.png");
-	this->enemyTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/enemyFollow.png");
-	this->enemyTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/enemyMoveLeftShoot.png");
-	this->enemyTextures.add(Texture(temp));
-
-	temp.loadFromFile("Textures/Guns/enemyBullet.png");
-	this->enemyBulletTextures.add(Texture(temp));
+	Enemy::initTextures();
 
 	// Bosses
 
 
 	// Particles
-	temp.loadFromFile("Textures/Particles/particle01.png");
-	Particle::particleTextures.add(temp);
-}
-
-void Game::initPlayerTextures() {
-	Texture temp;
-
-	// Init Textures regular
-	temp.loadFromFile("Textures/ship.png");
-	Player::playerBodyTextures.add(temp);
-
-	// Bullets
-	temp.loadFromFile("Textures/Guns/rayTex01.png");
-	Player::playerBulletTextures.add(temp);
-	temp.loadFromFile("Textures/Guns/missileTex01.png");
-	Player::playerBulletTextures.add(temp);
-
-	// Player guns
-	temp.loadFromFile("Textures/Guns/gun01.png");
-	Player::playerMainGunTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Guns/gun02.png");
-	Player::playerMainGunTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Guns/gun03.png");
-	Player::playerMainGunTextures.add(Texture(temp));
-
-	// Player shield
-	temp.loadFromFile("Textures/Player/shield.png");
-	Player::playerShieldTextures.add(Texture(temp));
-
-	// Init accessory textures
-	std::ifstream in;
-
-	in.open("Textures/Accessories/leftwings.txt");
-	std::string fileName = "";
-
-	if (in.is_open()) {
-		while (getline(in, fileName)) {
-			temp.loadFromFile(fileName);
-			Player::lWingTextures.add(Texture(temp));
-		}
-	}
-
-	in.close();
-
-	in.open("Textures/Accessories/rightwings.txt");
-	fileName = "";
-
-	if (in.is_open()) {
-		while (getline(in, fileName)) {
-			temp.loadFromFile(fileName);
-			Player::rWingTextures.add(Texture(temp));
-		}
-	}
-
-	in.close();
-
-	in.open("Textures/Accessories/cockpits.txt");
-	fileName = "";
-
-	if (in.is_open()) {
-		while (getline(in, fileName)) {
-			temp.loadFromFile(fileName);
-			Player::cPitTextures.add(Texture(temp));
-		}
-	}
-
-	in.close();
-
-	in.open("Textures/Accessories/auras.txt");
-	fileName = "";
-
-	if (in.is_open()) {
-		while (getline(in, fileName)) {
-			temp.loadFromFile(fileName);
-			Player::auraTextures.add(Texture(temp));
-		}
-	}
-
-	in.close();
-}
-
-void Game::initMapTextures() {
-	Tile::tileTextures.loadFromFile("Textures/Map/textureSheet.png");
-}
-
-void Game::initParticleTextures() {
-
-}
-
-void Game::initPickupTextures() {
-
-}
-
-void Game::initUpgradeTextures() {
-
-}
-
-void Game::initPowerupTextures() {
-
-}
-
-void Game::initEnemyTextures() {
-
-}
-
-void Game::initBossTextures() {
-
+	Particle::initTextures();
 }
 
 void Game::initMap() {
@@ -249,7 +123,7 @@ void Game::initUI() {
 	this->controlsText.setPosition(50.f, 300.f);
 
 	// PlayerStatText init
-	this->playerStatsText.setFont(font);
+	this->playerStatsText.setFont(this->font);
 	this->playerStatsText.setFillColor(Color::White);
 	this->playerStatsText.setCharacterSize(16);
 	this->playerStatsText.setString("NONE");
@@ -328,9 +202,6 @@ void Game::update(const float& dt) {
 	// Fullscreen
 	this->toggleFullscreen();
 
-	// View
-	this->updateView();
-
 	// Pause game
 	this->pauseGame();
 
@@ -341,6 +212,9 @@ void Game::update(const float& dt) {
 	if (this->playersAlive > 0 && !this->paused) {
 		// Update timers
 		this->updateTimersUnpaused(dt);
+
+		// View
+		this->updateView();
 
 		// Make game harder with time
 		this->updateDifficulty();
@@ -651,7 +525,7 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 							// Add upgrade
 							dropChance = rand() % 100 + 1;
 							if (dropChance > 90) {
-								uType = rand() % Upgrade::nrOfUpgrades;
+								uType = rand() % Upgrade::nrOfTextures;
 								for (size_t k = 0; k < this->players[i].getAcquiredUpgrades().size(); k++) {
 									if (uType == this->players[i].getAcquiredUpgrades()[k]) {
 										uType = rand() % 1;
@@ -668,7 +542,7 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 							// Add powerup
 							dropChance = rand() % 100 + 1;
 							if (dropChance > 90) {
-								uType = rand() % Powerup::nrOfPowerups;
+								uType = rand() % Powerup::nrOfTextures;
 								this->powerups.add(Powerup(
 									uType,
 									300.f,
@@ -713,8 +587,6 @@ void Game::enemyUpdate(const float& dt) {
 	// Spawn enemies
 	if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 		this->enemies.add(Enemy(
-			this->enemyTextures,
-			this->enemyBulletTextures,
 			this->mainView,
 			Vector2f(0.f, 0.f),
 			Vector2f(-1.f, 0.f),
@@ -894,7 +766,7 @@ void Game::upgradesUpdate(const float& dt) {
 					
 				switch (this->upgrades[i].getType()) {
 
-				case 0: // Statpoint
+				case Upgrade::STAT_POINT: // Statpoint
 					this->players[k].addStatPointRandom();
 
 					// HT text tag
@@ -911,7 +783,7 @@ void Game::upgradesUpdate(const float& dt) {
 					);
 					break;
 
-				case 1: // Healthtank
+				case Upgrade::HEALTH_TANK: // Healthtank
 					this->players[k].upgradeHP();
 
 					// HT text tag
@@ -928,7 +800,7 @@ void Game::upgradesUpdate(const float& dt) {
 					);
 					break;
 
-				case 2: // Doubleray
+				case Upgrade::DOUBLE_RAY: // Doubleray
 					if (this->players[k].getGunLevel() < 1)
 						this->players[k].setGunLevel(1);
 
@@ -946,7 +818,7 @@ void Game::upgradesUpdate(const float& dt) {
 					);
 					break;
 
-				case 3: // Tripleray
+				case Upgrade::TRIPLE_RAY: // Tripleray
 					if (this->players[k].getGunLevel() < 2)
 						this->players[k].setGunLevel(2);
 
@@ -964,7 +836,7 @@ void Game::upgradesUpdate(const float& dt) {
 					);
 					break;
 
-				case 4: // Piercing
+				case Upgrade::PIERCING_SHOT: // Piercing
 					this->players[k].enablePiercingShot();
 
 					// PS text tag
@@ -981,7 +853,7 @@ void Game::upgradesUpdate(const float& dt) {
 					);
 					break;
 
-				case 5: // Shield
+				case Upgrade::SHIELD: // Shield
 					this->players[k].enableShield();
 
 					// SH text tag
@@ -1020,10 +892,10 @@ void Game::powerupsUpdate(const float& dt) {
 		for (size_t k = 0; k < this->players.size(); k++) {
 			if (this->powerups[i].collide(this->players[k].getBounds())) {
 				switch (this->powerups[i].getType()) {
-				case 0: // RF
+				case Powerup::RAPIDFIRE: // RF
 					this->players[k].enablePowerupRF();
 					break;
-				case 1: // XP
+				case Powerup::EXPERIENCE_DOUBLE: // XP
 					this->players[k].enablePowerupXP();
 					break;
 				default:
@@ -1207,6 +1079,9 @@ void Game::draw() {
 	// Draw particles
 	this->drawParticles();
 
+	// Draw 
+	this->drawTextTags();
+
 	// Set view;
 	this->window->setView(this->window->getDefaultView());
 
@@ -1215,6 +1090,89 @@ void Game::draw() {
 
 	// Finish draw
 	this->window->display();
+}
+
+void Game::drawMap() {
+	stage->draw(*this->window, this->mainView, false);
+}
+
+void Game::drawPlayer() {
+	for (size_t i = 0; i < this->players.size(); i++) {
+		if (this->players[i].isAlive()) {
+			this->players[i].draw(*this->window);
+
+			// UI
+			this->updateUIPlayer(i);
+			this->window->draw(this->followPlayerText);
+			this->window->draw(this->playerExpBar);
+			this->window->draw(this->playerShieldBar);
+			this->window->draw(this->playerPowerupBar);
+
+			if (this->players[i].playerShowStatsIsPressed()) {
+				this->window->draw(this->playerStatsTextBack);
+				this->window->draw(this->playerStatsText);
+			}
+		}
+	}
+}
+
+void Game::drawEnemies() {
+	for (size_t i = 0; i < this->enemies.size(); i++) {
+		this->enemies[i].draw(*this->window);
+
+		// UI
+		this->updateUIEnemy(i);
+		this->window->draw(this->enemyText);
+	}
+
+	// Enemy bullets
+	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
+		Enemy::enemyBullets[i].draw(*this->window);
+	}
+}
+
+void Game::drawPickups() {
+	for (size_t i = 0; i < this->pickups.size(); i++) {
+		this->pickups[i].draw(*this->window);
+	}
+}
+
+void Game::drawUpgrades() {
+	for (size_t i = 0; i < this->upgrades.size(); i++) {
+		this->upgrades[i].draw(*this->window);
+	}
+}
+
+void Game::drawPowerups() {
+	for (size_t i = 0; i < this->powerups.size(); i++) {
+		this->powerups[i].draw(*this->window);
+	}
+}
+
+void Game::drawParticles() {
+	for (size_t i = 0; i < this->particles.size(); i++) {
+		this->particles[i].draw(*this->window);
+	}
+}
+
+void Game::drawUI() {
+	// Game over text
+	if (this->playersAlive <= 0)
+		this->window->draw(this->gameOverText);
+
+	// Score text
+	this->window->draw(this->scoreText);
+
+	// Controls text
+	if (this->paused)
+		this->window->draw(this->controlsText);
+}
+
+void Game::drawTextTags() {
+	// Draw Texttags
+	for (size_t i = 0; i < this->textTags.size(); i++) {
+		this->textTags[i].draw(*this->window);
+	}
 }
 
 
@@ -1267,14 +1225,14 @@ void Game::updateUIPlayer(int index) {
 			1.f);
 
 		// Statics box with text
-		if(this->players[index].playerShowStatsIsPressed()) {
+		if (this->players[index].playerShowStatsIsPressed()) {
 			this->playerStatsText.setString(this->players[index].getStatsAsString());
 			this->playerStatsTextBack.setPosition(
 				this->players[index].getPosition().x - 80.f,
 				this->players[index].getPosition().y + 110.f
 			);
 			this->playerStatsTextBack.setSize(Vector2f(
-				this->playerStatsText.getGlobalBounds().width, 
+				this->playerStatsText.getGlobalBounds().width,
 				this->playerStatsText.getGlobalBounds().height
 			));
 			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
@@ -1294,89 +1252,3 @@ void Game::updateUIEnemy(int index) {
 		std::to_string(this->enemies[index].getHpMax())
 	);
 }
-
-void Game::drawMap() {
-	stage->draw(*this->window, this->mainView, false);
-}
-
-void Game::drawPlayer() {
-	for (size_t i = 0; i < this->players.size(); i++) {
-		if (this->players[i].isAlive()) {
-			this->players[i].draw(*this->window);
-
-			// UI
-			this->updateUIPlayer(i);
-			this->window->draw(this->followPlayerText);
-			this->window->draw(this->playerExpBar);
-			this->window->draw(this->playerShieldBar);
-			this->window->draw(this->playerPowerupBar);
-			
-			if (this->players[i].playerShowStatsIsPressed()) {
-				this->window->draw(this->playerStatsTextBack);
-				this->window->draw(this->playerStatsText);
-			}
-		}
-	}
-}
-
-void Game::drawEnemies() {
-	for (size_t i = 0; i < this->enemies.size(); i++) {
-		this->enemies[i].draw(*this->window);
-
-		// UI
-		this->updateUIEnemy(i);
-		this->window->draw(this->enemyText);
-	}
-
-	// Enemy bullets
-	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
-		Enemy::enemyBullets[i].draw(*this->window);
-	}
-}
-
-void Game::drawPickups() {
-	for (size_t i = 0; i < this->pickups.size(); i++) {
-		this->pickups[i].draw(*this->window);
-	}
-}
-
-void Game::drawUpgrades() {
-	for (size_t i = 0; i < this->upgrades.size(); i++) {
-		this->upgrades[i].draw(*this->window);
-	}
-}
-
-void Game::drawPowerups() {
-	for (size_t i = 0; i < this->powerups.size(); i++) {
-		this->powerups[i].draw(*this->window);
-	}
-}
-
-void Game::drawParticles() {
-	for (size_t i = 0; i < this->particles.size(); i++) {
-		this->particles[i].draw(*this->window);
-	}
-}
-
-void Game::drawUI() {
-	// Draw Texttags
-	for (size_t i = 0; i < this->textTags.size(); i++)
-		this->textTags[i].draw(*this->window);
-
-	// Game over text
-	if (this->playersAlive <= 0)
-		this->window->draw(this->gameOverText);
-
-	// Score text
-	this->window->draw(this->scoreText);
-
-	// Controls text
-	if (this->paused)
-		this->window->draw(this->controlsText);
-}
-
-
-
-
-
-	

@@ -1,13 +1,24 @@
 #include"Enemy.h"
 
+
+// Static define
 dArr<Bullet> Enemy::enemyBullets;
 
-enum eTypes { MOVELEFT = 0, FOLLOW, MOVELEFTSHOOT, FOLLOWFAST, FOLLOWSHOOT, FOLLOWFASTSHOOT };
-enum bulletTypes { REGULAR = 0, MISSILE };
+dArr<Texture> Enemy::textures;
+int Enemy::nrOfTextures;
+void Enemy::initTextures() {
+	Texture temp;
+	temp.loadFromFile("Textures/enemyMoveLeft.png");
+	Enemy::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/enemyFollow.png");
+	Enemy::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/enemyMoveLeftShoot.png");
+	Enemy::textures.add(Texture(temp));
+
+	Enemy::nrOfTextures = Enemy::textures.size();
+}
 
 Enemy::Enemy(
-	dArr<Texture>& textures, 
-	dArr<Texture>& bulletTextures,
 	View& view,
 	Vector2f position,
 	Vector2f moveDirection,
@@ -17,11 +28,16 @@ Enemy::Enemy(
 ) {
 	this->dtMultiplier = 60.f;
 
-	this->textures = &textures;
-	this->bulletTextures = &bulletTextures;
+	if (type >= Enemy::nrOfTextures) {
+		type = Enemy::nrOfTextures - 1;
+	}
+	else if (type < 0) {
+		type = 0;
+	}
+
 	this->type = type;
 
-	this->sprite.setTexture((*this->textures)[this->type]);
+	this->sprite.setTexture(Enemy::textures[this->type]);
 	this->sprite.setRotation(270);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
@@ -152,7 +168,7 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 		// Shoot
 		if (this->shootTimer >= this->shootTimerMax) {
 			Enemy::enemyBullets.add(Bullet(
-				&(*this->bulletTextures)[REGULAR],
+				Bullet::BULLET_CIRCULAR_RED,
 				this->sprite.getPosition(),
 				Vector2f(0.75f, 0.75f),
 				this->normalizedLookDir,

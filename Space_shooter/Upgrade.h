@@ -30,8 +30,18 @@ public:
 	void draw(RenderTarget& target);
 
 	// Static
-	static int nrOfUpgrades;
-	static dArr<Texture> upgradeTextures;
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
+
+	enum Upgrades { 
+		STAT_POINT = 0,
+		HEALTH_TANK,
+		DOUBLE_RAY,
+		TRIPLE_RAY,
+		PIERCING_SHOT,
+		SHIELD
+	};
 
 private:
 	float dtMultiplier;

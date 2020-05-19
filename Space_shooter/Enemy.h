@@ -4,8 +4,7 @@
 
 class Enemy {
 public:
-	Enemy(dArr<Texture>& textures,
-		dArr<Texture>& bulletTextures,
+	Enemy(
 		View& view,
 		Vector2f position,
 		Vector2f direction,
@@ -30,9 +29,7 @@ public:
 	void update(const float &dt, Vector2f playerPosition);
 	void draw(RenderTarget& target);
 
-	// Static
-	static dArr<Bullet> enemyBullets;
-
+	// Regular functions
 	float vectorLength(Vector2f v) { return sqrt(pow(v.x, 2) + pow(v.y, 2)); }
 
 	Vector2f normalize(Vector2f v, float length) {
@@ -42,10 +39,29 @@ public:
 			return v / length;
 	}
 
+	// Static
+	static dArr<Bullet> enemyBullets;
+
+	enum eTypes { 
+		MOVELEFT = 0, 
+		FOLLOW, 
+		MOVELEFTSHOOT, 
+		FOLLOWFAST, 
+		FOLLOWSHOOT, 
+		FOLLOWFASTSHOOT 
+	};
+	enum weapons { 
+		REGULAR = 0, 
+		MISSILE 
+	};
+
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
+
 private:
 	float dtMultiplier;
 
-	dArr<Texture>* textures;
 	Sprite sprite;
 
 	Vector2f moveDirection;
@@ -53,8 +69,6 @@ private:
 	Vector2f lookDirection;
 	Vector2f normalizedLookDir;
 	float maxVelocity;
-
-	dArr<Texture>* bulletTextures;
 
 	float damageTimerMax;
 	float damageTimer;

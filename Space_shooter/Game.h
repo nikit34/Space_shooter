@@ -18,14 +18,6 @@ public:
 	// Functions
 	void initView();
 	void initTextures();
-	void initPlayerTextures();
-	void initMapTextures();
-	void initParticleTextures();
-	void initPickupTextures();
-	void initUpgradeTextures();
-	void initPowerupTextures();
-	void initEnemyTextures();
-	void initBossTextures();
 	void initMap();
 	void initUI();
 	void initialize();
@@ -53,8 +45,6 @@ public:
 	void restartUpdate();
 
 	void draw();
-	void updateUIPlayer(int index);
-	void updateUIEnemy(int index);
 	void drawMap();
 	void drawPlayer();
 	void drawEnemies();
@@ -62,7 +52,10 @@ public:
 	void drawUpgrades();
 	void drawPowerups();
 	void drawParticles();
+	void drawTextTags();
 	void drawUI();
+	void updateUIPlayer(int index);
+	void updateUIEnemy(int index);
 
 private:
 	// Game
