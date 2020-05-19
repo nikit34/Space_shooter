@@ -47,13 +47,7 @@ void Game::initTextures() {
 	this->initPlayerTextures();
 
 	// Pickup textures
-	temp.loadFromFile("Textures/Pickups/hpSupply.png");
-	this->pickupTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Pickups/missileSupply.png");
-	this->pickupTextures.add(Texture(temp));
-	temp.loadFromFile("Textures/Pickups/missileHSupply.png");
-	this->pickupTextures.add(Texture(temp));
-	this->nrOfPickups = this->pickupTextures.size();
+	Pickup::initTextures();
 
 	// Upgrades
 	temp.loadFromFile("Textures/Upgrades/statpoint.png");
@@ -88,14 +82,7 @@ void Game::initTextures() {
 	this->enemyBulletTextures.add(Texture(temp));
 
 	// Bosses
-	temp.loadFromFile("Textures/Bosses/Bodies/bossBody01.png");
-	this->bossBodyTextures.add(Texture(temp));
 
-	temp.loadFromFile("Textures/Bosses/Guns/bossGun01.png");
-	this->bossGunTextures.add(Texture(temp));
-
-	temp.loadFromFile("Textures/Bosses/Bullets/bossBullet01.png");
-	this->bossBulletTextures.add(Texture(temp));
 
 	// Particles
 	temp.loadFromFile("Textures/Particles/particle01.png");
@@ -181,6 +168,30 @@ void Game::initPlayerTextures() {
 
 void Game::initMapTextures() {
 	Tile::tileTextures.loadFromFile("Textures/Map/textureSheet.png");
+}
+
+void Game::initParticleTextures() {
+
+}
+
+void Game::initPickupTextures() {
+
+}
+
+void Game::initUpgradeTextures() {
+
+}
+
+void Game::initPowerupTextures() {
+
+}
+
+void Game::initEnemyTextures() {
+
+}
+
+void Game::initBossTextures() {
+
 }
 
 void Game::initMap() {
@@ -630,7 +641,6 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 							dropChance = rand() % 100 + 1;
 							if (dropChance > 80) {
 								this->pickups.add(Pickup(
-									this->pickupTextures,
 									this->enemies[j].getPosition(),
 									0,
 									150.f

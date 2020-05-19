@@ -1,17 +1,31 @@
 #include"Pickup.h"
 
+
+// Static define
+dArr<Texture> Pickup::textures;
+int Pickup::nrOfTextures;
+
+void Pickup::initTextures() {
+	Texture temp;
+	temp.loadFromFile("Textures/Pickups/hpSupply.png");
+	Pickup::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/Pickups/missileSupply.png");
+	Pickup::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/Pickups/missileHSupply.png");
+	Pickup::textures.add(Texture(temp));
+	Pickup::nrOfTextures = Pickup::textures.size();
+}
+
 Pickup::Pickup(
-	dArr<Texture>& textures,
 	Vector2f position,
 	int type,
 	float duration
 ) {
 	this->dtMultiplier = 60.f;
 
-	this->textures = &textures;
 	this->type = type;
 
-	this->sprite.setTexture((*this->textures)[this->type]);
+	this->sprite.setTexture(Pickup::textures[this->type]);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2

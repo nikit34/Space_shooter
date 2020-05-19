@@ -20,9 +20,16 @@ public:
 	void initTextures();
 	void initPlayerTextures();
 	void initMapTextures();
+	void initParticleTextures();
+	void initPickupTextures();
+	void initUpgradeTextures();
+	void initPowerupTextures();
+	void initEnemyTextures();
+	void initBossTextures();
 	void initMap();
 	void initUI();
 	void initialize();
+
 	void updateView();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
@@ -140,7 +147,4 @@ private:
 	dArr<Texture> enemyBulletTextures;
 
 	// Boss textures
-	dArr<Texture> bossBodyTextures;
-	dArr<Texture> bossGunTextures;
-	dArr<Texture> bossBulletTextures;
 };

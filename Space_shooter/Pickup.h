@@ -5,7 +5,6 @@
 class Pickup {
 public:
 	Pickup(
-		dArr<Texture>& textures,
 		Vector2f position,
 		int type,
 		float duration
@@ -21,11 +20,15 @@ public:
 	void update(const float& dt);
 	void draw(RenderTarget& target);
 
+	// Static variables
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
+
 private:
 	float dtMultiplier;
 	int type;
 
-	dArr<Texture>* textures;
 	Sprite sprite;
 
 	float aliveTimerMax;
