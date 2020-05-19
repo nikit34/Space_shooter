@@ -41,6 +41,7 @@ void Game::initTextures() {
 	Texture temp;
 
 	// Map
+	Stage::initTextures();
 	Tile::initTextures();
 
 	// Bullet

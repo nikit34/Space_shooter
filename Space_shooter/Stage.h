@@ -16,6 +16,8 @@ public:
 
 	void addTile(const Tile tile, unsigned row, unsigned col, bool background);
 	void removeTile(unsigned row, unsigned col, bool background);
+	void setBackground(const int index);
+	void setBackgroundSize(float width, float height);
 
 	void saveStage(std::string fileName);
 	bool loadStage(std::string fileName, View &view);
@@ -24,6 +26,11 @@ public:
 	void update(float const& dt, View& view, bool editor);
 
 	void draw(RenderTarget& target, View& view, bool editor);
+
+	// Static
+	static dArr<Texture> textures;
+	static int nrOfTextures;
+	static void initTextures();
 
 private:	
 	float dtMultiplier;
@@ -36,8 +43,8 @@ private:
 	
 	float scrollSpeed;
 
-	Sprite background1;
-	Sprite background2;
+	RectangleShape background;
+	dArr<RectangleShape> backgrounds;
 
 	// Optimization
 	int fromCol, toCol;

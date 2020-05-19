@@ -1,6 +1,27 @@
 #include"Stage.h"
 
 
+// Static define
+dArr<Texture> Stage::textures;
+int Stage::nrOfTextures;
+void Stage::initTextures() {
+	Texture temp;
+	std::string tempStr;
+	std::ifstream in;
+
+	in.open("Backgrounds/backgrounds.txt");
+	if (in.is_open()) {
+		while (getline(in, tempStr)) {
+			temp.loadFromFile(tempStr.c_str());
+			Stage::textures.add(Texture(temp));
+			tempStr.clear();
+		}
+	}
+	in.close();
+
+	Stage::nrOfTextures = Stage::textures.size();
+}
+
 Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	:stageSizeX(sizeX), stageSizeY(sizeY), 
 	tiles(stageSizeX),
@@ -61,6 +82,20 @@ void Stage::removeTile(unsigned row, unsigned col, bool background) {
 		else
 			std::cout << "No background tile in that position\n";
 	}
+}
+
+void Stage::setBackground(const int index) {
+	if (index >= 0 && index < Stage::nrOfTextures) {
+		this->background.setTexture(&Stage::textures[index]);
+	}
+}
+
+void Stage::setBackgroundSize(float width, float height) {
+	if (width < Wingman::backgroundSize || height < Wingman::backgroundSize) {
+		width = Wingman::backgroundSize;
+		height = Wingman::backgroundSize;
+	}
+	this->background.setSize(Vector2f(width, height));
 }
 
 void Stage::saveStage(std::string fileName) {

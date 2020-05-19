@@ -146,6 +146,7 @@ void GameMapMaker::initView() {
 
 void GameMapMaker::initTextures() {
 	// Map
+	Stage::initTextures();
 	Tile::initTextures();
 }
 
