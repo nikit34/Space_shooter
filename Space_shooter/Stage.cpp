@@ -244,7 +244,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 void Stage::updateBackground(const float& dt, View& view) {
 	bool bgRemoved = false;
 	for (size_t i = 0; i < this->backgrounds.size() && !bgRemoved; i++) {
-		this->backgrounds[i].move(this->scrollSpeed * dt * this->dtMultiplier * 0.8f, 0.f);
+		this->backgrounds[i].move(this->scrollSpeed * dt * this->dtMultiplier, 0.f);
 
 		if (this->backgrounds.size() < 3 &&
 			this->backgrounds[i].getPosition().x + this->backgrounds[i].getGlobalBounds().width

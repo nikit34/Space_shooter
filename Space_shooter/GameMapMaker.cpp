@@ -248,26 +248,48 @@ void GameMapMaker::updateControls() {
 	else {
 		this->updateAddRemoveTiles();
 	}
-	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
-		Keyboard::isKeyPressed(Keyboard::N) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::N) && 
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
 		this->newStage();
 		this->keyTime = 0.f;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::LControl) &&
-		Keyboard::isKeyPressed(Keyboard::B) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::B) && 
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
 		if (!this->backgroundTile)
 			this->backgroundTile = true;
 		else
 			this->backgroundTile = false;
 		this->keyTime = 0.f;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::LControl) && 
-		Keyboard::isKeyPressed(Keyboard::S) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::G) &&
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
+		int choice = 0;
+		std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
+		std::cin >> choice;
+		while (std::cin.fail() || choice >= Stage::nrOfTextures || choice < 0) {
+			std::cout << "\nFaulty input!\n";
+			std::cin.clear();
+			std::cin.ignore(100, '\n');
+			std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
+			std::cin >> choice;
+		}
+		this->stage->setBackground(choice);
+		std::cin.ignore(100, '\n');
+		std::cout << "\n";
+		this->keyTime = 0.f;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::S) && 
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
 		this->saveStage();
 		this->keyTime = 0.f;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::LControl) &&
-		Keyboard::isKeyPressed(Keyboard::L) && this->keyTime >= this->keyTimeMax) {
+	if (Keyboard::isKeyPressed(Keyboard::L) && 
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
 		this->loadStage();
 		this->keyTime = 0.f;
 	}

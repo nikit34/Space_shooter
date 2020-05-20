@@ -32,6 +32,14 @@ Game::~Game() {
 }
 
 
+void Game::initRT() {
+	this->mainRenderTexture.create(
+		this->window->getSize().x,
+		this->window->getSize().y
+	);
+	this->mainRenderSprite.setTexture(this->mainRenderTexture.getTexture());
+}
+
 void Game::initView() {
 	this->mainView.setSize(Vector2f(this->window->getSize()));
 	this->mainView.setCenter(Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));

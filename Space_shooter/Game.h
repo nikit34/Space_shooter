@@ -16,6 +16,7 @@ public:
 	// Setters
 
 	// Functions
+	void initRT();
 	void initView();
 	void initTextures();
 	void initMap();
@@ -61,6 +62,8 @@ private:
 	// Game
 	RenderWindow* window;
 	View mainView;
+	RenderTexture mainRenderTexture;
+	Sprite mainRenderSprite;
 	bool fullscreen;
 	float dtMultiplier;
 	bool paused;
