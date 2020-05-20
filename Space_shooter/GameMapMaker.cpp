@@ -8,6 +8,9 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
 	this->backgroundTile = false;
+	this->backgroundIndex = 0;
+	this->backgroundWidth = Wingman::backgroundSize;
+	this->backgroundHeight = Wingman::backgroundSize;
 
 	this->stage = nullptr;
 

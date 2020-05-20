@@ -9,9 +9,9 @@ void Stage::initTextures() {
 	std::string tempStr;
 	std::ifstream in;
 
-	in.open("Backgrounds/backgrounds.txt");
+	in.open("Textures/Backgrounds/backgrounds.txt");
 	if (in.is_open()) {
-		while (getline(in, tempStr)) {
+		while (std::getline(in, tempStr)) {
 			temp.loadFromFile(tempStr.c_str());
 			Stage::textures.add(Texture(temp));
 			tempStr.clear();
@@ -42,6 +42,7 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 		this->backgroundTiles.push(TileArr<Tile>(stageSizeY), i);
 		this->enemySpawners.push(TileArr<Tile>(stageSizeY), i);
 	}
+	this->backgroundIndex = 0;
 }
 
 Stage::~Stage() {}
@@ -108,7 +109,9 @@ void Stage::saveStage(std::string fileName) {
 		out << std::to_string(this->stageSizeY) << " ";
 
 		// Save background path
-		out << "NONE ";
+		out << this->backgroundIndex 
+			<< " " << static_cast<int>(this->background.getGlobalBounds().width) 
+			<< " " << static_cast<int>(this->background.getGlobalBounds().height);
 		out << "\n";
 		for (size_t i = 0; i < this->stageSizeX; i++) {
 			// Regular tiles
@@ -141,7 +144,9 @@ bool Stage::loadStage(std::string fileName, View& view) {
 
 	unsigned sizeX = 0;
 	unsigned sizeY = 0;
-	std::string backgroundPath;
+	int bgIndex = 0;
+	int bgWidth = 0;
+	int bgHeight = 0;
 	int rectLeft = 0;
 	int rectTop = 0;
 	int rectWidth = 0;
@@ -159,17 +164,20 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		std::getline(in, line);
 		ss.str(line);
 
-		in >> sizeX >> sizeY >> backgroundPath;
+		ss >> sizeX >> sizeY >> backgroundIndex >> bgWidth >> bgHeight;
 		this->stageSizeX = sizeX;
 		this->stageSizeY = sizeY;
+
+		this->backgroundIndex = bgIndex;
+		this->background.setSize(Vector2f(bgWidth, bgHeight));
+		this->background.setTexture(&Stage::textures[bgIndex]);
 
 		// Clear old stage
 		this->tiles.resizeClear(this->stageSizeX);
 		this->backgroundTiles.resizeClear(this->stageSizeX);
 		this->enemySpawners.resizeClear(this->stageSizeX);
 
-		for (size_t i = 0; i < this->stageSizeX; i++)
-		{
+		for (size_t i = 0; i < this->stageSizeX; i++) {
 			this->tiles.push(TileArr<Tile>(stageSizeY), i);
 			this->backgroundTiles.push(TileArr<Tile>(stageSizeY), i);
 			this->enemySpawners.push(TileArr<Tile>(stageSizeY), i);
@@ -185,8 +193,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 			rectLeft >> rectTop >> rectWidth >> rectHeight >> 
 			gridPosX >> gridPosY >> 
 			isCollider >> isDamaging >> damage
-			)
-		{
+		) {
 			this->tiles[gridPosX].push(
 				Tile(
 					IntRect(rectLeft, rectTop, rectWidth, rectHeight),
@@ -216,7 +223,6 @@ bool Stage::loadStage(std::string fileName, View& view) {
 					isDamaging),
 				gridPosY
 			);
-
 			this->backgroundTiles[gridPosX][gridPosY].setColor(Wingman::backgroundColor);
 		}
 
@@ -308,6 +314,12 @@ void Stage::draw(
 		toRow = 0;
 	if (toRow >= this->stageSizeY)
 		toRow = this->stageSizeY;
+
+	// Background
+	target.draw(background);
+	for (size_t i = 0; i < this->backgrounds.size(); i++) {
+		target.draw(this->backgrounds[i]);
+	}
 
 	// Tiles
 	for (int i = fromCol; i < toCol; i++) {

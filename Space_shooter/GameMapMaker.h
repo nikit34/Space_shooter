@@ -52,6 +52,9 @@ private:
 	float keyTimeMax;
 	float keyTime;
 	bool backgroundTile;
+	int backgroundIndex;
+	int backgroundWidth;
+	int backgroundHeight;
 
 	// Mouse positions
 	Vector2i mousePosWindow;

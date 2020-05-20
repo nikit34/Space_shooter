@@ -43,6 +43,7 @@ private:
 	
 	float scrollSpeed;
 
+	int backgroundIndex;
 	RectangleShape background;
 	dArr<RectangleShape> backgrounds;
 
