@@ -126,7 +126,7 @@ Player::Player(
 	this->sprite.setTexture(Player::bodyTextures[0]);
 	this->sprite.setScale(0.3f, 0.3f);
 	this->sprite.setRotation(90);
-	this->sprite.setPosition(40.f, (rand() % 800) - this->sprite.getGlobalBounds().height);
+	this->sprite.setPosition(Vector2f(200.f, Player::playerNr * 100.f));
 	this->sprite.setColor(Color(10, 10, 10, 255));
 
 	this->mainGunSprite.setTexture(Player::mainGunTextures[0]);
@@ -720,30 +720,53 @@ std::string Player::getStatsAsString()const {
 }
 
 void Player::reset() {
+	// Reset sprites
+	this->sprite.setPosition(Vector2f(200.f, Player::playerNr * 100.f));
+
+	// Reset stats
 	this->hpMax = 10;
+	this->hpAdded = 10;
 	this->hp = this->hpMax;
-	this->sprite.setPosition(Vector2f(100.f, 100.f));
-	this->bullets.clear();
-	this->upgradesAcquired.clear();
-	this->setGunLevel(Player::LASER_NORMAL);
 	this->wiring = 0;
 	this->cooling = 0;
 	this->power = 0;
 	this->plating = 0;
+	this->level = 1;
+	this->exp = 0;
+	this->expNext = 0;
+	this->statPoints = 0;
+	this->score = 0;
+
+	this->updateStats();
+
+	// Reset physics
+	this->currentVelocity.x = 0.f;
+	this->currentVelocity.y = 0.f;
+
+	// Reset arrays
+	this->bullets.clear();
+	this->upgradesAcquired.clear();
+	
+	// Reset weapon
+	this->setGunLevel(Player::LASER_NORMAL);
+	this->currentWeapon = Player::LASER_NORMAL;
+
+	// Reset upgrades
 	this->dualMissiles01 = false;
 	this->dualMissiles02 = false;
 	this->shield = false;
 	this->piercingShot = false;
-	this->currentVelocity.x = 0.f;
-	this->currentVelocity.y = 0.f;
-	this->level = 1;
-	this->exp = 0;
-	this->expNext = 20;
-	this->currentWeapon = Player::LASER_NORMAL;
-	this->statPoints = 0;
+
+	// Reset powerups
+	this->powerupRF = false;
+	this->powerupXP = false;
+
+	// Reset timers
 	this->shootTimer = this->shootTimerMax;
 	this->damageTimer = this->damageTimerMax;
-	this->score = 0;
+	this->powerupTimer = 0;
+	this->shootTimer = this->shootTimerMax;
+	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
 }
 
 void Player::update(View& view, const float& dt) {

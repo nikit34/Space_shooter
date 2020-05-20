@@ -16,7 +16,7 @@ public:
 
 	void addTile(const Tile tile, unsigned row, unsigned col, bool background);
 	void removeTile(unsigned row, unsigned col, bool background);
-	void setBackground(const int index);
+	void setBackground(const int index, const int width, const int height);
 	void setBackgroundSize(float width, float height);
 
 	void saveStage(std::string fileName);

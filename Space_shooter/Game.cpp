@@ -46,8 +46,6 @@ void Game::initView() {
 }
 
 void Game::initTextures() {
-	Texture temp;
-
 	// Map
 	Stage::initTextures();
 	Tile::initTextures();
@@ -79,7 +77,7 @@ void Game::initTextures() {
 
 void Game::initMap() {
 	this->stage = new Stage(10, 10);
-	this->stage->loadStage("test.wmap", this->mainView);
+	this->stage->loadStage("beta.wmap", this->mainView);
 }
 
 void Game::initUI() {
@@ -1049,10 +1047,20 @@ void Game::restartUpdate() {
 		this->bossEncounter = false;
 		this->enemySpawnTimerMax = 35.f;
 		this->scoreTimer.restart();
+
+		// Reset stage
+		this->mainView.setCenter(Vector2f(
+			this->window->getSize().x / 2, 
+			this->window->getSize().y / 2));
+
+		// Clear arrays
 		this->enemies.clear();
 		this->upgrades.clear();
 		this->pickups.clear();
 		this->bosses.clear();
+		this->powerups.clear();
+		this->textTags.clear();
+		this->particles.clear();
 	}
 }
 

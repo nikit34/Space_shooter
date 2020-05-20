@@ -44,6 +44,9 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 		this->enemySpawners.push(TileArr<Tile>(stageSizeY), i);
 	}
 	this->backgroundIndex = 0;
+	this->background.setSize(Vector2f(Wingman::backgroundSize, Wingman::backgroundSize));
+	this->background.setTextureRect(IntRect(0, 0, Wingman::backgroundSize, Wingman::backgroundSize));
+	this->background.setTexture(&Stage::textures[this->backgroundIndex]);
 }
 
 Stage::~Stage() {}
@@ -86,8 +89,11 @@ void Stage::removeTile(unsigned row, unsigned col, bool background) {
 	}
 }
 
-void Stage::setBackground(const int index) {
+void Stage::setBackground(const int index, const int width, const int height) {
 	if (index >= 0 && index < Stage::nrOfTextures) {
+		this->backgroundIndex = index;
+		this->background.setSize(Vector2f(width, height));
+		this->background.setTextureRect(IntRect(0, 0, width, height));
 		this->background.setTexture(&Stage::textures[index]);
 	}
 }
@@ -308,7 +314,8 @@ void Stage::update(const float& dt, View& view, bool editor) {
 	//		this->updateBackground(dt, i, k);
 	//	}
 	//}
-	this->updateBackground(dt, view);
+	if(!editor)
+		this->updateBackground(dt, view);
 }
 
 void Stage::draw(
@@ -342,10 +349,14 @@ void Stage::draw(
 		toRow = this->stageSizeY;
 
 	// Background
-	for (size_t i = 0; i < this->backgrounds.size(); i++) {
-		target.draw(this->backgrounds[i]);
+	if (editor) {
+		target.draw(this->background);
 	}
-
+	else {
+		for (size_t i = 0; i < this->backgrounds.size(); i++) {
+			target.draw(this->backgrounds[i]);
+		}
+	}
 	// Tiles
 	for (int i = fromCol; i < toCol; i++) {
 		for (int k = fromRow; k < toRow; k++) {

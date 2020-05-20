@@ -122,7 +122,46 @@ void GameMapMaker::loadStage() {
 	else {
 		std::cout << "\n" << "Could not load " << fileName << "\n";
 	}
-		
+}
+
+void GameMapMaker::setBackground() {
+	int choice = 0;
+	std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
+	std::cin >> choice;
+	while (std::cin.fail() || choice >= Stage::nrOfTextures || choice < 0) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
+		std::cin >> choice;
+	}
+	this->backgroundIndex = choice;
+
+	std::cout << "\nBackground size X: ";
+	std::cin >> choice;
+	while (std::cin.fail() || choice < Wingman::backgroundSize) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\nBackground size X: ";
+		std::cin >> choice;
+	}
+	this->backgroundWidth = choice;
+
+	std::cout << "\nBackground size Y: ";
+	std::cin >> choice;
+	while (std::cin.fail() || choice < Wingman::backgroundSize) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "\nBackground size Y: ";
+		std::cin >> choice;
+	}
+	this->backgroundHeight = choice;
+
+	this->stage->setBackground(this->backgroundIndex, this->backgroundWidth, this->backgroundHeight);
+	std::cin.ignore(100, '\n');
+	std::cout << "\n";
 }
 
 void GameMapMaker::initialize() {
@@ -248,12 +287,14 @@ void GameMapMaker::updateControls() {
 	else {
 		this->updateAddRemoveTiles();
 	}
+	// New stage
 	if (Keyboard::isKeyPressed(Keyboard::N) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
 		this->newStage();
 		this->keyTime = 0.f;
 	}
+	// enabled/disabed background stages
 	if (Keyboard::isKeyPressed(Keyboard::B) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
@@ -263,30 +304,21 @@ void GameMapMaker::updateControls() {
 			this->backgroundTile = false;
 		this->keyTime = 0.f;
 	}
+	// Select background
 	if (Keyboard::isKeyPressed(Keyboard::G) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
-		int choice = 0;
-		std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
-		std::cin >> choice;
-		while (std::cin.fail() || choice >= Stage::nrOfTextures || choice < 0) {
-			std::cout << "\nFaulty input!\n";
-			std::cin.clear();
-			std::cin.ignore(100, '\n');
-			std::cout << "\nBackground select index (0 / " << Stage::nrOfTextures << "): ";
-			std::cin >> choice;
-		}
-		this->stage->setBackground(choice);
-		std::cin.ignore(100, '\n');
-		std::cout << "\n";
+		this->setBackground();
 		this->keyTime = 0.f;
 	}
+	// Save stage
 	if (Keyboard::isKeyPressed(Keyboard::S) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
 		this->saveStage();
 		this->keyTime = 0.f;
 	}
+	// Load stage
 	if (Keyboard::isKeyPressed(Keyboard::L) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {

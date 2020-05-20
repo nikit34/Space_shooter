@@ -22,6 +22,7 @@ public:
 	void newStage();
 	void saveStage();
 	void loadStage();
+	void setBackground();
 
 	void initView();
 	void initTextures();
