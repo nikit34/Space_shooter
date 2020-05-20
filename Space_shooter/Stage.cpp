@@ -13,6 +13,7 @@ void Stage::initTextures() {
 	if (in.is_open()) {
 		while (std::getline(in, tempStr)) {
 			temp.loadFromFile(tempStr.c_str());
+			temp.setRepeated(true);
 			Stage::textures.add(Texture(temp));
 			tempStr.clear();
 		}
@@ -35,7 +36,7 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	this->fromRow = 0;
 	this->toRow = 0;
 
-	this->scrollSpeed = 0.1f;
+	this->scrollSpeed = 0.5f;
 
 	for (unsigned i = 0; i < this->stageSizeX; i++) {
 		this->tiles.push(TileArr<Tile>(stageSizeY), i);
@@ -170,9 +171,9 @@ bool Stage::loadStage(std::string fileName, View& view) {
 
 		this->backgroundIndex = bgIndex;
 		this->background.setSize(Vector2f(bgWidth, bgHeight));
-		Stage::textures[bgIndex].setRepeated(true);
 		this->background.setTextureRect(IntRect(0, 0, bgWidth, bgHeight));
 		this->background.setTexture(&Stage::textures[bgIndex]);
+		this->backgrounds.add(this->background);
 
 		// Clear old stage
 		this->tiles.resizeClear(this->stageSizeX);
@@ -240,8 +241,30 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	return loadSuccess;
 }
 
-void Stage::updateBackground(const float& dt) {
-	this->background.move(this->scrollSpeed * dt * this->dtMultiplier, 0.f);
+void Stage::updateBackground(const float& dt, View& view) {
+	bool bgRemoved = false;
+	for (size_t i = 0; i < this->backgrounds.size() && !bgRemoved; i++) {
+		this->backgrounds[i].move(this->scrollSpeed * dt * this->dtMultiplier * 0.8f, 0.f);
+
+		if (this->backgrounds.size() < 3 &&
+			this->backgrounds[i].getPosition().x + this->backgrounds[i].getGlobalBounds().width
+			<=
+			view.getCenter().x + view.getSize().x / 2) {
+			this->background.setPosition(
+				this->backgrounds[i].getPosition().x + this->backgrounds[i].getGlobalBounds().width,
+				this->background.getPosition().y);
+			this->backgrounds.add(this->background);
+		}
+		// Remove background
+		else if (this->backgrounds[i].getPosition().x + this->backgrounds[i].getGlobalBounds().width 
+			<= 
+			view.getCenter().x - view.getSize().x / 2) {
+			bgRemoved = true;
+		}
+		if (bgRemoved) {
+			this->backgrounds.remove(i);
+		}
+	}
 }
 
 void Stage::update(const float& dt, View& view, bool editor) {
@@ -285,7 +308,7 @@ void Stage::update(const float& dt, View& view, bool editor) {
 	//		this->updateBackground(dt, i, k);
 	//	}
 	//}
-	this->updateBackground(dt);
+	this->updateBackground(dt, view);
 }
 
 void Stage::draw(
@@ -319,7 +342,6 @@ void Stage::draw(
 		toRow = this->stageSizeY;
 
 	// Background
-	target.draw(background);
 	for (size_t i = 0; i < this->backgrounds.size(); i++) {
 		target.draw(this->backgrounds[i]);
 	}

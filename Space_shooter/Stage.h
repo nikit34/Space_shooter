@@ -22,7 +22,7 @@ public:
 	void saveStage(std::string fileName);
 	bool loadStage(std::string fileName, View &view);
 
-	void updateBackground(const float& dt);
+	void updateBackground(const float& dt, View& view);
 	void update(float const& dt, View& view, bool editor);
 
 	void draw(RenderTarget& target, View& view, bool editor);
