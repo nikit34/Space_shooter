@@ -164,12 +164,14 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		std::getline(in, line);
 		ss.str(line);
 
-		ss >> sizeX >> sizeY >> backgroundIndex >> bgWidth >> bgHeight;
+		ss >> sizeX >> sizeY >> bgIndex >> bgWidth >> bgHeight;
 		this->stageSizeX = sizeX;
 		this->stageSizeY = sizeY;
 
 		this->backgroundIndex = bgIndex;
 		this->background.setSize(Vector2f(bgWidth, bgHeight));
+		Stage::textures[bgIndex].setRepeated(true);
+		this->background.setTextureRect(IntRect(0, 0, bgWidth, bgHeight));
 		this->background.setTexture(&Stage::textures[bgIndex]);
 
 		// Clear old stage
@@ -238,8 +240,8 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	return loadSuccess;
 }
 
-void Stage::updateBackground(const float& dt, unsigned row, unsigned col) {
-
+void Stage::updateBackground(const float& dt) {
+	this->background.move(this->scrollSpeed * dt * this->dtMultiplier, 0.f);
 }
 
 void Stage::update(const float& dt, View& view, bool editor) {
@@ -283,6 +285,7 @@ void Stage::update(const float& dt, View& view, bool editor) {
 	//		this->updateBackground(dt, i, k);
 	//	}
 	//}
+	this->updateBackground(dt);
 }
 
 void Stage::draw(

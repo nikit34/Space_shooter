@@ -190,8 +190,8 @@ void Game::initialize() {
 	this->initUI();
 }
 
-void Game::updateView() {
-	this->mainView.move(this->stage->getScrollSpeed(), 0.f);
+void Game::updateView(const float& dt) {
+	this->mainView.move(this->stage->getScrollSpeed() * dt * this->dtMultiplier, 0.f);
 }
 
 
@@ -215,7 +215,7 @@ void Game::update(const float& dt) {
 		this->updateTimersUnpaused(dt);
 
 		// View
-		this->updateView();
+		this->updateView(dt);
 
 		// Make game harder with time
 		this->updateDifficulty();

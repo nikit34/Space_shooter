@@ -22,7 +22,7 @@ public:
 	void initUI();
 	void initialize();
 
-	void updateView();
+	void updateView(const float& dt);
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen();
