@@ -1,7 +1,7 @@
 #include"Game.h"
 #include"GameMapMaker.h"
 
-bool MAPMAKER = false;
+bool MAPMAKER = true;
 
 int main() {
 	srand(time(NULL));

@@ -249,6 +249,17 @@ Player::Player(
 
 Player::~Player() {}
 
+void Player::setPos(float x, float y) {
+	this->sprite.setPosition(Vector2f(x, y));
+	this->mainGunSprite.setPosition(Vector2f(x, y));
+
+	// Update positions
+	this->playerCenter.x =
+		this->sprite.getPosition().x - this->sprite.getGlobalBounds().width / 2;
+	this->playerCenter.y =
+		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
+}
+
 int Player::getDamage() const {
 	int damage = 0;
 	switch (this->currentWeapon) {
@@ -350,7 +361,7 @@ void Player::changeAccessories(const float& dt) {
 	}
 }
 
-void Player::updateAccessories(const float &dt) {
+void Player::updateAccessories(const float &dt, const float scrollSpeed) {
 	// Set the position of gun to follow player
 	this->mainGunSprite.setPosition(
 		this->mainGunSprite.getPosition().x,
@@ -359,7 +370,9 @@ void Player::updateAccessories(const float &dt) {
 	// Animate the main gun and correct it after firing
 	if (this->mainGunSprite.getPosition().x < this->playerCenter.x - 40.f) {
 		this->mainGunSprite.move(
-			this->currentVelocity.x * dt * this->dtMultiplier + 4.f * dt * this->dtMultiplier, 
+			scrollSpeed * dt * this->dtMultiplier +
+			this->currentVelocity.x * dt * this->dtMultiplier +
+			4.f * dt * this->dtMultiplier,
 			0.f);
 	}
 	if (this->mainGunSprite.getPosition().x > this->playerCenter.x - 40.f) {
@@ -407,7 +420,7 @@ void Player::updatePowerups() {
 	}
 }
 
-void Player::movement(View& view, const float& dt) {
+void Player::movement(View& view, const float& dt, const float scrollSpeed) {
 	// Update normalized direction
 	this->normDir = normalize(this->currentVelocity, vectorLength(this->currentVelocity));
 
@@ -468,7 +481,8 @@ void Player::movement(View& view, const float& dt) {
 
 	// Final move
 	this->sprite.move(
-		this->currentVelocity.x * dt * this->dtMultiplier, 
+		scrollSpeed * dt * this->dtMultiplier +
+		this->currentVelocity.x * dt * this->dtMultiplier,
 		this->currentVelocity.y * dt * this->dtMultiplier
 	);
 
@@ -771,7 +785,7 @@ void Player::reset() {
 	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
 }
 
-void Player::update(View& view, const float& dt) {
+void Player::update(View& view, const float& dt, const float scrollSpeed) {
 	// Update timers
 	if (this->powerupRF) {
 		this->shootTimerMax = 10.f;
@@ -796,9 +810,9 @@ void Player::update(View& view, const float& dt) {
 	if (this->powerupTimer > 0.f)
 		this->powerupTimer -= 1.f * dt * this->dtMultiplier;
 
-	this->movement(view, dt);
+	this->movement(view, dt, scrollSpeed);
 	this->changeAccessories(dt);
-	this->updateAccessories(dt);
+	this->updateAccessories(dt, scrollSpeed);
 	this->updatePowerups();
 	this->combat(dt);
 }

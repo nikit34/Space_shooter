@@ -46,6 +46,9 @@ void Game::initView() {
 }
 
 void Game::initTextures() {
+	// Buttons
+	WButton::initTextures();
+
 	// Map
 	Stage::initTextures();
 	Tile::initTextures();
@@ -350,7 +353,7 @@ void Game::playerUpdate(const float& dt) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		if (this->players[i].isAlive()) {
 			/// Update Players
-			this->players[i].update(this->mainView, dt);
+			this->players[i].update(this->mainView, dt, stage->getScrollSpeed());
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);

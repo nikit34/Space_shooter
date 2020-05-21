@@ -168,14 +168,17 @@ void GameMapMaker::initialize() {
 	// Init view
 	this->initView();
 
-	// Init fonts
-	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
-
 	// Init textures
 	this->initTextures();
 
 	// Init map
 	this->initMap();
+
+	// Init text
+	this->initText();
+
+	// Init buttons
+	this->initButtons();
 
 	// Init UI
 	this->initUI();
@@ -188,13 +191,27 @@ void GameMapMaker::initView() {
 
 void GameMapMaker::initTextures() {
 	// Map
-	Stage::initTextures();
-	Tile::initTextures();
+	// Stage::initTextures();
+	// Tile::initTextures();
 }
 
 void GameMapMaker::initMap() {
 	this->stageName = "EMPTY";
 	this->stage = new Stage(10, 10);
+}
+
+void GameMapMaker::initText() {
+	// Init fonts
+	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
+	this->selectorText.setFont(this->font);
+	this->selectorText.setCharacterSize(14);
+	this->selectorText.setFillColor(Color::White);
+	this->selectorText.setPosition(Vector2f(this->mousePosWindow));
+}
+
+void GameMapMaker::initButtons() {
+	WButton temp(this->font, "TEST", 12, Vector2f(600, 600), 0);
+	this->buttons.add(temp);
 }
 
 void GameMapMaker::initUI() {
@@ -227,6 +244,12 @@ void GameMapMaker::update(const float& dt) {
 
 	// Map
 	this->mapUpdate(dt);
+
+	// Text update
+	this->updateText();
+
+	// Button update
+	this->updateButtons();
 
 	// UI update
 	this->updateUI();
@@ -346,6 +369,24 @@ void GameMapMaker::updateAddRemoveTiles() {
 	}
 }
 
+void GameMapMaker::updateText() {
+	if(this->windowUI)
+		this->selectorText.setPosition(Vector2f(this->mousePosWindow.x + 20.f, this->mousePosWindow.y));
+	else
+		this->selectorText.setPosition(Vector2f(this->mousePosWorld.x + 20.f, this->mousePosWorld.y));
+
+	if (this->backgroundTile)
+		this->selectorText.setString("BACKGROUND");
+	else if(!this->backgroundTile)
+		this->selectorText.setString("REGULAR TILE");
+}
+
+void GameMapMaker::updateButtons() {
+	for (size_t i = 0; i < this->buttons.size(); i++) {
+		this->buttons[i].update(this->mousePosWorld);
+	}
+}
+
 void GameMapMaker::updateUI() {
 	if (this->windowUI) {
 		this->selector.setPosition(
@@ -414,9 +455,14 @@ void GameMapMaker::drawMap() {
 void GameMapMaker::drawUIWindow() {
 	this->window->draw(this->textureSelector);
 	this->window->draw(this->selector);
+	this->window->draw(this->selectorText);
 }
 
 void GameMapMaker::drawUIView() {
 	this->window->draw(this->selector);
+	this->window->draw(this->selectorText);
+	for (size_t i = 0; i < this->buttons.size(); i++) {
+		this->buttons[i].draw(*this->window);
+	}
 }
 

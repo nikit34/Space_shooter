@@ -27,6 +27,8 @@ public:
 	void initView();
 	void initTextures();
 	void initMap();
+	void initText();
+	void initButtons();
 	void initUI();
 	void initialize();
 	
@@ -34,6 +36,8 @@ public:
 	void updateView(const float& dt);
 	void updateControls();
 	void updateAddRemoveTiles();
+	void updateText();
+	void updateButtons();
 	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
@@ -70,8 +74,12 @@ private:
 	RectangleShape selector;
 	Sprite textureSelector;
 
+	// Buttons
+	dArr<WButton> buttons;
+
 	// Text
 	Font font;
+	Text selectorText;
 
 	// Map
 	std::string stageName;
