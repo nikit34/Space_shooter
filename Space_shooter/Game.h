@@ -141,6 +141,4 @@ private:
 	// Enemy textures
 	dArr<Texture> enemyTextures;
 	dArr<Texture> enemyBulletTextures;
-
-	// Boss textures
 };

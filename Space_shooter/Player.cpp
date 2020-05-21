@@ -106,6 +106,10 @@ Player::Player(
 	// Dt
 	this->dtMultiplier = 60.f;
 
+	// Add number to players for coop
+	this->playerNr = Player::players;
+	Player::players++;
+
 	// KeyTime
 	this->keyTimeMax = 8.f;
 	this->keyTime = this->keyTimeMax;
@@ -115,20 +119,21 @@ Player::Player(
 		(50 / 3) * ((pow(level, 3) - 
 		6 * pow(level, 2)) + 
 		17 * level - 12));
-	
-	// Update positions
-	this->playerCenter.x =
-		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2;
-	this->playerCenter.y =
-		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
 
 	// Textures & Sprites
 	this->sprite.setTexture(Player::bodyTextures[0]);
 	this->sprite.setScale(0.3f, 0.3f);
 	this->sprite.setRotation(90);
-	this->sprite.setPosition(Vector2f(200.f, Player::playerNr * 100.f));
+	this->sprite.setPosition(Vector2f(300.f, 300.f + Player::playerNr * 150.f));
 	this->sprite.setColor(Color(10, 10, 10, 255));
 
+	// Update positions
+	this->playerCenter.x =
+		this->sprite.getPosition().x - this->sprite.getGlobalBounds().width / 2;
+	this->playerCenter.y =
+		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2;
+
+	// Init main gun
 	this->mainGunSprite.setTexture(Player::mainGunTextures[0]);
 	this->mainGunSprite.setOrigin(
 		this->mainGunSprite.getGlobalBounds().width / 2,
@@ -136,9 +141,10 @@ Player::Player(
 	this->mainGunSprite.setRotation(270);
 	this->mainGunSprite.setScale(0.5f, 0.5f);
 	this->mainGunSprite.setPosition(
-		this->playerCenter.x,
+		this->playerCenter.x + 20.f,
 		this->playerCenter.y);
 
+	// Init shield
 	this->deflectorShield.setTexture(Player::shieldTextures[0]);
 	this->deflectorShield.setOrigin(
 		this->deflectorShield.getGlobalBounds().width / 2,
@@ -234,15 +240,11 @@ Player::Player(
 	this->dualMissiles01 = false;
 	this->dualMissiles02 = false;
 
+	this->setGunLevel(0);
+
 	// Powerups
 	this->powerupRF = false;
 	this->powerupXP = false;
-
-	this->setGunLevel(0);
-
-	// Add number to players for coop
-	this->playerNr = Player::players;
-	Player::players++;
 }
 
 Player::~Player() {}
@@ -721,7 +723,7 @@ std::string Player::getStatsAsString()const {
 
 void Player::reset() {
 	// Reset sprites
-	this->sprite.setPosition(Vector2f(200.f, Player::playerNr * 100.f));
+	this->sprite.setPosition(Vector2f(300.f, 300.f + Player::playerNr * 150.f));
 
 	// Reset stats
 	this->hpMax = 10;

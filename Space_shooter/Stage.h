@@ -7,15 +7,18 @@ public:
 	Stage(unsigned long sizeX, unsigned long sizeY);
 	virtual ~Stage();
 
-	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
-
 	// Accessors
 	inline int getSizeX()const { return this->stageSizeX; }
 	inline int getSizeY()const { return this->stageSizeY; }
 	inline float getScrollSpeed()const { return this->scrollSpeed; }
+	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
 
+	// Functions
 	void addTile(const Tile tile, unsigned row, unsigned col, bool background);
 	void removeTile(unsigned row, unsigned col, bool background);
+	void reset(View& view);
+
+	// Modifiers
 	void setBackground(const int index, const int width, const int height);
 	void setBackgroundSize(float width, float height);
 

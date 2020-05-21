@@ -89,6 +89,14 @@ void Stage::removeTile(unsigned row, unsigned col, bool background) {
 	}
 }
 
+void Stage::reset(View& view) {
+	this->backgrounds.clear();
+	this->background.setPosition(Vector2f(
+		view.getCenter().x - view.getSize().x / 2, 
+		view.getCenter().y - view.getSize().y / 2));
+	this->backgrounds.add(this->background);
+}
+
 void Stage::setBackground(const int index, const int width, const int height) {
 	if (index >= 0 && index < Stage::nrOfTextures) {
 		this->backgroundIndex = index;

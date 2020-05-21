@@ -68,9 +68,6 @@ void Game::initTextures() {
 	// Enemies
 	Enemy::initTextures();
 
-	// Bosses
-
-
 	// Particles
 	Particle::initTextures();
 }
@@ -1052,6 +1049,7 @@ void Game::restartUpdate() {
 		this->mainView.setCenter(Vector2f(
 			this->window->getSize().x / 2, 
 			this->window->getSize().y / 2));
+		this->stage->reset(this->mainView);
 
 		// Clear arrays
 		this->enemies.clear();
