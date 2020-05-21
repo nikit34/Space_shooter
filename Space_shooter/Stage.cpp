@@ -41,7 +41,7 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 	for (unsigned i = 0; i < this->stageSizeX; i++) {
 		this->tiles.push(TileArr<Tile>(stageSizeY), i);
 		this->backgroundTiles.push(TileArr<Tile>(stageSizeY), i);
-		this->enemySpawners.push(TileArr<Tile>(stageSizeY), i);
+		this->enemySpawners.push(TileArr<EnemySpawner>(stageSizeY), i);
 	}
 	this->backgroundIndex = 0;
 	this->background.setSize(Vector2f(Wingman::backgroundSize, Wingman::backgroundSize));
@@ -51,23 +51,30 @@ Stage::Stage(unsigned long sizeX, unsigned long sizeY)
 
 Stage::~Stage() {}
 
-void Stage::addTile(const Tile tile, unsigned row, unsigned col, bool background) {
+void Stage::addTile(const Tile tile, unsigned row, unsigned col, int type) {
 	if (row >= this->stageSizeX || col >= this->stageSizeY)
 		throw("OUT OF BOUNDS STAGE ADDTILE");
 	
-	if (!background) {
+	if (type == tileType::regularTile) {
 		if (this->tiles[row].isNull(col))
 			this->tiles[row].push(tile, col);
 		else
 			std::cout << "Already tile in that position\n";
 	}
-	else {
+	else if (type == tileType::backgroundTile) {
 		if (this->backgroundTiles[row].isNull(col)) {
 			this->backgroundTiles[row].push(Tile(tile.getTexRect(), tile.getPos(), false, false), col);
 			this->backgroundTiles[row][col].setColor(Color(100, 100, 100, 255));
 		}
 		else
 			std::cout << "Already background tile in that position\n";
+	}
+	else if (type == tileType::enemySpawner) {
+		if (this->enemySpawners[row].isNull(col)) {
+			// this->enemySpawners[row].push(EnemySpawner(), col);
+		}
+		else
+			std::cout << "Already enemyspawner in that position\n";
 	}
 }
 
@@ -197,7 +204,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		for (size_t i = 0; i < this->stageSizeX; i++) {
 			this->tiles.push(TileArr<Tile>(stageSizeY), i);
 			this->backgroundTiles.push(TileArr<Tile>(stageSizeY), i);
-			this->enemySpawners.push(TileArr<Tile>(stageSizeY), i);
+			this->enemySpawners.push(TileArr<EnemySpawner>(stageSizeY), i);
 		}
 		line.clear();
 		ss.clear();

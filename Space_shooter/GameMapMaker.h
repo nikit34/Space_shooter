@@ -56,11 +56,12 @@ private:
 	bool fullscreen;
 	float keyTimeMax;
 	float keyTime;
-	bool backgroundTile;
 	int backgroundIndex;
 	int backgroundWidth;
 	int backgroundHeight;
 
+	int toolSelect;
+	
 	// Mouse positions
 	Vector2i mousePosWindow;
 	Vector2f mousePosWorld;

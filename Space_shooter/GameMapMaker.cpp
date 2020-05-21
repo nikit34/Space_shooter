@@ -7,11 +7,10 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
 	this->dtMultiplier = 60.f;
-	this->backgroundTile = false;
+	this->toolSelect = Stage::tileType::regularTile;
 	this->backgroundIndex = 0;
 	this->backgroundWidth = Wingman::backgroundSize;
 	this->backgroundHeight = Wingman::backgroundSize;
-
 	this->stage = nullptr;
 
 	this->keyTimeMax = 10.f;
@@ -210,7 +209,7 @@ void GameMapMaker::initText() {
 }
 
 void GameMapMaker::initButtons() {
-	WButton temp(this->font, "TEST", 12, Vector2f(600, 600), 0);
+	WButton temp(this->font, "EnemySpawnerSelect", 12, Vector2f(600, 600), 0);
 	this->buttons.add(temp);
 }
 
@@ -321,10 +320,10 @@ void GameMapMaker::updateControls() {
 	if (Keyboard::isKeyPressed(Keyboard::B) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
-		if (!this->backgroundTile)
-			this->backgroundTile = true;
+		if (this->toolSelect == Stage::tileType::backgroundTile)
+			this->toolSelect = Stage::tileType::regularTile;
 		else
-			this->backgroundTile = false;
+			this->toolSelect = Stage::tileType::backgroundTile;
 		this->keyTime = 0.f;
 	}
 	// Select background
@@ -332,6 +331,13 @@ void GameMapMaker::updateControls() {
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
 		this->setBackground();
+		this->keyTime = 0.f;
+	}
+	// Select enemyspawner
+	if (Keyboard::isKeyPressed(Keyboard::E) &&
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
+		this->toolSelect = Stage::tileType::enemySpawner;
 		this->keyTime = 0.f;
 	}
 	// Save stage
@@ -361,11 +367,11 @@ void GameMapMaker::updateAddRemoveTiles() {
 				false),
 			this->mousePosGrid.x, 
 			this->mousePosGrid.y,
-			this->backgroundTile
+			this->toolSelect
 		);
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right)) {
-		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, this->backgroundTile);
+		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, this->toolSelect);
 	}
 }
 
@@ -375,10 +381,12 @@ void GameMapMaker::updateText() {
 	else
 		this->selectorText.setPosition(Vector2f(this->mousePosWorld.x + 20.f, this->mousePosWorld.y));
 
-	if (this->backgroundTile)
+	if (this->toolSelect == Stage::tileType::backgroundTile)
 		this->selectorText.setString("BACKGROUND");
-	else if(!this->backgroundTile)
+	else if(this->toolSelect == Stage::tileType::regularTile)
 		this->selectorText.setString("REGULAR TILE");
+	else if (this->toolSelect == Stage::tileType::enemySpawner)
+		this->selectorText.setString("ENEMY SPAWNER");
 }
 
 void GameMapMaker::updateButtons() {

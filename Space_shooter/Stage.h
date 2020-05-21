@@ -14,7 +14,7 @@ public:
 	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
 
 	// Functions
-	void addTile(const Tile tile, unsigned row, unsigned col, bool background);
+	void addTile(const Tile tile, unsigned row, unsigned col, int type);
 	void removeTile(unsigned row, unsigned col, bool background);
 	void reset(View& view);
 
@@ -35,6 +35,8 @@ public:
 	static int nrOfTextures;
 	static void initTextures();
 
+	enum tileType { regularTile = 0, backgroundTile, enemySpawner };
+
 private:	
 	float dtMultiplier;
 	unsigned long stageSizeX; 
@@ -42,7 +44,7 @@ private:
 
 	TileArr<TileArr<Tile>> tiles;
 	TileArr<TileArr<Tile>> backgroundTiles;
-	TileArr<TileArr<Tile>> enemySpawners;
+	TileArr<TileArr<EnemySpawner>> enemySpawners;
 	
 	float scrollSpeed;
 
