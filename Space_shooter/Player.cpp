@@ -285,8 +285,7 @@ int Player::getDamage() const {
 void Player::takeDamage(int damage) {
 	this->hp -= damage;
 	this->damageTimer = 0;
-	this->resetMoveDamageRand();
-	this->currentVelocity.x += -this->normDir.x * 10.f;		
+	this->currentVelocity.x += -this->normDir.x * 10.f;
 	this->currentVelocity.y += -this->normDir.y * 10.f;
 }
 
@@ -646,18 +645,19 @@ void Player::combat(const float& dt) {
 			this->rWing.setColor(Color::Red);
 			this->cPit.setColor(Color::Red);
 
-			this->lWing.move(this->moveDamageRand.x, -this->moveDamageRand.y);
-			this->rWing.move(this->moveDamageRand.x, this->moveDamageRand.y);
-			this->cPit.move(-this->moveDamageRand.x, 0.f);
+			this->lWing.move(-this->moveDamageRand.x * dt * this->dtMultiplier, this->moveDamageRand.y* dt* this->dtMultiplier);
+			this->rWing.move(-this->moveDamageRand.x * dt * this->dtMultiplier, -this->moveDamageRand.y * dt * this->dtMultiplier);
+			this->cPit.move(this->moveDamageRand.x* dt* this->dtMultiplier, 0.f);
 		}
 		else {
 			this->lWing.setColor(Color::White);
 			this->rWing.setColor(Color::White);
 			this->cPit.setColor(Color::White);
 
-			this->lWing.move(-this->moveDamageRand.x, this->moveDamageRand.y);
-			this->rWing.move(-this->moveDamageRand.x, -this->moveDamageRand.y);
-			this->cPit.move(this->moveDamageRand.x, 0.f);
+			this->resetMoveDamageRand();
+			this->lWing.move(this->moveDamageRand.x, -this->moveDamageRand.y);
+			this->rWing.move(this->moveDamageRand.x, this->moveDamageRand.y);
+			this->cPit.move(-this->moveDamageRand.x, 0.f);
 		}
 	}
 	else {
