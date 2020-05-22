@@ -2,14 +2,14 @@
 
 
 EnemySpawner::EnemySpawner(
-	Vector2f pos,
+	Vector2i gridPos,
 	int type,
 	int level,
 	int levelInterval,
 	int nrOfEnemies,
 	float spawnTimerMax
 ) {
-	this->sprite.setPosition(pos);
+	this->gridPosition = gridPos;
 	this->type = type;
 	this->level = level;
 	this->levelInterval = level;
@@ -39,5 +39,9 @@ void EnemySpawner::update(View& view) {
 }
 
 void EnemySpawner::draw(RenderTarget& target) {
-	target.draw(this->sprite);
+	RectangleShape shape;
+	shape.setFillColor(Color::White);
+	shape.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
+	shape.setPosition(this->gridPosition.x * Wingman::gridSize, this->gridPosition.y * Wingman::gridSize);
+	target.draw(shape);
 }

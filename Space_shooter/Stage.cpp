@@ -69,13 +69,6 @@ void Stage::addTile(const Tile tile, unsigned row, unsigned col, int type) {
 		else
 			std::cout << "Already background tile in that position\n";
 	}
-	else if (type == tileType::enemySpawner) {
-		if (this->enemySpawners[row].isNull(col)) {
-			// this->enemySpawners[row].push(EnemySpawner(), col);
-		}
-		else
-			std::cout << "Already enemyspawner in that position\n";
-	}
 }
 
 void Stage::removeTile(unsigned row, unsigned col, bool background) {
@@ -94,6 +87,23 @@ void Stage::removeTile(unsigned row, unsigned col, bool background) {
 		else
 			std::cout << "No background tile in that position\n";
 	}
+}
+
+void Stage::addEnemySpawner(const EnemySpawner es, unsigned row, unsigned col) {
+	if (this->enemySpawners[row].isNull(col))
+		this->enemySpawners[row].push(es, col);
+	else
+		std::cout << "Already enemyspawner in that position\n";
+}
+
+void Stage::removeEnemySpawner(unsigned row, unsigned col) {
+	if (row >= this->stageSizeX || col >= this->stageSizeY)
+		throw("OUT OF BOUNDS STAGE REMOVEENEMYSPAWNER");
+
+	if (!this->enemySpawners[row].isNull(col))
+			this->enemySpawners[row].remove(col);
+		else
+			std::cout << "No enemy spawner in that position\n";
 }
 
 void Stage::reset(View& view) {
@@ -379,7 +389,8 @@ void Stage::draw(
 				this->backgroundTiles[i][k].draw(target);
 			if (!this->tiles[i].isNull(k))
 				this->tiles[i][k].draw(target);
-			if (!this->enemySpawners[i].isNull(k))
+			// EnemySpawner
+			if (!this->enemySpawners[i].isNull(k) && editor)
 				this->enemySpawners[i][k].draw(target);
 		}
 	}

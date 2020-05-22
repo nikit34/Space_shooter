@@ -4,7 +4,7 @@
 
 class EnemySpawner {
 public:
-	EnemySpawner(Vector2f pos,
+	EnemySpawner(Vector2i gridPos,
 		int type,
 		int level,
 		int levelInterval,
@@ -21,7 +21,7 @@ public:
 	void draw(RenderTarget& target);
 
 private:
-	Sprite sprite;
+	Vector2i gridPosition;
 	int type; // -1 random
 	int level;
 	int levelInterval;

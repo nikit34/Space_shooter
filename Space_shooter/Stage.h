@@ -16,6 +16,8 @@ public:
 	// Functions
 	void addTile(const Tile tile, unsigned row, unsigned col, int type);
 	void removeTile(unsigned row, unsigned col, bool background);
+	void addEnemySpawner(const EnemySpawner es, unsigned row, unsigned col);
+	void removeEnemySpawner(unsigned row, unsigned col);
 	void reset(View& view);
 
 	// Modifiers

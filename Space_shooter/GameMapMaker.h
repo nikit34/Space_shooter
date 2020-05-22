@@ -23,6 +23,7 @@ public:
 	void saveStage();
 	void loadStage();
 	void setBackground();
+	void setEnemySpawner();
 
 	void initView();
 	void initTextures();
@@ -44,6 +45,7 @@ public:
 	void mapUpdate(const float& dt);
 
 	void draw();
+	void drawText();
 	void drawMap();
 	void drawUIView();
 	void drawUIWindow();
@@ -61,7 +63,15 @@ private:
 	int backgroundHeight;
 
 	int toolSelect;
-	
+
+	// enemySpawner
+	Vector2i enemyPosGrid;
+	int enemyType;
+	int enemyLevel;
+	int enemyLevelInterval;
+	int nrOfEnemies;
+	float enemyTimerMax;
+
 	// Mouse positions
 	Vector2i mousePosWindow;
 	Vector2f mousePosWorld;
@@ -81,6 +91,7 @@ private:
 	// Text
 	Font font;
 	Text selectorText;
+	Text enemySpawnerText;
 
 	// Map
 	std::string stageName;
