@@ -202,6 +202,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	int isDamaging = 0;
 
 	// Enemyspawner
+	bool randomSpawnPos = 0;
 	int type = 0;
 	int levelInterval = 0;
 	int nrOfEnemies = 0;
@@ -283,12 +284,14 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		ss.str(line);
 
 		while (ss >>
-			gridPosX >> gridPosY >> type >> levelInterval >>
+			gridPosX >> gridPosY >> 
+			randomSpawnPos >> type >> levelInterval >>
 			nrOfEnemies >> spawnTimerMax
 			) {
 			this->enemySpawners[gridPosX].push(
 				EnemySpawner(
 					Vector2i(gridPosX, gridPosY),
+					randomSpawnPos,
 					type,
 					levelInterval,
 					nrOfEnemies,

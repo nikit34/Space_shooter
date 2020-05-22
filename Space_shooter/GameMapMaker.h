@@ -66,6 +66,7 @@ private:
 
 	// enemySpawner
 	Vector2i enemyPosGrid;
+	bool enemyRandomSpawnPos;
 	int enemyType;
 	int enemyLevelInterval;
 	int nrOfEnemies;

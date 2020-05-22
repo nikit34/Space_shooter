@@ -14,6 +14,7 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->stage = nullptr;
 
 	// enemySpawner
+	this->enemyRandomSpawnPos = false;
 	enemyType = 0;
 	enemyLevelInterval = 0;
 	nrOfEnemies = 0;
@@ -171,7 +172,16 @@ void GameMapMaker::setBackground() {
 
 void GameMapMaker::setEnemySpawner() {
 	std::cout << "\nSet enemy spawner\n";
-	std::cout << "Type: ";
+	std::cout << "\nRandom position: ";
+	std::cin >> this->enemyRandomSpawnPos;
+	while (std::cin.fail() || this->enemyRandomSpawnPos < 0 || this->enemyRandomSpawnPos > 1) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "Random position: ";
+		std::cin >> this->enemyRandomSpawnPos;
+	}
+	std::cout << "\nType: ";
 	std::cin >> this->enemyType;
 	while (std::cin.fail()) {
 		std::cout << "\nFaulty input!\n";
@@ -180,7 +190,7 @@ void GameMapMaker::setEnemySpawner() {
 		std::cout << "Type: ";
 		std::cin >> this->enemyType;
 	}
-	std::cout << "Level Interval: ";
+	std::cout << "\nLevel Interval: ";
 	std::cin >> this->enemyLevelInterval;
 	while (std::cin.fail()) {
 		std::cout << "\nFaulty input!\n";
@@ -189,7 +199,7 @@ void GameMapMaker::setEnemySpawner() {
 		std::cout << "Level Interval: ";
 		std::cin >> this->enemyLevelInterval;
 	}
-	std::cout << "Number of enemies: ";
+	std::cout << "\nNumber of enemies: ";
 	std::cin >> this->nrOfEnemies;
 	while (std::cin.fail() || this->nrOfEnemies < 0) {
 		std::cout << "\nFaulty input!\n";
@@ -198,7 +208,7 @@ void GameMapMaker::setEnemySpawner() {
 		std::cout << "Number of enemies: ";
 		std::cin >> this->nrOfEnemies;
 	}
-	std::cout << "Timer max: ";
+	std::cout << "\nTimer max: ";
 	std::cin >> this->enemyTimerMax;
 	while (std::cin.fail() || this->enemyTimerMax < 0) {
 		std::cout << "\nFaulty input!\n";
@@ -443,6 +453,7 @@ void GameMapMaker::updateAddRemoveTiles() {
 			this->stage->addEnemySpawner(
 				EnemySpawner(
 					this->enemyPosGrid,
+					this->enemyRandomSpawnPos,
 					this->enemyType,
 					this->enemyLevelInterval,
 					this->nrOfEnemies,
@@ -482,7 +493,8 @@ void GameMapMaker::updateText() {
 		this->selectorText.setString("ENEMY SPAWNER");
 
 	this->enemySpawnerText.setString(
-		"Type: " + std::to_string(this->enemyType) +
+		"Random pos: " + std::to_string(this->enemyRandomSpawnPos) +
+		"\nType: " + std::to_string(this->enemyType) +
 		"\nLevel Interval: " + std::to_string(this->enemyLevelInterval) +
 		"\nNrOfEnemies: " + std::to_string(this->nrOfEnemies) +
 		"\nTimer max: " + std::to_string(this->enemyTimerMax));

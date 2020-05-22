@@ -5,6 +5,8 @@
 #include"Boss.h"
 #include"Map.h"
 
+enum Mode { Survival = 0, Regular };
+
 class Game {
 public:
 	Game(RenderWindow* window);
@@ -35,6 +37,7 @@ public:
 	void playerUpdate(const float& dt);
 	void playerBulletUpdate(const float& dt, const int i);
 	void enemyUpdate(const float& dt);
+	void enemySpawnUpdate(const float& dt);
 	void enemyBulletUpdate(const float& dt);
 	void textTagsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
@@ -69,6 +72,7 @@ private:
 	bool paused;
 	float keyTimeMax;
 	float keyTime;
+	int mode;
 
 	// Score
 	unsigned scoreMultiplier;

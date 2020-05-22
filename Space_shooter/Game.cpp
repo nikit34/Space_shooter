@@ -5,6 +5,7 @@ Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
+	this->mode = Mode::Survival;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
 	this->score = 0;
@@ -592,19 +593,8 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 
 void Game::enemyUpdate(const float& dt) {
 	// Spawn enemies
-	if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
-		this->enemies.add(Enemy(
-			this->mainView,
-			Vector2f(0.f, 0.f),
-			Vector2f(-1.f, 0.f),
-			rand() % 3,
-			this->players[(rand() % this->playersAlive)].getLevel(),
-			rand() % this->playersAlive)
-		);
-
-		this->enemySpawnTimer = 0;  // Reset timer
-	}
-
+	this->enemySpawnUpdate(dt);
+	
 	// Update enemies
 	bool enemyRemoved = false;
 	bool playerKilled = false;
@@ -648,7 +638,6 @@ void Game::enemyUpdate(const float& dt) {
 			if (playerKilled)
 				this->playersAlive--;
 		}
-
 		// Enemies out of bounds
 		if (this->enemies[i].getPosition().x < this->mainView.getCenter().x - this->mainView.getSize().x / 2 -
 			this->enemies[i].getGlobalBounds().width) {
@@ -658,6 +647,27 @@ void Game::enemyUpdate(const float& dt) {
 			this->enemies.remove(i);
     }
 	this->enemyBulletUpdate(dt);
+}
+
+void Game::enemySpawnUpdate(const float& dt) {
+	// Spawn enemies
+	if (this->mode == Mode::Survival) {
+		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
+			this->enemies.add(Enemy(
+				this->mainView,
+				Vector2f(0.f, 0.f),
+				Vector2f(-1.f, 0.f),
+				rand() % 4,
+				this->players[(rand() % this->playersAlive)].getLevel(),
+				rand() % this->playersAlive)
+			);
+
+			this->enemySpawnTimer = 0;  // Reset timer
+		}
+	}
+	else if (this->mode == Mode::Regular) {
+
+	}
 }
 
 void Game::enemyBulletUpdate(const float& dt) {

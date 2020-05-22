@@ -45,7 +45,8 @@ public:
 	enum eTypes { 
 		MOVELEFT = 0, 
 		FOLLOW, 
-		MOVELEFTSHOOT, 
+		MOVELEFTSHOOT,
+		MOVELEFTSHOOTPLAYER,
 		FOLLOWFAST, 
 		FOLLOWSHOOT, 
 		FOLLOWFASTSHOOT 
@@ -73,6 +74,7 @@ private:
 	float damageTimerMax;
 	float damageTimer;
 
+	int nrOfBullets;
 	float shootTimerMax;
 	float shootTimer;
 

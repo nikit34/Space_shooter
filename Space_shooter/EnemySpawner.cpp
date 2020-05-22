@@ -3,12 +3,14 @@
 
 EnemySpawner::EnemySpawner(
 	Vector2i gridPos,
+	bool randomSpawnPos,
 	int type,
 	int levelInterval,
 	int nrOfEnemies,
 	float spawnTimerMax
 ) {
 	this->gridPosition = gridPos;
+	this->randomSpawnPos = randomSpawnPos;
 	this->type = type;
 	this->levelInterval = levelInterval;
 	this->nrOfEnemies = nrOfEnemies;
@@ -36,6 +38,7 @@ std::string EnemySpawner::getAsString()const {
 	return
 		std::to_string(this->gridPosition.x) + " " +
 		std::to_string(this->gridPosition.y) + " " +
+		std::to_string(this->randomSpawnPos) + " " +
 		std::to_string(this->type) + " " +
 		std::to_string(this->levelInterval) + " " +
 		std::to_string(this->nrOfEnemies) + " " +
