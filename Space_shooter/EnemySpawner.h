@@ -8,8 +8,7 @@ public:
 		bool randomSpawnPos,
 		int type,
 		int levelInterval,
-		int nrOfEnemies,
-		float spawnTimerMax
+		int nrOfEnemies
 	);
 	virtual ~EnemySpawner();
 
@@ -27,7 +26,5 @@ private:
 	int type; // -1 random
 	int levelInterval;
 	int nrOfEnemies; // -1 random
-	float spawnTimerMax;
-	float spawnTimer;
 };
 

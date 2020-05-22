@@ -206,8 +206,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	int type = 0;
 	int levelInterval = 0;
 	int nrOfEnemies = 0;
-	float spawnTimerMax = 0.f;
-
+	
 	// Open file
 	in.open(fileName);
 	if (in.is_open()) {
@@ -286,7 +285,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		while (ss >>
 			gridPosX >> gridPosY >> 
 			randomSpawnPos >> type >> levelInterval >>
-			nrOfEnemies >> spawnTimerMax
+			nrOfEnemies
 			) {
 			this->enemySpawners[gridPosX].push(
 				EnemySpawner(
@@ -294,8 +293,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 					randomSpawnPos,
 					type,
 					levelInterval,
-					nrOfEnemies,
-					spawnTimerMax
+					nrOfEnemies
 				),
 				gridPosY
 			);
@@ -429,7 +427,7 @@ void Stage::draw(
 			if (!this->tiles[i].isNull(k))
 				this->tiles[i][k].draw(target);
 			// EnemySpawner
-			if (!this->enemySpawners[i].isNull(k) && editor)
+			if (!this->enemySpawners[i].isNull(k))
 				this->enemySpawners[i][k].draw(target, font);
 		}
 	}

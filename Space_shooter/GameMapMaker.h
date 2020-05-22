@@ -70,7 +70,6 @@ private:
 	int enemyType;
 	int enemyLevelInterval;
 	int nrOfEnemies;
-	float enemyTimerMax;
 
 	// Mouse positions
 	Vector2i mousePosWindow;

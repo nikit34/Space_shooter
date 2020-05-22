@@ -18,7 +18,6 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	enemyType = 0;
 	enemyLevelInterval = 0;
 	nrOfEnemies = 0;
-	enemyTimerMax = 0.f;
 
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
@@ -208,15 +207,8 @@ void GameMapMaker::setEnemySpawner() {
 		std::cout << "Number of enemies: ";
 		std::cin >> this->nrOfEnemies;
 	}
-	std::cout << "\nTimer max: ";
-	std::cin >> this->enemyTimerMax;
-	while (std::cin.fail() || this->enemyTimerMax < 0) {
-		std::cout << "\nFaulty input!\n";
-		std::cin.clear();
-		std::cin.ignore(100, '\n');
-		std::cout << "Timer max: ";
-		std::cin >> this->enemyTimerMax;
-	}
+	std::cin.clear();
+	std::cin.ignore(100, '\n');
 }
 
 void GameMapMaker::initialize() {
@@ -456,8 +448,7 @@ void GameMapMaker::updateAddRemoveTiles() {
 					this->enemyRandomSpawnPos,
 					this->enemyType,
 					this->enemyLevelInterval,
-					this->nrOfEnemies,
-					this->keyTimeMax
+					this->nrOfEnemies
 				),
 				this->mousePosGrid.x,
 				this->mousePosGrid.y
@@ -495,9 +486,7 @@ void GameMapMaker::updateText() {
 	this->enemySpawnerText.setString(
 		"Random pos: " + std::to_string(this->enemyRandomSpawnPos) +
 		"\nType: " + std::to_string(this->enemyType) +
-		"\nLevel Interval: " + std::to_string(this->enemyLevelInterval) +
-		"\nNrOfEnemies: " + std::to_string(this->nrOfEnemies) +
-		"\nTimer max: " + std::to_string(this->enemyTimerMax));
+		"\nLevel Interval: " + std::to_string(this->enemyLevelInterval));
 }
 
 void GameMapMaker::updateButtons() {

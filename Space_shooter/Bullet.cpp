@@ -56,7 +56,7 @@ Bullet::Bullet(
 	);
 	this->sprite.setScale(scale);
 	this->sprite.setPosition(position);
-	this->sprite.setRotation(atan2(this->direction.y, this->direction.x) * 180 / 3.14 + 270);
+	this->sprite.setRotation(atan2(this->direction.y, this->direction.x) * 180 / 3.14 + 90);
 }
 
 Bullet::~Bullet() {}

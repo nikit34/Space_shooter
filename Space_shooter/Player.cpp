@@ -236,7 +236,7 @@ Player::Player(
 	// Upgrades
 	this->mainGunLevel = 0;
 	this->piercingShot = false;
-	this->shield = false;
+	this->shield = true;
 	this->dualMissiles01 = false;
 	this->dualMissiles02 = false;
 
@@ -382,7 +382,6 @@ void Player::updateAccessories(const float &dt, const float scrollSpeed) {
 	}
 
 	// Set the position of the shield to follow player
-	this->deflectorShield.setScale(1.f, 1.f);
 	this->deflectorShield.setPosition(
 		playerCenter.x - this->sprite.getGlobalBounds().width,
 		playerCenter.y - 10.f);
@@ -770,7 +769,7 @@ void Player::reset() {
 	// Reset upgrades
 	this->dualMissiles01 = false;
 	this->dualMissiles02 = false;
-	this->shield = false;
+	this->shield = true;
 	this->piercingShot = false;
 
 	// Reset powerups
@@ -782,6 +781,7 @@ void Player::reset() {
 	this->damageTimer = this->damageTimerMax;
 	this->powerupTimer = 0;
 	this->shootTimer = this->shootTimerMax;
+	this->shieldTimer = this->shieldTimerMax;
 	this->shieldRechargeTimer = this->shieldRechargeTimerMax;
 }
 
