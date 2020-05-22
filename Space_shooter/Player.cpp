@@ -224,6 +224,7 @@ Player::Player(
 	this->maxVelocity = 25.f;
 	this->acceleration = 0.8f;
 	this->stabilizerForce = 0.4f;
+	this->moveDamageRand = Vector2f((float)(rand() % 20 - 10), (float)(rand() % 10 - 5));
 
 	// Guns
 	this->currentWeapon = Player::LASER_NORMAL;
@@ -283,9 +284,8 @@ int Player::getDamage() const {
 
 void Player::takeDamage(int damage) {
 	this->hp -= damage;
-
 	this->damageTimer = 0;
-
+	this->resetMoveDamageRand();
 	this->currentVelocity.x += -this->normDir.x * 10.f;		
 	this->currentVelocity.y += -this->normDir.y * 10.f;
 }
@@ -627,6 +627,7 @@ void Player::combat(const float& dt) {
 		if (this->shieldTimer > 0 && this->shieldRechargeTimer >= this->shieldRechargeTimerMax) {
 			this->shielding = true;
 			this->shieldTimer -= 2.f * dt * this->dtMultiplier;
+			this->deflectorShield.rotate(10.f * dt * this->dtMultiplier);
 
 			// Deplete shield
 			if (this->shieldTimer <= 0.f)
@@ -640,15 +641,23 @@ void Player::combat(const float& dt) {
 
 	// Damaged
 	if (this->isDamageCooldown()) {
-		if ((int)this->damageTimer % 5 == 0) {
+		if ((int)this->damageTimer % 5 != 0) {
 			this->lWing.setColor(Color::Red);
 			this->rWing.setColor(Color::Red);
 			this->cPit.setColor(Color::Red);
+
+			this->lWing.move(this->moveDamageRand.x, -this->moveDamageRand.y);
+			this->rWing.move(this->moveDamageRand.x, this->moveDamageRand.y);
+			this->cPit.move(-this->moveDamageRand.x, 0.f);
 		}
 		else {
 			this->lWing.setColor(Color::White);
 			this->rWing.setColor(Color::White);
 			this->cPit.setColor(Color::White);
+
+			this->lWing.move(-this->moveDamageRand.x, this->moveDamageRand.y);
+			this->rWing.move(-this->moveDamageRand.x, -this->moveDamageRand.y);
+			this->cPit.move(this->moveDamageRand.x, 0.f);
 		}
 	}
 	else {

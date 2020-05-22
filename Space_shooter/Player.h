@@ -42,6 +42,7 @@ public:
 
 	int getDamage()const;
 	void takeDamage(int damage);
+	inline void resetMoveDamageRand(){ this->moveDamageRand = Vector2f((float)(rand() % 20 - 10), (float)(rand() % 20 - 10)); }
 
 	inline const int& getPlayerNr() const { return this->playerNr; }
 
@@ -190,6 +191,7 @@ private:
 
 	int damage;
 	int damageMax;
+	Vector2f moveDamageRand;
 
 	int score;
 
