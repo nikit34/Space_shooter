@@ -38,7 +38,7 @@ private:
 	// Core
 	bool isCollider;
 	bool isDamaging;
-	int damage;
+	double damage;
 
 	// Positioning
 

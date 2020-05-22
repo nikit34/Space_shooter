@@ -20,7 +20,7 @@ Tile::Tile(
 
 	this->isCollider = isCollider;
 	this->isDamaging = isDamaging;
-	this->damage = 0;
+	this->damage = 20.0; // percent of hp
 }
 
 Tile::~Tile() {}
@@ -37,8 +37,7 @@ std::string Tile::getAsString()const {
 		std::to_string((int)this->sprite.getPosition().y / Wingman::gridSize) + " " +
 		// Stats
 		std::to_string(isCollider) + " " +
-		std::to_string(isDamaging) + " " +
-		std::to_string(damage) + " ";
+		std::to_string(isDamaging) + " ";
 }
 
 void Tile::update(const float &dt) {

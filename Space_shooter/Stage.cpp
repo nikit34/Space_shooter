@@ -160,6 +160,14 @@ void Stage::saveStage(std::string fileName) {
 					out << this->backgroundTiles[i][k].getAsString() << " ";
 			}
 		}
+		out << "\n";
+		for (size_t i = 0; i < this->stageSizeX; i++) {
+			// Enemyspawners
+			for (size_t k = 0; k < this->stageSizeY; k++) {
+				if (!this->enemySpawners[i].isNull(k))
+					out << this->enemySpawners[i][k].getAsString() << " ";
+			}
+		}
 	}
 	else {
 		std::cout << "\nCould not open map file " << fileName << "\n";
@@ -192,9 +200,12 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	int gridPosY = 0;
 	int isCollider = 0;
 	int isDamaging = 0;
-	int damage = 0;
 
 	// Enemyspawner
+	int type = 0;
+	int levelInterval = 0;
+	int nrOfEnemies = 0;
+	float spawnTimerMax = 0.f;
 
 	// Open file
 	in.open(fileName);
@@ -233,7 +244,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		while (ss >> 
 			rectLeft >> rectTop >> rectWidth >> rectHeight >> 
 			gridPosX >> gridPosY >> 
-			isCollider >> isDamaging >> damage
+			isCollider >> isDamaging
 		) {
 			this->tiles[gridPosX].push(
 				Tile(
@@ -254,7 +265,7 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		while (ss >> 
 			rectLeft >> rectTop >> rectWidth >> rectHeight >> 
 			gridPosX >> gridPosY >> 
-			isCollider >> isDamaging >> damage
+			isCollider >> isDamaging
 		) {
 			this->backgroundTiles[gridPosX].push(
 				Tile(
@@ -268,7 +279,24 @@ bool Stage::loadStage(std::string fileName, View& view) {
 		}
 
 		// Enemy spawners
-		
+		std::getline(in, line);
+		ss.str(line);
+
+		while (ss >>
+			gridPosX >> gridPosY >> type >> levelInterval >>
+			nrOfEnemies >> spawnTimerMax
+			) {
+			this->enemySpawners[gridPosX].push(
+				EnemySpawner(
+					Vector2i(gridPosX, gridPosY),
+					type,
+					levelInterval,
+					nrOfEnemies,
+					spawnTimerMax
+				),
+				gridPosY
+			);
+		}
 
 		loadSuccess = true;
 	}

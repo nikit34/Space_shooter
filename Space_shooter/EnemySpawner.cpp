@@ -32,6 +32,16 @@ void EnemySpawner::spawn() {
 
 }
 
+std::string EnemySpawner::getAsString()const {
+	return
+		std::to_string(this->gridPosition.x) + " " +
+		std::to_string(this->gridPosition.y) + " " +
+		std::to_string(this->type) + " " +
+		std::to_string(this->levelInterval) + " " +
+		std::to_string(this->nrOfEnemies) + " " +
+		std::to_string(static_cast<int>(this->spawnTimerMax)) + " ";
+}
+
 void EnemySpawner::update(View& view) {
 
 }

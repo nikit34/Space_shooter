@@ -15,6 +15,7 @@ public:
 	void updateTimer();
 	bool isInScreen(View& view);
 	void spawn();
+	std::string getAsString()const;
 
 	void update(View& view);
 	void draw(RenderTarget& target, Font& font);
