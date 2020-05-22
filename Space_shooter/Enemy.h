@@ -64,6 +64,8 @@ private:
 	float dtMultiplier;
 
 	Sprite sprite;
+	Color color;
+	Color damageColor;
 
 	Vector2f moveDirection;
 	Vector2f normalizedMoveDir;

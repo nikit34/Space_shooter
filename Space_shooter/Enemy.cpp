@@ -13,6 +13,8 @@ void Enemy::initTextures() {
 	Enemy::textures.add(Texture(temp));
 	temp.loadFromFile("Textures/enemyMoveLeftShoot.png");
 	Enemy::textures.add(Texture(temp));
+	temp.loadFromFile("Textures/enemyMoveLeftShootPlayer.png");
+	Enemy::textures.add(Texture(temp));
 
 	Enemy::nrOfTextures = Enemy::textures.size();
 }
@@ -33,20 +35,23 @@ Enemy::Enemy(
 	else if (type < 0) {
 		type = 0;
 	}
-
+	this->moveDirection = moveDirection;
 	this->type = type;
 	this->sprite.setTexture(Enemy::textures[this->type]);
 	this->sprite.setRotation(270);
 	this->sprite.setOrigin(
 		this->sprite.getGlobalBounds().width / 2,
 		this->sprite.getGlobalBounds().height / 2);
+
+	this->color = Color::White;
+	this->damageColor = Color::Red;
+
 	this->damageTimerMax = 4.f;
 	this->damageTimer = 0;
 	this->nrOfBullets = 0;
 	this->shootTimerMax = 50.f;
 	this->shootTimer = this->shootTimerMax;
-	this->moveDirection = moveDirection;
-
+	
 	switch (this->type)
 	{
 	case MOVELEFT:
@@ -69,7 +74,7 @@ Enemy::Enemy(
 		this->sprite.setScale(Vector2f(0.35f, 0.35f));
 		this->hpMax = (rand() % 5 + 1) * scalar;
 		this->hp = this->hpMax;
-		this->damageMax = (rand() % 3 + 1) * scalar;
+		this->damageMax = (rand() % 5 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
 		this->maxVelocity = rand() % 10 + 5;
 		this->nrOfBullets = 3;
@@ -99,9 +104,9 @@ Enemy::Enemy(
 	this->hp = this->hpMax;
 	this->damageMax = damageMax;
 	this->damageMin = damageMin;
-	this->playerFollowNr = playerFollowNr;
 	this->sprite.setPosition((view.getCenter().x + view.getSize().x / 2),
 		(rand() % static_cast<int>(view.getCenter().y + view.getSize().y) + static_cast<int>(view.getCenter().y - view.getSize().y)));
+	this->playerFollowNr = playerFollowNr;
 }
 
 Enemy::~Enemy() {}
@@ -156,22 +161,19 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 		if (this->shootTimer < this->shootTimerMax)
 			this->shootTimer += 1.f * dt * this->dtMultiplier;
 
-		this->lookDirection.x = playerPosition.x - this->sprite.getPosition().x;
-		this->lookDirection.y = playerPosition.y - this->sprite.getPosition().y;
-		this->normalizedLookDir = normalize(this->lookDirection, vectorLength(this->lookDirection));
-		
-		if (this->shootTimer >= this->shootTimerMax) {
+		if (this->shootTimer >= this->shootTimerMax && this->nrOfBullets > 0) {
 			Enemy::enemyBullets.add(Bullet(
 				Bullet::BULLET_CIRCULAR_RED,
 				this->sprite.getPosition(),
 				Vector2f(0.75f, 0.75f),
-				this->normalizedLookDir,
-				1.5f,
-				7.f,
-				0.5f,
+				this->normalizedMoveDir,
+				0.f,
+				this->maxVelocity * 5.f,
+				5.f,
 				this->getDamage()
 			));
 			this->shootTimer = 0.f;
+			this->nrOfBullets--;
 		}
 		break;
 
@@ -212,13 +214,13 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 	// Damaged
 	if (this->damageTimer > 0.f) {
 		this->damageTimer -= 0.5f * dt * dtMultiplier;
-		this->sprite.setColor(Color::Red);
+		this->sprite.setColor(damageColor);
 		this->sprite.move(
 			2.f * -this->normalizedMoveDir.x * this->damageTimer * dt * dtMultiplier,
 			2.f * -this->normalizedMoveDir.y * this->damageTimer * dt * dtMultiplier);
 	}
 	else {
-		this->sprite.setColor(Color::White);
+		this->sprite.setColor(color);
 	}
 }
 
