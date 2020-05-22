@@ -6,7 +6,6 @@ class EnemySpawner {
 public:
 	EnemySpawner(Vector2i gridPos,
 		int type,
-		int level,
 		int levelInterval,
 		int nrOfEnemies,
 		float spawnTimerMax
@@ -18,12 +17,11 @@ public:
 	void spawn();
 
 	void update(View& view);
-	void draw(RenderTarget& target);
+	void draw(RenderTarget& target, Font& font);
 
 private:
 	Vector2i gridPosition;
 	int type; // -1 random
-	int level;
 	int levelInterval;
 	int nrOfEnemies; // -1 random
 	float spawnTimerMax;

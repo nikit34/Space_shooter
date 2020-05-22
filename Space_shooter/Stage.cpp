@@ -174,11 +174,16 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	std::stringstream ss;
 	std::string line = "";
 
+	// Map
 	unsigned sizeX = 0;
 	unsigned sizeY = 0;
+	
+	// Background
 	int bgIndex = 0;
 	int bgWidth = 0;
 	int bgHeight = 0;
+
+	// Tiles
 	int rectLeft = 0;
 	int rectTop = 0;
 	int rectWidth = 0;
@@ -188,6 +193,8 @@ bool Stage::loadStage(std::string fileName, View& view) {
 	int isCollider = 0;
 	int isDamaging = 0;
 	int damage = 0;
+
+	// Enemyspawner
 
 	// Open file
 	in.open(fileName);
@@ -346,7 +353,8 @@ void Stage::update(const float& dt, View& view, bool editor) {
 void Stage::draw(
 	RenderTarget& target, 
 	View& view, 
-	bool editor
+	bool editor,
+	Font& font
 ) {
 	// Index calculations
 	this->fromCol = (view.getCenter().x - view.getSize().x / 2) / Wingman::gridSize;
@@ -391,7 +399,7 @@ void Stage::draw(
 				this->tiles[i][k].draw(target);
 			// EnemySpawner
 			if (!this->enemySpawners[i].isNull(k) && editor)
-				this->enemySpawners[i][k].draw(target);
+				this->enemySpawners[i][k].draw(target, font);
 		}
 	}
 }

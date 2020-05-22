@@ -67,7 +67,6 @@ private:
 	// enemySpawner
 	Vector2i enemyPosGrid;
 	int enemyType;
-	int enemyLevel;
 	int enemyLevelInterval;
 	int nrOfEnemies;
 	float enemyTimerMax;

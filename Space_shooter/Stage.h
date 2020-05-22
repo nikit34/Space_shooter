@@ -30,7 +30,7 @@ public:
 	void updateBackground(const float& dt, View& view);
 	void update(float const& dt, View& view, bool editor);
 
-	void draw(RenderTarget& target, View& view, bool editor);
+	void draw(RenderTarget& target, View& view, bool editor, Font& font);
 
 	// Static
 	static dArr<Texture> textures;

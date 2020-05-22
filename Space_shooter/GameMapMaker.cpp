@@ -15,7 +15,6 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 
 	// enemySpawner
 	enemyType = 0;
-	enemyLevel = 0;
 	enemyLevelInterval = 0;
 	nrOfEnemies = 0;
 	enemyTimerMax = 0.f;
@@ -180,15 +179,6 @@ void GameMapMaker::setEnemySpawner() {
 		std::cin.ignore(100, '\n');
 		std::cout << "Type: ";
 		std::cin >> this->enemyType;
-	}
-	std::cout << "Level: ";
-	std::cin >> this->enemyLevel;
-	while (std::cin.fail()) {
-		std::cout << "\nFaulty input!\n";
-		std::cin.clear();
-		std::cin.ignore(100, '\n');
-		std::cout << "Level: ";
-		std::cin >> this->enemyLevel;
 	}
 	std::cout << "Level Interval: ";
 	std::cin >> this->enemyLevelInterval;
@@ -373,7 +363,7 @@ void GameMapMaker::updateControls() {
 		}
 	}
 	else {
-		this->updateAddRemoveTiles();
+		GameMapMaker::updateAddRemoveTiles();
 	}
 	// New stage
 	if (Keyboard::isKeyPressed(Keyboard::N) && 
@@ -454,7 +444,6 @@ void GameMapMaker::updateAddRemoveTiles() {
 				EnemySpawner(
 					this->enemyPosGrid,
 					this->enemyType,
-					this->enemyLevel,
 					this->enemyLevelInterval,
 					this->nrOfEnemies,
 					this->keyTimeMax
@@ -465,7 +454,13 @@ void GameMapMaker::updateAddRemoveTiles() {
 		}
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right)) {
-		this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, this->toolSelect);
+		if (this->toolSelect == Stage::tileType::regularTile ||
+			this->toolSelect == Stage::tileType::backgroundTile) {
+			this->stage->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, this->toolSelect);
+		}
+		else if (this->toolSelect == Stage::tileType::enemySpawner) {
+			this->stage->removeEnemySpawner(this->mousePosGrid.x, this->mousePosGrid.y);
+		}
 	}
 }
 
@@ -488,7 +483,6 @@ void GameMapMaker::updateText() {
 
 	this->enemySpawnerText.setString(
 		"Type: " + std::to_string(this->enemyType) +
-		"\nLevel: " + std::to_string(this->enemyLevel) +
 		"\nLevel Interval: " + std::to_string(this->enemyLevelInterval) +
 		"\nNrOfEnemies: " + std::to_string(this->nrOfEnemies) +
 		"\nTimer max: " + std::to_string(this->enemyTimerMax));
@@ -571,7 +565,7 @@ void GameMapMaker::drawText() {
 }
 
 void GameMapMaker::drawMap() {
-	this->stage->draw(*this->window, this->mainView, true);
+	this->stage->draw(*this->window, this->mainView, true, this->font);
 }
 
 void GameMapMaker::drawUIWindow() {

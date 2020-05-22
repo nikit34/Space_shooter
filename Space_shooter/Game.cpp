@@ -1111,7 +1111,7 @@ void Game::draw() {
 }
 
 void Game::drawMap() {
-	stage->draw(*this->window, this->mainView, false);
+	stage->draw(*this->window, this->mainView, false, this->font);
 }
 
 void Game::drawPlayer() {
