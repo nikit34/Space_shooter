@@ -173,8 +173,10 @@ void Stage::saveStage(std::string fileName) {
 		for (size_t i = 0; i < this->stageSizeX; i++) {
 			// Enemyspawners
 			for (size_t k = 0; k < this->stageSizeY; k++) {
-				if (!this->enemySpawners[i].isNull(k))
+				if (!this->enemySpawners[i].isNull(k)) {
 					out << this->enemySpawners[i][k].getAsString() << " ";
+					std::cout << 1;
+				}
 			}
 		}
 	}
@@ -286,6 +288,8 @@ bool Stage::loadStage(std::string fileName, View& view) {
 			);
 			this->backgroundTiles[gridPosX][gridPosY].setColor(Wingman::backgroundColor);
 		}
+		line.clear();
+		ss.clear();
 
 		// Enemy spawners
 		std::getline(in, line);
@@ -379,7 +383,7 @@ void Stage::update(const float& dt, View& view, bool editor) {
 	//			this->tiles[i][k].update(dt);
 
 	//		if (!this->enemySpawners[i].isNull(k))
-	//			this->enemySpawners[i][k].update(dt);
+	//			this->[i][k].update(dt);
 
 	//		this->updateBackground(dt, i, k);
 	//	}

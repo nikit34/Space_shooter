@@ -112,6 +112,7 @@ void GameMapMaker::saveStage() {
 		this->stage->saveStage(this->stageName);
 		std::cout << "\nStage " << this->stageName << " saved\n";
 	}
+	in.close();
 }
 
 void GameMapMaker::loadStage() {
