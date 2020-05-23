@@ -58,9 +58,9 @@ void EnemySpawner::draw(RenderTarget& target, Font& font) {
 	text.setFillColor(Color::Red);
 	text.setPosition(shape.getPosition());
 	text.setString(
-		"Type: " + std::to_string(this->type) + "\n" +
-		"LevelInterval: " + std::to_string(this->levelInterval) + "\n" +
-		"NrOfEnemies: " + std::to_string(this->nrOfEnemies) + "\n"
+		"Type  : " + std::to_string(this->type) + "\n" +
+		"Level : " + std::to_string(this->levelInterval) + "\n" +
+		"Number: " + std::to_string(this->nrOfEnemies) + "\n"
 	);
 
 	target.draw(shape);
