@@ -14,6 +14,9 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->backgroundHeight = Wingman::backgroundSize;
 	this->stage = nullptr;
 
+	// tiles
+	this->tileCollider = false;
+
 	// enemySpawner
 	this->enemyRandomSpawnPos = false;
 	this->enemyMaxVelocity = 0;
@@ -288,8 +291,8 @@ void GameMapMaker::initUI() {
 	this->textureY = 0;
 	this->selector.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
 	this->selector.setFillColor(Color::Transparent);
-	this->selector.setOutlineColor(Color::Red);
-	this->selector.setOutlineThickness(2.f);
+	this->selector.setOutlineColor(Color::Green);
+	this->selector.setOutlineThickness(2.5f);
 
 	this->textureSelector.setTexture(Tile::textures);
 }
@@ -359,13 +362,14 @@ void GameMapMaker::mapUpdate(const float &dt) {
 void GameMapMaker::updateControls() {
 	// Switch Window/View UI
 	if (Keyboard::isKeyPressed(Keyboard::Tab) && this->keyTime >= this->keyTimeMax) {
+
 		if (this->windowUI)
 			this->windowUI = false;
 		else
 			this->windowUI = true;
-
 		this->keyTime = 0.f;
 	}
+
 	// Add/Remove tiles
 	if (this->windowUI) {
 		// Select texture
@@ -377,56 +381,93 @@ void GameMapMaker::updateControls() {
 	else {
 		GameMapMaker::updateAddRemoveTiles();
 	}
+
 	// New stage
 	if (Keyboard::isKeyPressed(Keyboard::N) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->newStage();
 		this->keyTime = 0.f;
 	}
-	// enabled/disabed background stages
+
+	// Enabled regular tile drawing
+	if (Keyboard::isKeyPressed(Keyboard::T) &&
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		this->keyTime >= this->keyTimeMax) {
+			
+		this->toolSelect = Stage::tileType::regularTile;
+		this->keyTime = 0.f;
+	}
+
+	// Toggle tile collider
+	if (Keyboard::isKeyPressed(Keyboard::T) &&
+		Keyboard::isKeyPressed(Keyboard::LControl) &&
+		Keyboard::isKeyPressed(Keyboard::LShift) &&
+		this->keyTime >= this->keyTimeMax) {
+
+		if (this->tileCollider) {
+			this->tileCollider = false;
+			this->selector.setOutlineColor(Color::Green);
+		}
+		else {
+			this->tileCollider = true;
+			this->selector.setOutlineColor(Color::Red);
+		}
+		this->keyTime = 0.f;
+	}
+
+	// Enabled background tile drawing
 	if (Keyboard::isKeyPressed(Keyboard::B) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
-		if (this->toolSelect == Stage::tileType::backgroundTile)
-			this->toolSelect = Stage::tileType::regularTile;
-		else
-			this->toolSelect = Stage::tileType::backgroundTile;
+		
+		this->toolSelect = Stage::tileType::backgroundTile;
 		this->keyTime = 0.f;
 	}
+
 	// Select background
 	if (Keyboard::isKeyPressed(Keyboard::G) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->setBackground();
 		this->keyTime = 0.f;
 	}
+
 	// Set enemyspawner
 	if (Keyboard::isKeyPressed(Keyboard::E) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		Keyboard::isKeyPressed(Keyboard::LShift) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->setEnemySpawner();
 		this->keyTime = 0.f;
 	}
+
 	// Select enemyspawner
 	if (Keyboard::isKeyPressed(Keyboard::E) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->toolSelect = Stage::tileType::enemySpawner;
 		this->keyTime = 0.f;
 	}
+
 	// Save stage
 	if (Keyboard::isKeyPressed(Keyboard::S) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->saveStage();
 		this->keyTime = 0.f;
 	}
+
 	// Load stage
 	if (Keyboard::isKeyPressed(Keyboard::L) && 
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		this->keyTime >= this->keyTimeMax) {
+
 		this->loadStage();
 		this->keyTime = 0.f;
 	}
@@ -438,11 +479,14 @@ void GameMapMaker::updateAddRemoveTiles() {
 			this->toolSelect == Stage::tileType::backgroundTile
 			) {
 			this->stage->addTile(
-				Tile(IntRect(this->textureX, this->textureY,
-					Wingman::gridSize, Wingman::gridSize),
+				Tile(
+					IntRect(this->textureX, this->textureY, 
+						Wingman::gridSize, Wingman::gridSize
+					),
 					Vector2f(this->mousePosGrid.x * Wingman::gridSize,
-						this->mousePosGrid.y * Wingman::gridSize),
-					false,
+						this->mousePosGrid.y * Wingman::gridSize
+					),
+					this->tileCollider,
 					false
 				),
 				this->mousePosGrid.x,
@@ -488,9 +532,9 @@ void GameMapMaker::updateText() {
 	}
 		
 	if (this->toolSelect == Stage::tileType::backgroundTile)
-		this->selectorText.setString("BACKGROUND");
+		this->selectorText.setString(std::string("BACKGROUND " + std::to_string(this->tileCollider)));
 	else if(this->toolSelect == Stage::tileType::regularTile)
-		this->selectorText.setString("REGULAR TILE");
+		this->selectorText.setString(std::string("REGULAR TILE " + std::to_string(this->tileCollider)));
 	else if (this->toolSelect == Stage::tileType::enemySpawner)
 		this->selectorText.setString("ENEMY SPAWNER");
 

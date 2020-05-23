@@ -594,6 +594,49 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 	}
 }
 
+void Game::playerCollisionUpdate(const float& dt, const int i) {
+	// Index calculations
+	if (this->players[i].isAlive()) {
+		this->fromCol = (this->players[i].getPosition().x - Wingman::gridSize * 2) / Wingman::gridSize;
+		if (fromCol <= 0)
+			fromCol = 0;
+		if (fromCol >= this->stage->getSizeX())
+			fromCol = this->stage->getSizeX();
+
+		this->toCol = (this->players[i].getPosition().x + Wingman::gridSize * 2) / Wingman::gridSize + 1;
+		if (toCol <= 0)
+			toCol = 0;
+		if (toCol >= this->stage->getSizeX())
+			toCol = this->stage->getSizeX();
+
+		this->fromRow = (this->players[i].getPosition().y - Wingman::gridSize * 2) / Wingman::gridSize;
+		if (fromRow <= 0)
+			fromRow = 0;
+		if (fromRow >= this->stage->getSizeY())
+			fromRow = this->stage->getSizeY();
+
+		this->toRow = (this->players[i].getPosition().y + Wingman::gridSize * 2) / Wingman::gridSize + 1;
+		if (toRow <= 0)
+			toRow = 0;
+		if (toRow >= this->stage->getSizeY())
+			toRow = this->stage->getSizeY();
+
+		for (size_t j = fromCol; j < toCol; j++) {
+			for (size_t k = fromRow; k < toRow; k++) {
+				// Collision
+				if (!this->stage->getTiles()[j].isNull(k) &&
+					this->stage->getTiles()[j][k].getIsCollider() &&
+					this->players[i].getBounds().intersects(this->stage->getTiles()[j][k].getBounds())
+					) {
+					this->players[i].move(
+						-this->players[i].getNormDir().x * 100 * dt * this->dtMultiplier,
+						-this->players[i].getNormDir().y * 100 * dt * this->dtMultiplier);
+				}
+			}
+		}
+	}
+}
+
 void Game::enemyUpdate(const float& dt) {
 	// Spawn enemies
 	this->enemySpawnUpdate(dt);

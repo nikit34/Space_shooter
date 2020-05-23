@@ -350,46 +350,6 @@ void Stage::updateBackground(const float& dt, View& view) {
 }
 
 void Stage::update(const float& dt, View& view, bool editor) {
-	//this->fromCol = (view.getCenter().x - view.getSize().x / 2) / Wingman::gridSize;
-	//if (fromCol <= 0)
-	//	fromCol = 0;
-	//if (fromCol >= this->stageSizeX)
-	//	fromCol = this->stageSizeX;
-
-	//this->toCol = (view.getCenter().x + view.getSize().x / 2) / Wingman::gridSize + 1;
-	//if (toCol <= 0)
-	//	toCol = 0;
-	//if (toCol >= this->stageSizeX)
-	//	toCol = this->stageSizeX;
-
-	//this->fromRow = (view.getCenter().y - view.getSize().y / 2) / Wingman::gridSize;
-	//if (fromRow <= 0)
-	//	fromRow = 0;
-	//if (fromRow >= this->stageSizeY)
-	//	fromRow = this->stageSizeY;
-
-	//this->toRow = (view.getCenter().y + view.getSize().y / 2) / Wingman::gridSize + 1;
-	//if (toRow <= 0)
-	//	toRow = 0;
-	//if (toRow >= this->stageSizeY)
-	//	toRow = this->stageSizeY;
-
-	//// Tiles
-	//for (int i = fromCol; i < toCol; i++) {
-	//	for (int k = fromRow; k < toRow; k++) {
-
-	//		if (!this->backgroundTiles[i].isNull(k))
-	//			this->backgroundTiles[i][k].update(dt);
-
-	//		if (!this->tiles[i].isNull(k))
-	//			this->tiles[i][k].update(dt);
-
-	//		if (!this->enemySpawners[i].isNull(k))
-	//			this->[i][k].update(dt);
-
-	//		this->updateBackground(dt, i, k);
-	//	}
-	//}
 	if(!editor)
 		this->updateBackground(dt, view);
 }
@@ -440,8 +400,14 @@ void Stage::draw(
 			if(!this->backgroundTiles[i].isNull(k))
 				this->backgroundTiles[i][k].draw(target);
 			// Tiles
-			if (!this->tiles[i].isNull(k))
+			if (!this->tiles[i].isNull(k)) {
 				this->tiles[i][k].draw(target);
+
+				if (editor) {
+					RectangleShape shape;
+					shape.setSize(Vector2f())
+				}
+			}
 			// EnemySpawner
 			if (!this->enemySpawners[i].isNull(k) && editor)
 				this->enemySpawners[i][k].draw(target, font);

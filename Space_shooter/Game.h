@@ -35,6 +35,7 @@ public:
 	void updateScore();
 	void playerUpdate(const float& dt);
 	void playerBulletUpdate(const float& dt, const int i);
+	void playerCollisionUpdate(const float& dt, const int i);
 	void enemyUpdate(const float& dt);
 	void enemySpawnUpdate(const float& dt);
 	void enemyBulletUpdate(const float& dt);

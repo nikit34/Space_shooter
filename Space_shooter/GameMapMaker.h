@@ -63,6 +63,9 @@ private:
 
 	int toolSelect;
 
+	// Tiles
+	bool tileCollider;
+
 	// enemySpawner
 	Vector2i enemyPosGrid;
 	bool enemyRandomSpawnPos;
