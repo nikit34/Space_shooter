@@ -10,6 +10,7 @@ public:
 		bool randomPos,
 		Vector2f position,
 		Vector2f direction,
+		int maxVelocity, 
 		int type,
 		int scalar,
 		int playerFollowNr
@@ -75,7 +76,7 @@ private:
 	Vector2f normalizedMoveDir;
 	Vector2f lookDirection;
 	Vector2f normalizedLookDir;
-	float maxVelocity;
+	int maxVelocity;
 
 	float damageTimerMax;
 	float damageTimer;

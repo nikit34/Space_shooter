@@ -251,8 +251,11 @@ void Game::update(const float& dt) {
 		// Powerups update
 		this->powerupsUpdate(dt);
 
-		// Particles update
+		// Particles
 		this->particlesUpdate(dt);
+
+		// Restart
+		this->restartUpdate();
 	}
 	else if (this->playersAlive <= 0 && this->scoreTime == 0) {
 		// Best score is set
@@ -429,7 +432,7 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 				if (this->enemies[j].getHp() <= 0) {
 
 					// Add particles on enemy dead
-					int nrOfPart = rand() % 5 + 5;
+					int nrOfPart = rand() % 15 + 5;
 					for (size_t l = 0; l < nrOfPart; l++) {
 						this->particles.add(Particle(
 							this->players[i].getBullet(k).getPosition(),
@@ -658,6 +661,7 @@ void Game::enemySpawnUpdate(const float& dt) {
 				true,
 				Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f),
+				-1,
 				rand() % Enemy::nrOfTypes,
 				this->players[(rand() % this->playersAlive)].getLevel(),
 				rand() % this->playersAlive)
@@ -721,6 +725,7 @@ void Game::enemySpawnUpdate(const float& dt) {
 							this->stage->getEnemySpawners()[i][j].getRandomSpawnPos(),
 							this->stage->getEnemySpawners()[i][j].getPos(),
 							Vector2f(-1.f, 0.f),
+							this->stage->getEnemySpawners()[i][j].getMaxVelocity(),
 							eType,
 							this->players[(rand() % this->playersAlive)].getLevel(),
 							rand() % this->playersAlive)

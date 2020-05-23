@@ -16,6 +16,7 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 
 	// enemySpawner
 	this->enemyRandomSpawnPos = false;
+	this->enemyMaxVelocity = 0;
 	enemyType = 0;
 	enemyLevelInterval = 0;
 	nrOfEnemies = 0;
@@ -182,9 +183,18 @@ void GameMapMaker::setEnemySpawner() {
 		std::cout << "Random position: ";
 		std::cin >> this->enemyRandomSpawnPos;
 	}
+	std::cout << "\nMax velocity: ";
+	std::cin >> this->enemyMaxVelocity;
+	while (std::cin.fail() || this->enemyMaxVelocity < -1 || this->enemyMaxVelocity > 100) {
+		std::cout << "\nFaulty input!\n";
+		std::cin.clear();
+		std::cin.ignore(100, '\n');
+		std::cout << "Max velocity: ";
+		std::cin >> this->enemyMaxVelocity;
+	}
 	std::cout << "\nType: ";
 	std::cin >> this->enemyType;
-	while (std::cin.fail()) {
+	while (std::cin.fail() || this->enemyType > Enemy::nrOfTypes) {
 		std::cout << "\nFaulty input!\n";
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
@@ -193,7 +203,7 @@ void GameMapMaker::setEnemySpawner() {
 	}
 	std::cout << "\nLevel Interval: ";
 	std::cin >> this->enemyLevelInterval;
-	while (std::cin.fail()) {
+	while (std::cin.fail() || this->enemyLevelInterval <= 0) {
 		std::cout << "\nFaulty input!\n";
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
@@ -202,7 +212,7 @@ void GameMapMaker::setEnemySpawner() {
 	}
 	std::cout << "\nNumber of enemies: ";
 	std::cin >> this->nrOfEnemies;
-	while (std::cin.fail() || this->nrOfEnemies < 0) {
+	while (std::cin.fail() || this->nrOfEnemies < -1 || this->nrOfEnemies > 50) {
 		std::cout << "\nFaulty input!\n";
 		std::cin.clear();
 		std::cin.ignore(100, '\n');
@@ -446,6 +456,7 @@ void GameMapMaker::updateAddRemoveTiles() {
 				EnemySpawner(
 					this->enemyPosGrid,
 					this->enemyRandomSpawnPos,
+					this->enemyMaxVelocity,
 					this->enemyType,
 					this->enemyLevelInterval,
 					this->nrOfEnemies

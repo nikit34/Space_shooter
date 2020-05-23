@@ -26,6 +26,7 @@ Enemy::Enemy(
 	bool randomPos,
 	Vector2f position,
 	Vector2f moveDirection,
+	int maxVelocity,
 	int type, 
 	int scalar, 
 	int playerFollowNr
@@ -63,7 +64,10 @@ Enemy::Enemy(
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 3 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = rand() % 20 + 5;
+		if (maxVelocity < 0.f)
+			this->maxVelocity = rand() % 20 + 5;
+		else
+			this->maxVelocity = maxVelocity;
 		break;
 	case FOLLOW:
 		this->sprite.setScale(Vector2f(0.3f, 0.3f));
@@ -71,7 +75,10 @@ Enemy::Enemy(
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = 9;
+		if (maxVelocity < 0.f)
+			this->maxVelocity = rand() % 6 + 3;
+		else
+			this->maxVelocity = maxVelocity;
 		break;
 	case MOVELEFTSHOOT:
 		this->sprite.setScale(Vector2f(0.35f, 0.35f));
@@ -79,10 +86,13 @@ Enemy::Enemy(
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 5 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = rand() % 10 + 5;
 		this->nrOfBullets = 3;
 		this->shootTimerMax = 8.f;
 		this->shootTimer = 0.f;
+		if (maxVelocity < 0.f)
+			this->maxVelocity = rand() % 10 + 5;
+		else
+			this->maxVelocity = maxVelocity;
 		break;
 	case MOVELEFTSHOOTPLAYER:
 		this->sprite.setScale(Vector2f(0.35f, 0.35f));
@@ -90,16 +100,22 @@ Enemy::Enemy(
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = rand() % 10 + 3;
 		this->shootTimerMax = 50.f;
 		this->shootTimer = 0.f;
+		if (maxVelocity < 0.f)
+			this->maxVelocity = rand() % 10 + 3;
+		else
+			this->maxVelocity = maxVelocity;
 		break;
 	default:
 		this->hpMax = (rand() % 2 + 1) * scalar;
 		this->hp = this->hpMax;
 		this->damageMax = (rand() % 2 + 1) * scalar;
 		this->damageMin = (rand() % 1 + 1) * scalar;
-		this->maxVelocity = 20;
+		if (maxVelocity < 0.f)
+			this->maxVelocity = rand() % 15 + 5;
+		else
+			this->maxVelocity = maxVelocity;
 		break;
 	}
 

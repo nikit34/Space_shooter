@@ -29,8 +29,8 @@ Particle::Particle(
 	this->sprite.setColor(color);
 	this->color = color;
 
-	this->dir.x = rand() % 10 + static_cast<int>(dir.x);
-	this->dir.y = rand() % 10 + static_cast<int>(dir.y);
+	this->dir.x = rand() % 10 + static_cast<int>(dir.x) - 5;
+	this->dir.y = rand() % 10 + static_cast<int>(dir.y) - 5;
 	this->dir = normalize(this->dir, vectorLength(this->dir));
 
 	this->deceleration = 0.5f;

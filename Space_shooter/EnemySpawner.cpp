@@ -4,6 +4,7 @@
 EnemySpawner::EnemySpawner(
 	Vector2i gridPos,
 	bool randomSpawnPos,
+	int maxVelocity,
 	int type,
 	int levelInterval,
 	int nrOfEnemies
@@ -11,6 +12,7 @@ EnemySpawner::EnemySpawner(
 	this->used = false;
 	this->gridPosition = gridPos;
 	this->randomSpawnPos = randomSpawnPos;
+	this->maxVelocity = maxVelocity;
 	this->type = type;
 	this->levelInterval = levelInterval;
 	this->nrOfEnemies = nrOfEnemies;
@@ -37,6 +39,7 @@ std::string EnemySpawner::getAsString()const {
 		std::to_string(this->gridPosition.x) + " " +
 		std::to_string(this->gridPosition.y) + " " +
 		std::to_string(this->randomSpawnPos) + " " +
+		std::to_string(this->maxVelocity) + " " +
 		std::to_string(this->type) + " " +
 		std::to_string(this->levelInterval) + " " +
 		std::to_string(this->nrOfEnemies) + " ";
@@ -60,9 +63,10 @@ void EnemySpawner::draw(RenderTarget& target, Font& font) {
 	text.setFillColor(Color::Red);
 	text.setPosition(shape.getPosition());
 	text.setString(
-		"Type  : " + std::to_string(this->type) + "\n" +
-		"Level : " + std::to_string(this->levelInterval) + "\n" +
-		"Number: " + std::to_string(this->nrOfEnemies) + "\n"
+		"Type    : " + std::to_string(this->type) + "\n" +
+		"Level   : " + std::to_string(this->levelInterval) + "\n" +
+		"Number  : " + std::to_string(this->nrOfEnemies) + "\n" +
+		"Velocity: " + std::to_string(this->maxVelocity) + "\n"
 	);
 
 	target.draw(shape);

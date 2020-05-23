@@ -76,5 +76,6 @@ void WButton::update(Vector2f mousePos) {
 
 void WButton::draw(RenderTarget& target) {
 	target.draw(this->sprite);
+	target.draw(this->text);
 }
 
