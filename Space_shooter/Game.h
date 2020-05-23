@@ -111,6 +111,8 @@ private:
 
 	// Map
 	Stage *stage;
+	int fromCol, toCol;
+	int fromRow, toRow;
 
 	// Players
 	dArr<Player> players;

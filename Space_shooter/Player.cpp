@@ -645,9 +645,9 @@ void Player::combat(const float& dt) {
 			this->rWing.setColor(Color::Red);
 			this->cPit.setColor(Color::Red);
 
-			this->lWing.move(-this->moveDamageRand.x * dt * this->dtMultiplier, this->moveDamageRand.y* dt* this->dtMultiplier);
+			this->lWing.move(-this->moveDamageRand.x * dt * this->dtMultiplier, this->moveDamageRand.y * dt * this->dtMultiplier);
 			this->rWing.move(-this->moveDamageRand.x * dt * this->dtMultiplier, -this->moveDamageRand.y * dt * this->dtMultiplier);
-			this->cPit.move(this->moveDamageRand.x* dt* this->dtMultiplier, 0.f);
+			this->cPit.move(this->moveDamageRand.x * dt * this->dtMultiplier, 0.f);
 		}
 		else {
 			this->lWing.setColor(Color::White);

@@ -12,6 +12,7 @@ public:
 	inline int getSizeY()const { return this->stageSizeY; }
 	inline float getScrollSpeed()const { return this->scrollSpeed; }
 	TileArr<TileArr<Tile>>& getTiles() { return this->tiles; }
+	TileArr<TileArr<EnemySpawner>>& getEnemySpawners() { return this->enemySpawners; }
 
 	// Functions
 	void addTile(const Tile tile, unsigned row, unsigned col, int type);

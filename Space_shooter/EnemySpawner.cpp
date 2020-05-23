@@ -8,6 +8,7 @@ EnemySpawner::EnemySpawner(
 	int levelInterval,
 	int nrOfEnemies
 ) {
+	this->used = false;
 	this->gridPosition = gridPos;
 	this->randomSpawnPos = randomSpawnPos;
 	this->type = type;

@@ -6,6 +6,7 @@ class Enemy {
 public:
 	Enemy(
 		View& view,
+		bool randomPos,
 		Vector2f position,
 		Vector2f direction,
 		int type,
@@ -59,6 +60,8 @@ public:
 	static dArr<Texture> textures;
 	static int nrOfTextures;
 	static void initTextures();
+
+	static int nrOfTypes;
 
 private:
 	float dtMultiplier;

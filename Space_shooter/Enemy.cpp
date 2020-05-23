@@ -19,8 +19,11 @@ void Enemy::initTextures() {
 	Enemy::nrOfTextures = Enemy::textures.size();
 }
 
+int Enemy::nrOfTypes = 4;
+
 Enemy::Enemy(
 	View& view,
+	bool randomPos,
 	Vector2f position,
 	Vector2f moveDirection,
 	int type, 
@@ -104,8 +107,14 @@ Enemy::Enemy(
 	this->hp = this->hpMax;
 	this->damageMax = damageMax;
 	this->damageMin = damageMin;
-	this->sprite.setPosition((view.getCenter().x + view.getSize().x / 2),
-		(rand() % static_cast<int>(view.getCenter().y + view.getSize().y) + static_cast<int>(view.getCenter().y - view.getSize().y)));
+
+	if (randomPos) {
+		this->sprite.setPosition((view.getCenter().x + view.getSize().x / 2),
+			(rand() % static_cast<int>(view.getCenter().y + view.getSize().y) + static_cast<int>(view.getCenter().y - view.getSize().y)));
+	}
+	else {
+		this->sprite.setPosition(position);
+	}
 	this->playerFollowNr = playerFollowNr;
 }
 

@@ -107,11 +107,20 @@ void Stage::removeEnemySpawner(unsigned row, unsigned col) {
 }
 
 void Stage::reset(View& view) {
+	// Reset background
 	this->backgrounds.clear();
 	this->background.setPosition(Vector2f(
 		view.getCenter().x - view.getSize().x / 2, 
 		view.getCenter().y - view.getSize().y / 2));
 	this->backgrounds.add(this->background);
+
+	// Reset enemySpawners
+	for (size_t i = 0; i < this->stageSizeX; i++) {
+		for (size_t k = 0; k < this->stageSizeY; k++) {
+			if (!this->enemySpawners[i].isNull(k))
+				this->enemySpawners[i][k].setUnused();
+		}
+	}
 }
 
 void Stage::setBackground(const int index, const int width, const int height) {
@@ -419,15 +428,16 @@ void Stage::draw(
 			target.draw(this->backgrounds[i]);
 		}
 	}
-	// Tiles
 	for (int i = fromCol; i < toCol; i++) {
 		for (int k = fromRow; k < toRow; k++) {
+			// Background tiles
 			if(!this->backgroundTiles[i].isNull(k))
 				this->backgroundTiles[i][k].draw(target);
+			// Tiles
 			if (!this->tiles[i].isNull(k))
 				this->tiles[i][k].draw(target);
 			// EnemySpawner
-			if (!this->enemySpawners[i].isNull(k))
+			if (!this->enemySpawners[i].isNull(k) && editor)
 				this->enemySpawners[i][k].draw(target, font);
 		}
 	}

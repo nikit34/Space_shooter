@@ -5,7 +5,7 @@ Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
-	this->mode = Mode::Survival;
+	this->mode = Mode::Regular;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
 	this->score = 0;
@@ -188,7 +188,7 @@ void Game::initialize() {
 
 	// Init enemies
 
-	this->enemySpawnTimerMax = 25.f;
+	this->enemySpawnTimerMax = 35.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 
 	// Init bosses
@@ -334,7 +334,7 @@ void Game::updateTimersUnpaused(const float& dt) {
 }
 
 void Game::updateDifficulty() {
-	if ((int)this->difficultyTimer % 1000 == 0 && this->enemySpawnTimerMax > 10) {
+	if ((int)this->difficultyTimer % 1000 == 0) {
 		if(this->enemySpawnTimer > 10)
 			this->enemySpawnTimerMax--;
 		
@@ -655,9 +655,10 @@ void Game::enemySpawnUpdate(const float& dt) {
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
 			this->enemies.add(Enemy(
 				this->mainView,
+				true,
 				Vector2f(0.f, 0.f),
 				Vector2f(-1.f, 0.f),
-				rand() % 4,
+				rand() % Enemy::nrOfTypes,
 				this->players[(rand() % this->playersAlive)].getLevel(),
 				rand() % this->playersAlive)
 			);
@@ -666,7 +667,69 @@ void Game::enemySpawnUpdate(const float& dt) {
 		}
 	}
 	else if (this->mode == Mode::Regular) {
+		// Index calculations
+		this->fromCol = (mainView.getCenter().x - mainView.getSize().x / 2) / Wingman::gridSize;
+		if (fromCol <= 0)
+			fromCol = 0;
+		if (fromCol >= this->stage->getSizeX())
+			fromCol = this->stage->getSizeX();
 
+		this->toCol = (mainView.getCenter().x + mainView.getSize().x / 2) / Wingman::gridSize + 1;
+		if (toCol <= 0)
+			toCol = 0;
+		if (toCol >= this->stage->getSizeX())
+			toCol = this->stage->getSizeX();
+
+		this->fromRow = (mainView.getCenter().y - mainView.getSize().y / 2) / Wingman::gridSize;
+		if (fromRow <= 0)
+			fromRow = 0;
+		if (fromRow >= this->stage->getSizeY())
+			fromRow = this->stage->getSizeY();
+
+		this->toRow = (mainView.getCenter().y + mainView.getSize().y / 2) / Wingman::gridSize + 1;
+		if (toRow <= 0)
+			toRow = 0;
+		if (toRow >= this->stage->getSizeY())
+			toRow = this->stage->getSizeY();
+
+		for (int i = fromCol; i < toCol; i++) {
+			for (int j = fromRow; j < toRow; j++) {
+				if (!this->stage->getEnemySpawners()[i].isNull(j) &&
+					this->stage->getEnemySpawners()[i][j].getPos().x < 
+					this->mainView.getCenter().x + this->mainView.getSize().x / 2 &&
+					!this->stage->getEnemySpawners()[i][j].isUsed()
+					) {
+
+					int eType = 0;
+					int nrOfE = 0;
+					if (this->stage->getEnemySpawners()[i][j].getType() < 0) {
+						eType = rand() % Enemy::nrOfTypes;
+					}
+					else {
+						eType = this->stage->getEnemySpawners()[i][j].getType();
+					}
+					if (this->stage->getEnemySpawners()[i][j].getNrOfEnemies() < 0) {
+						nrOfE = rand() % 10 + 1;
+					}
+					else {
+						nrOfE = this->stage->getEnemySpawners()[i][j].getNrOfEnemies();
+					}
+
+					for (size_t k = 0; k < nrOfE; k++) {
+						this->enemies.add(Enemy(
+							this->mainView,
+							this->stage->getEnemySpawners()[i][j].getRandomSpawnPos(),
+							this->stage->getEnemySpawners()[i][j].getPos(),
+							Vector2f(-1.f, 0.f),
+							eType,
+							this->players[(rand() % this->playersAlive)].getLevel(),
+							rand() % this->playersAlive)
+						);
+						this->stage->getEnemySpawners()[i][j].setUsed();
+					}
+				}
+			}
+		}
 	}
 }
 
