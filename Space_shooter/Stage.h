@@ -1,6 +1,6 @@
 #pragma once
-
 #include"TileArr.h"
+
 
 class Stage {
 public:

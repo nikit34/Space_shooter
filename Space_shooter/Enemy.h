@@ -1,6 +1,7 @@
 ﻿#pragma once
-
+#include"Wingman.h"
 #include"Bullet.h"
+
 
 class Enemy {
 public:

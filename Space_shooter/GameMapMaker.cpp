@@ -1,5 +1,6 @@
 #include "GameMapMaker.h"
 
+
 enum textures { player = 0, laser01, missile01 };
 
 GameMapMaker::GameMapMaker(RenderWindow* window) {
@@ -238,9 +239,7 @@ void GameMapMaker::initView() {
 }
 
 void GameMapMaker::initTextures() {
-	// Map
-	// Stage::initTextures();
-	// Tile::initTextures();
+	
 }
 
 void GameMapMaker::initMap() {

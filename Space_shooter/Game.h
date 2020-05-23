@@ -1,9 +1,8 @@
 #pragma once
-
 #include"Player.h"
-#include"Enemy.h"
 #include"Boss.h"
 #include"Map.h"
+
 
 enum Mode { Survival = 0, Regular };
 

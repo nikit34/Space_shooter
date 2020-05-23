@@ -1,5 +1,4 @@
 #pragma once
-
 #include"SFML\Graphics.hpp"
 #include"SFML\System.hpp"
 #include"SFML\Audio.hpp"
@@ -10,6 +9,7 @@
 #include<fstream>
 #include<sstream>
 #include"dArr.h"
+
 
 using namespace sf;
 

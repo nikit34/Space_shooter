@@ -1,6 +1,7 @@
 #include"Game.h"
 #include"GameMapMaker.h"
 
+
 bool MAPMAKER = false;
 
 int main() {

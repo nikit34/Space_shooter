@@ -51,6 +51,8 @@ void EnemySpawner::draw(RenderTarget& target, Font& font) {
 	shape.setFillColor(Color::White);
 	shape.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
 	shape.setPosition(this->gridPosition.x * Wingman::gridSize, this->gridPosition.y * Wingman::gridSize);
+	if (this->type >= 0)
+		shape.setTexture(&Enemy::textures[this->type]);
 
 	Text text;
 	text.setFont(font);

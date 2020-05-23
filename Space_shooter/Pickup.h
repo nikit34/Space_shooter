@@ -1,6 +1,6 @@
 #pragma once
-
 #include"Upgrade.h"
+
 
 class Pickup {
 public:

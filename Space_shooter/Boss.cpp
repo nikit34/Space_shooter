@@ -1,5 +1,6 @@
 #include"Boss.h"
 
+
 enum textures { BODY = 0 };
 
 // Texture role: 0 for body, 1 for regular gun, 2 for regular bullet 

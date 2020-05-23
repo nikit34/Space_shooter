@@ -1,6 +1,6 @@
 #pragma once
+#include"Enemy.h"
 
-#include"Wingman.h"
 
 class WButton {
 public:

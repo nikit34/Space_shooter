@@ -175,7 +175,6 @@ void Stage::saveStage(std::string fileName) {
 			for (size_t k = 0; k < this->stageSizeY; k++) {
 				if (!this->enemySpawners[i].isNull(k)) {
 					out << this->enemySpawners[i][k].getAsString() << " ";
-					std::cout << 1;
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 ﻿#pragma once
-
 #include"TextTag.h"
+
 
 class Bullet {
 public:
