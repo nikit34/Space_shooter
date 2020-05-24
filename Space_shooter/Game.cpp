@@ -5,7 +5,7 @@ Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
-	this->mode = Mode::Regular;
+	this->mode = Mode::Survival;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
 	this->score = 0;
@@ -37,8 +37,7 @@ Game::~Game() {
 void Game::initRT() {
 	this->mainRenderTexture.create(
 		this->window->getSize().x,
-		this->window->getSize().y
-	);
+		this->window->getSize().y);
 	this->mainRenderSprite.setTexture(this->mainRenderTexture.getTexture());
 }
 
@@ -218,6 +217,9 @@ void Game::update(const float& dt) {
 	// Fullscreen
 	this->toggleFullscreen();
 
+	// Mouse positions
+	this->updateMousePositions();
+
 	// Pause game
 	this->stopGame();
 
@@ -268,6 +270,10 @@ void Game::update(const float& dt) {
 	else if (this->playersAlive <= 0 && this->scoreTime == 0) {
 		// Best score is set
 		this->setEndingScoreboard();
+	}
+	else if(this->viewMainMenu) {
+		// General controls
+		this->updateControls();
 	}
 
 	// Restart if all player dead
@@ -1206,6 +1212,94 @@ void Game::restartUpdate() {
 	}
 }
 
+void Game::updateMousePositions() {
+	this->mousePosWindow = Mouse::getPosition(*this->window); // pixel
+	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
+}
+
+void Game::updateControls() {
+	for (size_t i = 0; i < this->mainMenu.buttons.size(); i++) {
+		this->mainMenu.buttons[i].update(this->mousePosWorld);
+	}
+}
+
+void Game::updateUIPlayer(int index) {
+	if (index >= 0 && index < this->players.size()) {
+		// Follow text
+		this->followPlayerText.setPosition(
+			this->players[index].getPosition().x - 75.f,
+			this->players[index].getPosition().y - 5.f);
+		this->followPlayerText.setString(
+			std::to_string(this->players[index].getPlayerNr())
+			+ "           " +
+			this->players[index].getHpAsString()
+			+ "\n\n\n\n"
+			+ std::to_string(this->players[index].getLevel()));
+
+		// Bars
+		this->playerExpBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 70.f);
+		this->playerExpBar.setScale(
+			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
+			1.f);
+
+		this->playerShieldBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 80.f);
+		if (this->players[index].getShieldRechargeTimer() < this->players[index].getShieldRechargeTimerMax()) {
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()),
+				1.f);
+			if (static_cast<int>(this->players[index].getShieldRechargeTimer()) % 5 == 0)
+				this->playerShieldBar.setFillColor(Color::Red);
+			else
+				this->playerShieldBar.setFillColor(Color(200.f, 200.f, 200.f, 200.f));
+		}
+		else {
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()),
+				1.f);
+			this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
+		}
+
+		this->playerPowerupBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 90.f);
+		this->playerPowerupBar.setScale((static_cast<float>
+			(this->players[index].getPowerupTimer()) / this->players[index].getPowerupTimerMax()),
+			1.f);
+
+		// Statics box with text
+		if (this->players[index].playerShowStatsIsPressed()) {
+			this->playerStatsText.setString(this->players[index].getStatsAsString());
+			this->playerStatsTextBack.setPosition(
+				this->players[index].getPosition().x - 80.f,
+				this->players[index].getPosition().y + 110.f
+			);
+			this->playerStatsTextBack.setSize(Vector2f(
+				this->playerStatsText.getGlobalBounds().width,
+				this->playerStatsText.getGlobalBounds().height
+			));
+			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
+		}
+	}
+}
+
+void Game::updateUIEnemy(int index) {
+	this->enemyText.setPosition(
+		this->enemies[index].getPosition().x,
+		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
+	);
+
+	this->enemyText.setString(
+		std::to_string(this->enemies[index].getHp())
+		+ "/" +
+		std::to_string(this->enemies[index].getHpMax())
+	);
+}
+
+
 
 
 
@@ -1340,78 +1434,3 @@ void Game::drawTextTags() {
 
 
 
-void Game::updateUIPlayer(int index) {
-	if (index >= 0 && index < this->players.size()) {
-		// Follow text
-		this->followPlayerText.setPosition(
-			this->players[index].getPosition().x - 75.f,
-			this->players[index].getPosition().y - 5.f);
-		this->followPlayerText.setString(
-			std::to_string(this->players[index].getPlayerNr())
-			+ "           " +
-			this->players[index].getHpAsString()
-			+ "\n\n\n\n"
-			+ std::to_string(this->players[index].getLevel()));
-
-		// Bars
-		this->playerExpBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 70.f);
-		this->playerExpBar.setScale(
-			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
-			1.f);
-
-		this->playerShieldBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 80.f);
-		if (this->players[index].getShieldRechargeTimer() < this->players[index].getShieldRechargeTimerMax()) {
-			this->playerShieldBar.setScale((static_cast<float>
-				(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()),
-				1.f);
-			if (static_cast<int>(this->players[index].getShieldRechargeTimer()) % 5 == 0)
-				this->playerShieldBar.setFillColor(Color::Red);
-			else
-				this->playerShieldBar.setFillColor(Color(200.f, 200.f, 200.f, 200.f));
-		}
-		else {
-			this->playerShieldBar.setScale((static_cast<float>
-				(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()),
-				1.f);
-			this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
-		}
-
-		this->playerPowerupBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 90.f);
-		this->playerPowerupBar.setScale((static_cast<float>
-			(this->players[index].getPowerupTimer()) / this->players[index].getPowerupTimerMax()),
-			1.f);
-
-		// Statics box with text
-		if (this->players[index].playerShowStatsIsPressed()) {
-			this->playerStatsText.setString(this->players[index].getStatsAsString());
-			this->playerStatsTextBack.setPosition(
-				this->players[index].getPosition().x - 80.f,
-				this->players[index].getPosition().y + 110.f
-			);
-			this->playerStatsTextBack.setSize(Vector2f(
-				this->playerStatsText.getGlobalBounds().width,
-				this->playerStatsText.getGlobalBounds().height
-			));
-			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
-		}
-	}
-}
-
-void Game::updateUIEnemy(int index) {
-	this->enemyText.setPosition(
-		this->enemies[index].getPosition().x,
-		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
-	);
-
-	this->enemyText.setString(
-		std::to_string(this->enemies[index].getHp())
-		+ "/" +
-		std::to_string(this->enemies[index].getHpMax())
-	);
-}

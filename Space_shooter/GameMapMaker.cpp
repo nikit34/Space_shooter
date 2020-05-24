@@ -333,8 +333,8 @@ void GameMapMaker::updateTimers(const float& dt) {
 }
 
 void GameMapMaker::updateMousePositions() {
-	this->mousePosWindow = Mouse::getPosition(*this->window);
-	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow);
+	this->mousePosWindow = Mouse::getPosition(*this->window); // pixel
+	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
 
 	if (this->windowUI) {
 		this->mousePosGrid.x = this->mousePosWindow.x / (Wingman::gridSize + 1);
@@ -404,13 +404,12 @@ void GameMapMaker::updateControls() {
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		Keyboard::isKeyPressed(Keyboard::LShift) &&
 		this->keyTime >= this->keyTimeMax) {
-		std::cout << 0;
+
 		if (this->tileCollider) {
 			this->tileCollider = false;
 			this->selector.setOutlineColor(Color::Green);
 		}
 		else {
-			std::cout << 2;
 			this->tileCollider = true;
 			this->selector.setOutlineColor(Color::Red);
 		}

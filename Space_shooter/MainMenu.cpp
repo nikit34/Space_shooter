@@ -32,7 +32,7 @@ void MainMenu::initButtons() {
 	this->buttons.add(WButton(
 		EXIT_BTN, 
 		this->font, 
-		"Exit ->", 
+		"Exit -->", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.75f),
 		0

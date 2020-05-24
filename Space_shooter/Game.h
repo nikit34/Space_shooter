@@ -48,6 +48,10 @@ public:
 	void pickupsUpdate(const float& dt);
 	void setEndingScoreboard();
 	void restartUpdate();
+	void updateMousePositions();
+	void updateControls();
+	void updateUIPlayer(int index);
+	void updateUIEnemy(int index);
 
 	void draw();
 	void drawMap();
@@ -59,8 +63,6 @@ public:
 	void drawParticles();
 	void drawTextTags();
 	void drawUI();
-	void updateUIPlayer(int index);
-	void updateUIEnemy(int index);
 
 private:
 	// Game menu
@@ -107,6 +109,10 @@ private:
 	RectangleShape playerExpBar; 
 	RectangleShape playerShieldBar;
 	RectangleShape playerPowerupBar;
+
+	// Mouse positions
+	Vector2i mousePosWindow;
+	Vector2f mousePosWorld;
 
 	// Backgrounds
 	RectangleShape playerStatsTextBack;

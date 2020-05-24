@@ -25,9 +25,9 @@ WButton::WButton(
 	this->text.setCharacterSize(charSize);
 	this->text.setOutlineThickness(2.f);
 
-	this->colorPressed = Color(50, 50, 50, 240);
-	this->colorHover = Color(255, 255, 255, 240);
-	this->colorIdle = Color(200, 200, 200, 240);
+	this->colorPressed = Color(50, 100, 50, 200);
+	this->colorHover = Color(0, 200, 0, 200);
+	this->colorIdle = Color(0, 255, 0, 200);
 
 	this->pressed = false;
 	this->hover = false;
@@ -60,7 +60,6 @@ bool WButton::isIdle() {
 }
 
 void WButton::update(Vector2f mousePos) {
-	std::cout << 0;
 	if(!Mouse::isButtonPressed(Mouse::Left) && !this->sprite.getGlobalBounds().contains(mousePos)) {
 		this->idle = true;
 		this->pressed = false;
