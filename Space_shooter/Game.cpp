@@ -20,9 +20,11 @@ Game::Game(RenderWindow* window) {
 	this->difficultyTimer = 0.f;
 
 	this->stage = nullptr;
+	this->mainMenu = nullptr;
 
 	this->paused = false;
 	this->viewMainMenu = true;
+
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
 
@@ -31,6 +33,7 @@ Game::Game(RenderWindow* window) {
 
 Game::~Game() {
 	delete this->stage;
+	delete this->mainMenu;
 }
 
 
@@ -77,7 +80,7 @@ void Game::initTextures() {
 }
 
 void Game::initMenu() {
-	this->mainMenu.initialize(this->window);
+	this->mainMenu = new MainMenu(this->window);
 }
 
 void Game::initMap() {
@@ -1218,7 +1221,7 @@ void Game::updateMousePositions() {
 }
 
 void Game::updateControls(const float& dt) {
-	this->mainMenu.update(this->mousePosWorld, dt);
+	this->mainMenu->update(this->mousePosWorld, dt);
 }
 
 void Game::updateUIPlayer(int index) {
@@ -1420,7 +1423,7 @@ void Game::drawUI() {
 
 	// View main menu
 	if (this->viewMainMenu)
-		this->mainMenu.draw(*this->window);
+		this->mainMenu->draw(*this->window);
 }
 
 void Game::drawTextTags() {

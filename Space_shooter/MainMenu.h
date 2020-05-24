@@ -5,13 +5,13 @@
 
 class MainMenu {
 public:
-	MainMenu();
+	MainMenu(RenderWindow* window);
 	virtual ~MainMenu();
 
 	// Init
 	void initBackground();
 	void initButtons();
-	void initialize(RenderWindow* window);
+	void initialize();
 
 	// Update
 	void updateTimers(const float& dt);
@@ -36,5 +36,7 @@ private:
 	float keyTime;
 	Font font;
 	Vector2u windowBounds;
+
+	bool exitProgram;
 };
 

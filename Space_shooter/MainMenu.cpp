@@ -1,10 +1,15 @@
 #include "MainMenu.h"
 
 
-MainMenu::MainMenu() {
+MainMenu::MainMenu(RenderWindow* window) {
+	this->window = window;
+	this->window->setFramerateLimit(200);
+	this->windowBounds = this->window->getSize();
 	this->dtMultiplier = 60.f;
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
+
+	this->initialize();
 }
 
 MainMenu::~MainMenu() {}
@@ -41,10 +46,8 @@ void MainMenu::initButtons() {
 	));
 }
 
-void MainMenu::initialize(RenderWindow* window) {
+void MainMenu::initialize() {
 	this->font.loadFromFile("Fonts/Metropolian-Display.ttf");
-	this->window = window;
-	this->windowBounds = this->window->getSize();
 
 	// Init background
 	this->initBackground();
@@ -83,6 +86,8 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 			
 			// Exit event
 			if (this->buttons[i].getId() == buttons::EXIT_BTN) {
+				this->buttons.clear();
+				this->exitProgram = true;
 				// DEBUG - TODO: COMMENT!!!
 				// _CrtDumpMemoryLeaks();
 				///////////////////////////

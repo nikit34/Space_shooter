@@ -65,8 +65,8 @@ public:
 	void drawUI();
 
 private:
-	// Game menu
-	MainMenu mainMenu;
+	// Menu game
+	MainMenu *mainMenu;
 
 	// Game
 	RenderWindow* window;
