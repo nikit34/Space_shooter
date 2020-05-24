@@ -280,8 +280,7 @@ void GameMapMaker::initText() {
 }
 
 void GameMapMaker::initButtons() {
-	WButton temp(this->font, "EnemySpawnerSelect", 12, Vector2f(600, 600), 0);
-	this->buttons.add(temp);
+
 }
 
 void GameMapMaker::initUI() {
@@ -409,7 +408,6 @@ void GameMapMaker::updateControls() {
 		if (this->tileCollider) {
 			this->tileCollider = false;
 			this->selector.setOutlineColor(Color::Green);
-			std::cout << 1;
 		}
 		else {
 			std::cout << 2;

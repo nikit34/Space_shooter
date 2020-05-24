@@ -4,12 +4,17 @@
 
 class WButton {
 public:
-	WButton(Font &font,
+	WButton(
+		int id,
+		Font &font,
 		std::string text,
 		const unsigned int charSize,
 		Vector2f pos,
 		int textureIndex);
 	virtual ~WButton();
+
+	inline std::string getName() { return this->text.getString(); }
+	inline int getId() { return this->id; }
 
 	bool isPressed();
 	bool isHover();
@@ -24,6 +29,8 @@ public:
 	static void initTextures();
 
 private:
+	int id;
+
 	Sprite sprite;
 	Text text;
 	

@@ -12,15 +12,17 @@ void WButton::initTextures() {
 }
 
 WButton::WButton(
+	int id,
 	Font& font,
 	std::string text,
 	const unsigned int charSize,
 	Vector2f pos,
 	int textureIndex
 ) {
+	this->id = id;
 	this->text.setFont(font);
-	this->text.setCharacterSize(charSize);
 	this->text.setString(text);
+	this->text.setCharacterSize(charSize);
 
 	this->colorPressed = Color(50, 50, 50, 240);
 	this->colorHover = Color(255, 255, 255, 240);

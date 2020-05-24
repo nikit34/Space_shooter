@@ -21,7 +21,8 @@ Game::Game(RenderWindow* window) {
 
 	this->stage = nullptr;
 
-	this->paused = true;
+	this->paused = false;
+	this->viewMainMenu = true;
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
 
@@ -74,6 +75,10 @@ void Game::initTextures() {
 
 	// Particles
 	Particle::initTextures();
+}
+
+void Game::initMenu() {
+	this->mainMenu.initialize(this->window->getSize());
 }
 
 void Game::initMap() {
@@ -142,14 +147,17 @@ void Game::initUI() {
 }
 
 void Game::initialize() {
-	// Init view
-	this->initView();
-
 	// Init fonts
 	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
 	// Init textures
 	this->initTextures();
+
+	// Init main menu
+	this->initMenu();
+
+	// Init view
+	this->initView();
 
 	// Init map
 	this->initMap();
@@ -211,13 +219,13 @@ void Game::update(const float& dt) {
 	this->toggleFullscreen();
 
 	// Pause game
-	this->pauseGame();
+	this->stopGame();
 
 	// Update while game paused
 	this->updateWhilePaused(dt);
 
 	// Start game
-	if (this->playersAlive > 0 && !this->paused) {
+	if (this->playersAlive > 0 && !this->paused && !this->viewMainMenu) {
 		// Update timers
 		this->updateTimersUnpaused(dt);
 
@@ -292,12 +300,20 @@ void Game::toggleFullscreen() {
 	}
 }
 
-void Game::pauseGame() {
+void Game::stopGame() {
 	if (Keyboard::isKeyPressed(Keyboard::P) && this->keyTime >= this->keyTimeMax) {
 		if(this->paused)	
 			this->paused = false;
 		else
 			this->paused = true;
+
+		this->keyTime = 0.f;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::M) && this->keyTime >= this->keyTimeMax) {
+		if (this->viewMainMenu)
+			this->viewMainMenu = false;
+		else
+			this->viewMainMenu = true;
 
 		this->keyTime = 0.f;
 	}
@@ -1309,6 +1325,10 @@ void Game::drawUI() {
 	// Controls text
 	if (this->paused)
 		this->window->draw(this->controlsText);
+
+	// View main menu
+	if (this->viewMainMenu)
+		this->mainMenu.draw(*this->window);
 }
 
 void Game::drawTextTags() {

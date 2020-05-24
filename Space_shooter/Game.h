@@ -20,6 +20,7 @@ public:
 	void initRT();
 	void initView();
 	void initTextures();
+	void initMenu();
 	void initMap();
 	void initUI();
 	void initialize();
@@ -28,7 +29,7 @@ public:
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen();
-	void pauseGame();
+	void stopGame();
 	void updateWhilePaused(const float& dt);
 	void updateTimersUnpaused(const float& dt);
 	void updateDifficulty();
@@ -62,6 +63,9 @@ public:
 	void updateUIEnemy(int index);
 
 private:
+	// Game menu
+	MainMenu mainMenu;
+
 	// Game
 	RenderWindow* window;
 	View mainView;
@@ -70,6 +74,7 @@ private:
 	bool fullscreen;
 	float dtMultiplier;
 	bool paused;
+	bool viewMainMenu;
 	float keyTimeMax;
 	float keyTime;
 	int mode;
