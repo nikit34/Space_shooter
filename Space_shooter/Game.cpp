@@ -358,6 +358,9 @@ void Game::playerUpdate(const float& dt) {
 		if (this->players[i].isAlive()) {
 			/// Update Players
 			this->players[i].update(this->mainView, dt, stage->getScrollSpeed());
+			
+			//Collision update
+			this->playerCollisionUpdate(dt, i);
 
 			// Bullet update
 			this->playerBulletUpdate(dt, i);
@@ -629,8 +632,9 @@ void Game::playerCollisionUpdate(const float& dt, const int i) {
 					this->players[i].getBounds().intersects(this->stage->getTiles()[j][k].getBounds())
 					) {
 					this->players[i].move(
-						-this->players[i].getNormDir().x * 100 * dt * this->dtMultiplier,
-						-this->players[i].getNormDir().y * 100 * dt * this->dtMultiplier);
+						-this->players[i].getNormDir().x * 10.f * dt * this->dtMultiplier,
+						-this->players[i].getNormDir().y * 10.f * dt * this->dtMultiplier);
+					this->players[i].resetVelocity();
 				}
 			}
 		}

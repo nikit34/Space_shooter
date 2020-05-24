@@ -403,9 +403,14 @@ void Stage::draw(
 			if (!this->tiles[i].isNull(k)) {
 				this->tiles[i][k].draw(target);
 
-				if (editor) {
+				if (editor && this->tiles[i][k].getIsCollider()) {
 					RectangleShape shape;
-					shape.setSize(Vector2f())
+					shape.setSize(Vector2f(Wingman::gridSize, Wingman::gridSize));
+					shape.setPosition(this->tiles[i][k].getPos());
+					shape.setFillColor(Color::Transparent);
+					shape.setOutlineThickness(2.f);
+					shape.setOutlineColor(Color::Red);
+					target.draw(shape);
 				}
 			}
 			// EnemySpawner

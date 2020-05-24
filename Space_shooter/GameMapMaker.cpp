@@ -401,16 +401,18 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Toggle tile collider
-	if (Keyboard::isKeyPressed(Keyboard::T) &&
+	if (Keyboard::isKeyPressed(Keyboard::C) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
 		Keyboard::isKeyPressed(Keyboard::LShift) &&
 		this->keyTime >= this->keyTimeMax) {
-
+		std::cout << 0;
 		if (this->tileCollider) {
 			this->tileCollider = false;
 			this->selector.setOutlineColor(Color::Green);
+			std::cout << 1;
 		}
 		else {
+			std::cout << 2;
 			this->tileCollider = true;
 			this->selector.setOutlineColor(Color::Red);
 		}
