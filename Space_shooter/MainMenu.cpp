@@ -17,24 +17,24 @@ void MainMenu::initButtons() {
 		NORMAL_MODE_BTN, 
 		this->font, 
 		"Normal", 
-		12, 
-		Vector2f(this->windowBounds.x / 2 - 200.f, this->windowBounds.y / 2), 
+		18, 
+		Vector2f(this->windowBounds.x * 0.75f - 200.f, this->windowBounds.y * 0.75f),
 		0
 	));
 	this->buttons.add(WButton(
 		SURVIVAL_MODE_BTN, 
 		this->font, 
 		"Survival", 
-		12, 
-		Vector2f(this->windowBounds.x / 2, this->windowBounds.y / 2), 
+		18, 
+		Vector2f(this->windowBounds.x * 0.75f, this->windowBounds.y * 0.75f),
 		0
 	));
 	this->buttons.add(WButton(
 		EXIT_BTN, 
 		this->font, 
-		"Exit to windows", 
-		12, 
-		Vector2f(this->windowBounds.x / 2 + 200.f, this->windowBounds.y / 2), 
+		"Exit ->", 
+		18, 
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.75f),
 		0
 	));
 }

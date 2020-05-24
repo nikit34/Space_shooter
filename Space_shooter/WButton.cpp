@@ -23,6 +23,7 @@ WButton::WButton(
 	this->text.setFont(font);
 	this->text.setString(text);
 	this->text.setCharacterSize(charSize);
+	this->text.setOutlineThickness(2.f);
 
 	this->colorPressed = Color(50, 50, 50, 240);
 	this->colorHover = Color(255, 255, 255, 240);
@@ -36,8 +37,11 @@ WButton::WButton(
 		this->sprite.setTexture(WButton::textures[textureIndex]);
 	this->sprite.setPosition(pos);
 	this->sprite.setColor(this->colorIdle);
+	this->sprite.setScale(Vector2f(0.5f, 0.4f));
 
-	this->text.setPosition(this->sprite.getPosition());
+	this->text.setPosition(Vector2f(
+		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2 - this->text.getGlobalBounds().width / 2,
+		this->sprite.getPosition().y + this->sprite.getGlobalBounds().height / 2 - this->text.getGlobalBounds().height / 2));
 }
 
 WButton::~WButton() {}
@@ -56,6 +60,7 @@ bool WButton::isIdle() {
 }
 
 void WButton::update(Vector2f mousePos) {
+	std::cout << 0;
 	if(!Mouse::isButtonPressed(Mouse::Left) && !this->sprite.getGlobalBounds().contains(mousePos)) {
 		this->idle = true;
 		this->pressed = false;
