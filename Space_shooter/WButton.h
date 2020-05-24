@@ -13,8 +13,10 @@ public:
 		int textureIndex);
 	virtual ~WButton();
 
+	// Accessors
 	inline std::string getName() { return this->text.getString(); }
 	inline int getId() { return this->id; }
+	inline FloatRect getBounds() const { return this->sprite.getGlobalBounds(); }
 
 	bool isPressed();
 	bool isHover();

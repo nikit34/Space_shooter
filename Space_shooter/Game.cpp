@@ -77,7 +77,7 @@ void Game::initTextures() {
 }
 
 void Game::initMenu() {
-	this->mainMenu.initialize(this->window->getSize());
+	this->mainMenu.initialize(this->window);
 }
 
 void Game::initMap() {
@@ -273,7 +273,7 @@ void Game::update(const float& dt) {
 	}
 	else if(this->viewMainMenu) {
 		// General controls
-		this->updateControls();
+		this->updateControls(dt);
 	}
 
 	// Restart if all player dead
@@ -1217,10 +1217,8 @@ void Game::updateMousePositions() {
 	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
 }
 
-void Game::updateControls() {
-	for (size_t i = 0; i < this->mainMenu.buttons.size(); i++) {
-		this->mainMenu.buttons[i].update(this->mousePosWorld);
-	}
+void Game::updateControls(const float& dt) {
+	this->mainMenu.update(this->mousePosWorld, dt);
 }
 
 void Game::updateUIPlayer(int index) {

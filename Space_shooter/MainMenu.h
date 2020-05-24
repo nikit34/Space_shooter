@@ -11,11 +11,12 @@ public:
 	// Init
 	void initBackground();
 	void initButtons();
-	void initialize(Vector2u windowBounds);
+	void initialize(RenderWindow* window);
 
 	// Update
+	void updateTimers(const float& dt);
 	void updateBackground(Vector2f& mPos, const float& dt);
-	void updateButtons(Vector2f& mPos, const float& dt);
+	void updateButtons(Vector2f& mPos);
 	void update(Vector2f& mPos, const float& dt);
 
 	// Draw
@@ -26,9 +27,13 @@ public:
 	dArr<WButton> buttons;
 
 	// Static
-	enum buttons { NORMAL_MODE_BTN=0, SURVIVAL_MODE_BTN, EXIT_BTN };
+	enum buttons { NORMAL_MODE_BTN = 0, SURVIVAL_MODE_BTN, EXIT_BTN };
 
 private:
+	RenderWindow* window;
+	float dtMultiplier;
+	float keyTimeMax;
+	float keyTime;
 	Font font;
 	Vector2u windowBounds;
 };

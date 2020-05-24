@@ -49,7 +49,7 @@ public:
 	void setEndingScoreboard();
 	void restartUpdate();
 	void updateMousePositions();
-	void updateControls();
+	void updateControls(const float& dt);
 	void updateUIPlayer(int index);
 	void updateUIEnemy(int index);
 
