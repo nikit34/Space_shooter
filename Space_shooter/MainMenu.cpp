@@ -83,6 +83,9 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 			
 			// Exit event
 			if (this->buttons[i].getId() == buttons::EXIT_BTN) {
+				// DEBUG - TODO: COMMENT!!!
+				// _CrtDumpMemoryLeaks();
+				///////////////////////////
 				this->window->close();
 			}
 			this->keyTime = 0.f;
