@@ -2,7 +2,7 @@
 #include"Wingman.h"
 #include"WButton.h"
 
-enum Mode { Survival = 0, Regular };
+static enum Mode { Survival = 0, Regular };
 
 class MainMenu {
 public:
@@ -38,8 +38,7 @@ public:
 
 	dArr<WButton> buttons;
 
-	// Static
-	enum buttons { NORMAL_MODE_BTN = 0, SURVIVAL_MODE_BTN, EXIT_BTN };
+	
 
 private:
 	RenderWindow* window;
@@ -51,6 +50,10 @@ private:
 
 	bool exitProgram;
 	bool view;
+
+	bool constructor;
 	int mode;
+ 
+	enum buttons { CONSTRUCTOR_BTN = 0, NORMAL_MODE_BTN, SURVIVAL_MODE_BTN, EXIT_BTN };
 };
 

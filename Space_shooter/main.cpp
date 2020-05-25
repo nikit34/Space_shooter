@@ -1,5 +1,6 @@
 #include"Game.h"
 #include"GameMapMaker.h"
+#include"MainMenu.h"
 
 // DEBUG - TODO: COMMENT!!!
 //#define _CRTDBG_MAP_ALLOC

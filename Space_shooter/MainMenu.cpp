@@ -28,9 +28,17 @@ void MainMenu::initBackground() {
 
 void MainMenu::initButtons() {
 	this->buttons.add(WButton(
+		CONSTRUCTOR_BTN,
+		this->font,
+		"MAP MAKER",
+		18,
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.25f),
+		0
+	));
+	this->buttons.add(WButton(
 		NORMAL_MODE_BTN, 
 		this->font, 
-		"Normal", 
+		"NORMAL", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f - 200.f, this->windowBounds.y * 0.75f),
 		0
@@ -38,7 +46,7 @@ void MainMenu::initButtons() {
 	this->buttons.add(WButton(
 		SURVIVAL_MODE_BTN, 
 		this->font, 
-		"Survival", 
+		"SURVIVAL", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f, this->windowBounds.y * 0.75f),
 		0
@@ -46,7 +54,7 @@ void MainMenu::initButtons() {
 	this->buttons.add(WButton(
 		EXIT_BTN, 
 		this->font, 
-		"Exit -->", 
+		"EXIT -->", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.75f),
 		0
@@ -81,6 +89,11 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 			this->keyTime >= this->keyTimeMax &&
 			this->buttons[i].getBounds().contains(mPos)
 		) {
+			// Constructor
+			if (this->buttons[i].getId() == buttons::CONSTRUCTOR_BTN) {
+				std::cout << 1;
+			}
+
 			// Set normal mode
 			if (this->buttons[i].getId() == buttons::NORMAL_MODE_BTN) {
 				this->mode = Mode::Regular;
