@@ -821,7 +821,7 @@ void Player::update(View& view, const float& dt, const float scrollSpeed) {
 		this->powerupTimer -= 1.f * dt * this->dtMultiplier;
 
 	this->movement(view, dt, scrollSpeed);
-	this->changeAccessories(dt);
+	// this->changeAccessories(dt);
 	this->updateAccessories(dt, scrollSpeed);
 	this->updatePowerups();
 	this->combat(dt);

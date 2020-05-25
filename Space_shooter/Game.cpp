@@ -5,7 +5,7 @@ Game::Game(RenderWindow* window) {
 	this->window = window;
 	this->window->setFramerateLimit(200);
 	this->fullscreen = false;
-	this->mode = Mode::Survival;
+	this->mode = 0;
 	this->dtMultiplier = 60.f;
 	this->scoreMultiplier = 1;
 	this->score = 0;
@@ -80,7 +80,7 @@ void Game::initTextures() {
 }
 
 void Game::initMenu() {
-	this->mainMenu = new MainMenu(this->window);
+	this->mainMenu = new MainMenu(this->window, this->mode);
 }
 
 void Game::initMap() {
@@ -230,7 +230,11 @@ void Game::update(const float& dt) {
 	this->updateWhilePaused(dt);
 
 	// Start game
-	if (this->playersAlive > 0 && !this->paused && !this->viewMainMenu) {
+	if (this->playersAlive > 0 && !this->paused && (!this->viewMainMenu || this->mainMenu->closeMainMenu())) {
+		
+		// Set Mode
+		this->setMode();
+
 		// Update timers
 		this->updateTimersUnpaused(dt);
 
@@ -321,8 +325,10 @@ void Game::stopGame() {
 	if (Keyboard::isKeyPressed(Keyboard::M) && this->keyTime >= this->keyTimeMax) {
 		if (this->viewMainMenu)
 			this->viewMainMenu = false;
-		else
+		else {
 			this->viewMainMenu = true;
+			this->initMenu();
+		}
 
 		this->keyTime = 0.f;
 	}
@@ -330,12 +336,9 @@ void Game::stopGame() {
 
 void Game::updateWhilePaused(const float& dt) {
 	// Change accessories when paused
-	if (this->paused)
-	{
-		for (size_t i = 0; i < this->players.size(); i++)
-		{
-			if (this->players[i].isAlive())
-			{
+	if (this->paused) {
+		for (size_t i = 0; i < this->players.size(); i++) {
+			if (this->players[i].isAlive()) {
 				this->players[i].changeAccessories(dt);
 			}
 		}
@@ -1215,6 +1218,15 @@ void Game::restartUpdate() {
 	}
 }
 
+void Game::setMode() {
+	if (this->mainMenu->getMode() == Mode::Survival) {
+		this->mode = Mode::Survival;
+	}
+	else if (this->mainMenu->getMode() == Mode::Regular) {
+		this->mode = Mode::Regular;
+	}
+}
+
 void Game::updateMousePositions() {
 	this->mousePosWindow = Mouse::getPosition(*this->window); // pixel
 	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
@@ -1422,7 +1434,7 @@ void Game::drawUI() {
 		this->window->draw(this->controlsText);
 
 	// View main menu
-	if (this->viewMainMenu)
+	if (this->viewMainMenu && !this->mainMenu->closeMainMenu())
 		this->mainMenu->draw(*this->window);
 }
 

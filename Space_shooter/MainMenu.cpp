@@ -1,8 +1,12 @@
 #include "MainMenu.h"
 
 
-MainMenu::MainMenu(RenderWindow* window) {
+MainMenu::MainMenu(
+	RenderWindow* window, 
+	int mode
+) {
 	this->window = window;
+	this->mode = mode;
 	this->window->setFramerateLimit(200);
 	this->windowBounds = this->window->getSize();
 	this->dtMultiplier = 60.f;
@@ -12,6 +16,7 @@ MainMenu::MainMenu(RenderWindow* window) {
 	this->initialize();
 
 	this->exitProgram = false;
+	this->close = false;
 }
 
 MainMenu::~MainMenu() {}
@@ -75,15 +80,15 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 		if (Mouse::isButtonPressed(Mouse::Left) && 
 			this->keyTime >= this->keyTimeMax &&
 			this->buttons[i].getBounds().contains(mPos)
-			) {
+		) {
 			// Set normal mode
 			if (this->buttons[i].getId() == buttons::NORMAL_MODE_BTN) {
-				std::cout << i;
+				this->mode = Mode::Regular;
 			}
 
 			// Set survival mode
 			if (this->buttons[i].getId() == buttons::SURVIVAL_MODE_BTN) {
-				std::cout << i;
+				this->mode = Mode::Survival;
 			}
 			
 			// Exit event
@@ -91,6 +96,7 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 				this->exitProgram = true;
 			}
 			this->keyTime = 0.f;
+			this->close = true;
 		}
 	}
 }

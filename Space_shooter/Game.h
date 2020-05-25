@@ -4,8 +4,6 @@
 #include"Map.h"
 
 
-enum Mode { Survival = 0, Regular };
-
 class Game {
 public:
 	Game(RenderWindow* window);
@@ -16,6 +14,7 @@ public:
 	inline bool getExit()const { return this->mainMenu->getExit(); }
 
 	// Setters
+	void setMode();
 
 	// Functions
 	void initRT();

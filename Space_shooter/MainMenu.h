@@ -2,10 +2,14 @@
 #include"Wingman.h"
 #include"WButton.h"
 
+enum Mode { Survival = 0, Regular };
 
 class MainMenu {
 public:
-	MainMenu(RenderWindow* window);
+	MainMenu(
+		RenderWindow* window, 
+		int mode
+	);
 	virtual ~MainMenu();
 
 	// Init
@@ -15,6 +19,8 @@ public:
 
 	// Accessors
 	inline bool getExit()const { return this->exitProgram; }
+	inline int getMode()const { return this->mode; }
+	inline bool closeMainMenu()const { return this->close; }
 
 	// Update
 	void updateTimers(const float& dt);
@@ -41,5 +47,7 @@ private:
 	Vector2u windowBounds;
 
 	bool exitProgram;
+	bool close;
+	int mode;
 };
 
