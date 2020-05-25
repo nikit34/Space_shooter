@@ -12,6 +12,7 @@ public:
 	// Accessors
 	inline RenderWindow& getWindow() { return *this->window; }
 	inline bool getExit()const { return this->mainMenu->getExit(); }
+	inline bool getStatConstructor()const { return this->mainMenu->getStatConstructor(); }
 
 	// Setters
 	void setMode();

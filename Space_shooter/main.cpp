@@ -1,6 +1,5 @@
 #include"Game.h"
 #include"GameMapMaker.h"
-#include"MainMenu.h"
 
 // DEBUG - TODO: COMMENT!!!
 //#define _CRTDBG_MAP_ALLOC
@@ -13,6 +12,7 @@
 //#define DBG_NEW new
 //#endif
 // !!!!!!!!!!!!!!!!!!!!!!!!
+
 
 bool MAPMAKER = false;
 
@@ -38,7 +38,8 @@ int main() {
 		}
 		dt = clock.restart().asSeconds();
 
-		if (MAPMAKER) {
+		if (game.getStatConstructor()) {
+			std::cout << 1;
 			gameMapMaker.update(dt);
 			gameMapMaker.draw();
 		}

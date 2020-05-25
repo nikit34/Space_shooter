@@ -17,6 +17,7 @@ MainMenu::MainMenu(
 
 	this->exitProgram = false;
 	this->view = true;
+	this->constructor = false;
 }
 
 MainMenu::~MainMenu() {}
@@ -91,7 +92,10 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 		) {
 			// Constructor
 			if (this->buttons[i].getId() == buttons::CONSTRUCTOR_BTN) {
-				std::cout << 1;
+				if (this->constructor)
+					this->constructor = false;
+				else
+					this->constructor = true;
 			}
 
 			// Set normal mode

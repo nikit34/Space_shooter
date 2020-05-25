@@ -21,6 +21,7 @@ public:
 	inline bool getExit()const { return this->exitProgram; }
 	inline int getMode()const { return this->mode; }
 	inline bool viewMainMenu()const { return this->view; }
+	inline bool getStatConstructor()const { return this->constructor; }
 
 	// Setters
 	inline void setViewMainMenu(bool view) { this->view = view; }
