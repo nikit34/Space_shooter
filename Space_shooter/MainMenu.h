@@ -20,7 +20,10 @@ public:
 	// Accessors
 	inline bool getExit()const { return this->exitProgram; }
 	inline int getMode()const { return this->mode; }
-	inline bool closeMainMenu()const { return this->close; }
+	inline bool viewMainMenu()const { return this->view; }
+
+	// Setters
+	inline void setViewMainMenu(bool view) { this->view = view; }
 
 	// Update
 	void updateTimers(const float& dt);
@@ -47,7 +50,7 @@ private:
 	Vector2u windowBounds;
 
 	bool exitProgram;
-	bool close;
+	bool view;
 	int mode;
 };
 

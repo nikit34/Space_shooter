@@ -80,7 +80,6 @@ private:
 
 	bool fullscreen;
 	bool paused;
-	bool viewMainMenu;
 
 	// Score
 	unsigned scoreMultiplier;

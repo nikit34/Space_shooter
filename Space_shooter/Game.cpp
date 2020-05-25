@@ -23,7 +23,6 @@ Game::Game(RenderWindow* window) {
 	this->mainMenu = nullptr;
 
 	this->paused = false;
-	this->viewMainMenu = true;
 
 	this->keyTimeMax = 10.f;
 	this->keyTime = this->keyTimeMax;
@@ -230,7 +229,7 @@ void Game::update(const float& dt) {
 	this->updateWhilePaused(dt);
 
 	// Start game
-	if (this->playersAlive > 0 && !this->paused && (!this->viewMainMenu || this->mainMenu->closeMainMenu())) {
+	if (this->playersAlive > 0 && !this->paused && !this->mainMenu->viewMainMenu()) {
 		
 		// Set Mode
 		this->setMode();
@@ -278,7 +277,7 @@ void Game::update(const float& dt) {
 		// Best score is set
 		this->setEndingScoreboard();
 	}
-	else if(this->viewMainMenu) {
+	else if(this->mainMenu->viewMainMenu()) {
 		// General controls
 		this->updateControls(dt);
 	}
@@ -323,12 +322,10 @@ void Game::stopGame() {
 		this->keyTime = 0.f;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::M) && this->keyTime >= this->keyTimeMax) {
-		if (this->viewMainMenu)
-			this->viewMainMenu = false;
-		else {
-			this->viewMainMenu = true;
-			this->initMenu();
-		}
+		if (this->mainMenu->viewMainMenu())
+			this->mainMenu->setViewMainMenu(false);
+		else 
+			this->mainMenu->setViewMainMenu(true);
 
 		this->keyTime = 0.f;
 	}
@@ -1434,7 +1431,7 @@ void Game::drawUI() {
 		this->window->draw(this->controlsText);
 
 	// View main menu
-	if (this->viewMainMenu && !this->mainMenu->closeMainMenu())
+	if (this->mainMenu->viewMainMenu())
 		this->mainMenu->draw(*this->window);
 }
 

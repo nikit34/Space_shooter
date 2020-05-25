@@ -16,7 +16,7 @@ MainMenu::MainMenu(
 	this->initialize();
 
 	this->exitProgram = false;
-	this->close = false;
+	this->view = true;
 }
 
 MainMenu::~MainMenu() {}
@@ -96,7 +96,7 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 				this->exitProgram = true;
 			}
 			this->keyTime = 0.f;
-			this->close = true;
+			this->view = false;
 		}
 	}
 }
