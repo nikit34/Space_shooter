@@ -21,9 +21,7 @@ Boss::Boss(
 	case 0: // First easy boss
 		this->sprite.setTexture((*this->bodyTextures)[0]);
 
-		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
-		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
-		this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
+		// this->guns.add(BossGun(&(*this->gunTextures)[0], Vector2f(0.f, 0.f), 20.f));
 
 		this->sprite.setPosition(position);
 		break;

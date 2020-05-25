@@ -45,6 +45,13 @@ int main() {
 			game.update(dt);
 			game.draw();
 		}
+
+		if (game.getExit()) {
+			// DEBUG - TODO: COMMENT!!!
+			// _CrtDumpMemoryLeaks();
+			///////////////////////////
+			window.close();
+		}
 	}
 	return 0;
 }

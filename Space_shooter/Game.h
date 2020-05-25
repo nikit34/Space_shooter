@@ -13,6 +13,7 @@ public:
 
 	// Accessors
 	inline RenderWindow& getWindow() { return *this->window; }
+	inline bool getExit()const { return this->mainMenu->getExit(); }
 
 	// Setters
 
@@ -73,13 +74,14 @@ private:
 	View mainView;
 	RenderTexture mainRenderTexture;
 	Sprite mainRenderSprite;
-	bool fullscreen;
 	float dtMultiplier;
-	bool paused;
-	bool viewMainMenu;
 	float keyTimeMax;
 	float keyTime;
 	int mode;
+
+	bool fullscreen;
+	bool paused;
+	bool viewMainMenu;
 
 	// Score
 	unsigned scoreMultiplier;

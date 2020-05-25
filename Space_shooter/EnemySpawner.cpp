@@ -18,9 +18,7 @@ EnemySpawner::EnemySpawner(
 	this->nrOfEnemies = nrOfEnemies;
 }
 
-EnemySpawner::~EnemySpawner() {
-
-}
+EnemySpawner::~EnemySpawner() {}
 
 void EnemySpawner::updateTimer() {
 

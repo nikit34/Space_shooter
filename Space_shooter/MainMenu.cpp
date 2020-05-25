@@ -10,6 +10,8 @@ MainMenu::MainMenu(RenderWindow* window) {
 	this->keyTime = this->keyTimeMax;
 
 	this->initialize();
+
+	this->exitProgram = false;
 }
 
 MainMenu::~MainMenu() {}
@@ -86,12 +88,7 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 			
 			// Exit event
 			if (this->buttons[i].getId() == buttons::EXIT_BTN) {
-				this->buttons.clear();
 				this->exitProgram = true;
-				// DEBUG - TODO: COMMENT!!!
-				// _CrtDumpMemoryLeaks();
-				///////////////////////////
-				this->window->close();
 			}
 			this->keyTime = 0.f;
 		}

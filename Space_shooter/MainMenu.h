@@ -13,6 +13,9 @@ public:
 	void initButtons();
 	void initialize();
 
+	// Accessors
+	inline bool getExit()const { return this->exitProgram; }
+
 	// Update
 	void updateTimers(const float& dt);
 	void updateBackground(Vector2f& mPos, const float& dt);

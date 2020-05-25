@@ -48,9 +48,7 @@ Upgrade::Upgrade(
 	this->sprite.setPosition(position);
 }
 
-Upgrade::~Upgrade() {
-
-}
+Upgrade::~Upgrade() {}
 
 bool Upgrade::checkCollision(const FloatRect rect) {
 	if (this->sprite.getGlobalBounds().intersects(rect))
