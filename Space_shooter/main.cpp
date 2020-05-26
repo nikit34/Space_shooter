@@ -39,7 +39,6 @@ int main() {
 		dt = clock.restart().asSeconds();
 
 		if (game.getStatConstructor()) {
-			std::cout << 1;
 			gameMapMaker.update(dt);
 			gameMapMaker.draw();
 		}
