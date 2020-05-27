@@ -17,6 +17,7 @@ WButton::WButton(
 	std::string text,
 	const unsigned int charSize,
 	Vector2f pos,
+	Vector2f scale,
 	int textureIndex
 ) {
 	this->id = id;
@@ -37,7 +38,7 @@ WButton::WButton(
 		this->sprite.setTexture(WButton::textures[textureIndex]);
 	this->sprite.setPosition(pos);
 	this->sprite.setColor(this->colorIdle);
-	this->sprite.setScale(Vector2f(0.5f, 0.4f));
+	this->sprite.setScale(Vector2f(scale.x, scale.y));
 
 	this->text.setPosition(Vector2f(
 		this->sprite.getPosition().x + this->sprite.getGlobalBounds().width / 2 - this->text.getGlobalBounds().width / 2,

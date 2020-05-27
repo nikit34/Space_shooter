@@ -10,6 +10,7 @@ public:
 		std::string text,
 		const unsigned int charSize,
 		Vector2f pos,
+		Vector2f scale,
 		int textureIndex);
 	virtual ~WButton();
 

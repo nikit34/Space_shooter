@@ -13,23 +13,67 @@ ConstructorMenu::ConstructorMenu(RenderWindow* window) {
 
 	this->exitProgram = false;
 	this->view = true;
-	this->constructor = false;
+	this->constructor = true;
 }
 
 ConstructorMenu::~ConstructorMenu() {}
 
 
 void ConstructorMenu::initBackground() {
-
+	this->background.loadFromFile("Textures/Backgrounds/bgConstructorMenu.png");
+	this->spriteBackground.setTexture(this->background);
+	this->spriteBackground.setScale(
+		this->windowBounds.x / this->spriteBackground.getGlobalBounds().width * 1.5f,
+		this->windowBounds.y / this->spriteBackground.getGlobalBounds().height * 1.5f);
+	this->spriteBackground.setPosition(
+		-this->spriteBackground.getGlobalBounds().width * 0.25f,
+		-this->spriteBackground.getGlobalBounds().height * 0.25f);
 }
 
 void ConstructorMenu::initButtons() {
 	this->buttons.add(WButton(
 		GAME_BTN,
 		this->font,
-		"MAP MAKER",
+		"GAME",
 		18,
-		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.25f),
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.1f),
+		Vector2f(0.5f, 0.4f),
+		0
+	));
+	this->buttons.add(WButton(
+		SAVE_BTN,
+		this->font,
+		"SAVE",
+		18,
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f - 100.f),
+		Vector2f(0.5f, 0.4f),
+		0
+	));
+	this->buttons.add(WButton(
+		BACKGROUNDS_BTN,
+		this->font,
+		"Backgrounds",
+		18,
+		Vector2f(this->windowBounds.x * 0.25f - 300.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.7f, 0.4f),
+		0
+	));
+	this->buttons.add(WButton(
+		TILES_BTN,
+		this->font,
+		"Reg. tails",
+		18,
+		Vector2f(this->windowBounds.x * 0.25f, this->windowBounds.y * 0.85f),
+		Vector2f(0.7f, 0.4f),
+		0
+	));
+	this->buttons.add(WButton(
+		ENEMIES_BTN,
+		this->font,
+		"Enemies",
+		18,
+		Vector2f(this->windowBounds.x * 0.25f + 300.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.7f, 0.4f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -37,7 +81,8 @@ void ConstructorMenu::initButtons() {
 		this->font,
 		"EXIT -->",
 		18,
-		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.75f),
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.5f, 0.4f),
 		0
 	));
 }
@@ -57,8 +102,10 @@ void ConstructorMenu::updateTimers(const float& dt) {
 		this->keyTime += 1.f * dt * this->dtMultiplier;
 }
 
-void ConstructorMenu::updateBackground(Vector2f& mPos, const float& dt) {
-
+void ConstructorMenu::updateBackground(Vector2f& mPos) {
+	this->spriteBackground.setPosition(
+		-mPos.x / 2.5f - this->windowBounds.x / 10,
+		-mPos.y / 2.5f - this->windowBounds.y / 10);
 }
 
 void ConstructorMenu::updateButtons(Vector2f& mPos) {
@@ -90,14 +137,14 @@ void ConstructorMenu::update(Vector2f& mPos, const float& dt) {
 	this->updateTimers(dt);
 
 	// Background update
-	this->updateBackground(mPos, dt);
+	this->updateBackground(mPos);
 
 	// Buttons update
 	this->updateButtons(mPos);
 }
 
 void ConstructorMenu::drawBackground(RenderTarget& target) {
-
+	target.draw(this->spriteBackground);
 }
 
 void ConstructorMenu::drawButtons(RenderTarget& target) {

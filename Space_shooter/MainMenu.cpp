@@ -24,7 +24,14 @@ MainMenu::~MainMenu() {}
 
 
 void MainMenu::initBackground() {
-
+	this->background.loadFromFile("Textures/Backgrounds/bgMainMenu.png");
+	this->spriteBackground.setTexture(this->background);
+	this->spriteBackground.setScale(
+		this->windowBounds.x / this->spriteBackground.getGlobalBounds().width * 1.5f,
+		this->windowBounds.y / this->spriteBackground.getGlobalBounds().height * 1.5f);
+	this->spriteBackground.setPosition(
+		-this->spriteBackground.getGlobalBounds().width * 0.25f,
+		-this->spriteBackground.getGlobalBounds().height * 0.25f);
 }
 
 void MainMenu::initButtons() {
@@ -33,7 +40,8 @@ void MainMenu::initButtons() {
 		this->font,
 		"MAP MAKER",
 		18,
-		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.25f),
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.1f),
+		Vector2f(0.6f, 0.4f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -41,7 +49,8 @@ void MainMenu::initButtons() {
 		this->font, 
 		"NORMAL", 
 		18, 
-		Vector2f(this->windowBounds.x * 0.75f - 200.f, this->windowBounds.y * 0.75f),
+		Vector2f(this->windowBounds.x * 0.75f - 200.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.5f, 0.4f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -49,7 +58,8 @@ void MainMenu::initButtons() {
 		this->font, 
 		"SURVIVAL", 
 		18, 
-		Vector2f(this->windowBounds.x * 0.75f, this->windowBounds.y * 0.75f),
+		Vector2f(this->windowBounds.x * 0.75f, this->windowBounds.y * 0.85f),
+		Vector2f(0.5f, 0.4f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -57,7 +67,8 @@ void MainMenu::initButtons() {
 		this->font, 
 		"EXIT -->", 
 		18, 
-		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.75f),
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.5f, 0.4f),
 		0
 	));
 }
@@ -77,8 +88,10 @@ void MainMenu::updateTimers(const float& dt) {
 		this->keyTime += 1.f * dt * this->dtMultiplier;
 }
 
-void MainMenu::updateBackground(Vector2f& mPos, const float& dt) {
-
+void MainMenu::updateBackground(Vector2f& mPos) {
+	this->spriteBackground.setPosition(
+		 - mPos.x / 2.5f - this->windowBounds.x / 10,
+		 - mPos.y / 2.5f - this->windowBounds.y / 10);
 }
 
 void MainMenu::updateButtons(Vector2f &mPos) {
@@ -120,14 +133,14 @@ void MainMenu::update(Vector2f& mPos, const float& dt) {
 	this->updateTimers(dt);
 
 	// Background update
-	this->updateBackground(mPos, dt);
+	this->updateBackground(mPos);
 	
 	// Buttons update
 	this->updateButtons(mPos);
 }
 
 void MainMenu::drawBackground(RenderTarget& target) {
-
+	target.draw(this->spriteBackground);
 }
 
 void MainMenu::drawButtons(RenderTarget& target) {

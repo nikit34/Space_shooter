@@ -26,7 +26,7 @@ public:
 
 	// Update
 	void updateTimers(const float& dt);
-	void updateBackground(Vector2f& mPos, const float& dt);
+	void updateBackground(Vector2f& mPos);
 	void updateButtons(Vector2f& mPos);
 	void update(Vector2f& mPos, const float& dt);
 
@@ -39,16 +39,19 @@ public:
 
 private:
 	RenderWindow* window;
+	Vector2u windowBounds;
 	float dtMultiplier;
 	float keyTimeMax;
 	float keyTime;
+
 	Font font;
-	Vector2u windowBounds;
+	Texture background;
+	Sprite spriteBackground;
 
 	bool exitProgram;
 	bool view;
 
 	bool constructor;
 
-	enum buttons { GAME_BTN = 0, EXIT_BTN };
+	enum buttons { GAME_BTN = 0, SAVE_BTN, BACKGROUNDS_BTN, TILES_BTN, ENEMIES_BTN, EXIT_BTN };
 };
