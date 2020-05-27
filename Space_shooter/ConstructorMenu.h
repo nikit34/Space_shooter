@@ -2,15 +2,13 @@
 #include"Wingman.h"
 #include"WButton.h"
 
-static enum Mode { Survival = 0, Regular };
 
-class MainMenu {
+class ConstructorMenu {
 public:
-	MainMenu(
-		RenderWindow* window, 
-		int mode
+	ConstructorMenu(
+		RenderWindow* window
 	);
-	virtual ~MainMenu();
+	virtual ~ConstructorMenu();
 
 	// Init
 	void initBackground();
@@ -19,13 +17,12 @@ public:
 
 	// Accessors
 	inline bool getExit()const { return this->exitProgram; }
-	inline int getMode()const { return this->mode; }
-	inline bool viewMainMenu()const { return this->view; }
-	inline bool getStatGame()const { return this->game; }
+	inline bool viewConstructorMenu()const { return this->view; }
+	inline bool getStatConstructor()const { return this->constructor; }
 
 	// Setters
-	inline void setViewMainMenu(bool view) { this->view = view; }
-	inline void setStatGame(bool game) { this->game = game; }
+	inline void setViewConstructorMenu(bool view) { this->view = view; }
+	inline void setStatConstructor(bool constructor) { this->constructor = constructor; }
 
 	// Update
 	void updateTimers(const float& dt);
@@ -51,9 +48,7 @@ private:
 	bool exitProgram;
 	bool view;
 
-	bool game;
-	int mode;
- 
-	enum buttons { CONSTRUCTOR_BTN = 0, NORMAL_MODE_BTN, SURVIVAL_MODE_BTN, EXIT_BTN };
-};
+	bool constructor;
 
+	enum buttons { GAME_BTN = 0, EXIT_BTN };
+};

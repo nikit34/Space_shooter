@@ -1,4 +1,4 @@
-#include "GameMapMaker.h"
+#include"GameMapMaker.h"
 
 
 enum textures { player = 0, laser01, missile01 };
@@ -12,7 +12,9 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 	this->backgroundIndex = 0;
 	this->backgroundWidth = Wingman::backgroundSize;
 	this->backgroundHeight = Wingman::backgroundSize;
+
 	this->stage = nullptr;
+	this->constructorMenu = nullptr;
 
 	// tiles
 	this->tileCollider = false;
@@ -32,26 +34,10 @@ GameMapMaker::GameMapMaker(RenderWindow* window) {
 
 GameMapMaker::~GameMapMaker() {
 	delete this->stage;
+	delete this->constructorMenu;
 }
 
 
-
-void GameMapMaker::toggleFullscreen() {
-	if (Keyboard::isKeyPressed(Keyboard::F11) && this->keyTime >= this->keyTimeMax) {
-		this->keyTime = 0.f;
-
-		if (fullscreen) {
-			this->fullscreen = false;
-			this->window->close();
-			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Default);
-		}
-		else {
-			this->fullscreen = true;
-			this->window->close();
-			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Fullscreen);
-		}
-	}
-}
 
 void GameMapMaker::newStage() {
 	unsigned mapSizeX = 0;
@@ -227,11 +213,11 @@ void GameMapMaker::setEnemySpawner() {
 }
 
 void GameMapMaker::initialize() {
+	// Init main menu
+	this->initMenu();
+
 	// Init view
 	this->initView();
-
-	// Init textures
-	this->initTextures();
 
 	// Init map
 	this->initMap();
@@ -239,20 +225,17 @@ void GameMapMaker::initialize() {
 	// Init text
 	this->initText();
 
-	// Init buttons
-	this->initButtons();
-
 	// Init UI
 	this->initUI();
+}
+
+void GameMapMaker::initMenu() {
+	this->constructorMenu = new ConstructorMenu(this->window);
 }
 
 void GameMapMaker::initView() {
 	this->mainView.setSize(Vector2f(this->window->getSize()));
 	this->mainView.setCenter(Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
-}
-
-void GameMapMaker::initTextures() {
-	
 }
 
 void GameMapMaker::initMap() {
@@ -279,10 +262,6 @@ void GameMapMaker::initText() {
 	this->enemySpawnerText.setPosition(Vector2f(this->mousePosWindow));
 }
 
-void GameMapMaker::initButtons() {
-
-}
-
 void GameMapMaker::initUI() {
 	this->windowUI = true;
 
@@ -301,35 +280,63 @@ void GameMapMaker::initUI() {
 void GameMapMaker::update(const float& dt) {
 	// Timers update
 	this->updateTimers(dt);
-
-	// Mouse positions
-	this->updateMousePositions();
 	
 	// Fullscreen
 	this->toggleFullscreen();
 
-	// General controls
-	this->updateControls();
+	// Mouse positions
+	this->updateMousePositions();
 
-	// Map
-	this->mapUpdate(dt);
+	// Pause constructor
+	this->stopConstructor();
 
-	// Text update
-	this->updateText();
+	// Start edit
+	if (!this->constructorMenu->viewConstructorMenu()) {
 
-	// Button update
-	this->updateButtons();
+		// Set mode
+		this->setMode();
 
-	// UI update
-	this->updateUI();
+		// General controls
+		this->updateControls();
 
-	// View
-	this->updateView(dt);
+		// Map
+		this->updateMap(dt);
+
+		// Text update
+		this->updateText();
+
+		// UI update
+		this->updateUI();
+
+		// View
+		this->updateView(dt);
+	}
+	else if (this->constructorMenu->viewConstructorMenu()) {
+		this->updateConstructorMenu(dt);
+	}
 }
 
 void GameMapMaker::updateTimers(const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
 		this->keyTime += 1.f * dt * this->dtMultiplier;
+}
+
+
+void GameMapMaker::toggleFullscreen() {
+	if (Keyboard::isKeyPressed(Keyboard::F11) && this->keyTime >= this->keyTimeMax) {
+		this->keyTime = 0.f;
+
+		if (fullscreen) {
+			this->fullscreen = false;
+			this->window->close();
+			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Default);
+		}
+		else {
+			this->fullscreen = true;
+			this->window->close();
+			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Fullscreen);
+		}
+	}
 }
 
 void GameMapMaker::updateMousePositions() {
@@ -354,8 +361,19 @@ void GameMapMaker::updateMousePositions() {
 	}
 }
 
-void GameMapMaker::mapUpdate(const float &dt) {
-	this->stage->update(dt, this->mainView, true);
+void GameMapMaker::stopConstructor() {
+	if (Keyboard::isKeyPressed(Keyboard::M) && this->keyTime >= this->keyTimeMax) {
+		if (this->constructorMenu->viewConstructorMenu())
+			this->constructorMenu->setViewConstructorMenu(false);
+		else
+			this->constructorMenu->setViewConstructorMenu(true);
+
+		this->keyTime = 0.f;
+	}
+}
+
+void GameMapMaker::setMode() {
+
 }
 
 void GameMapMaker::updateControls() {
@@ -520,6 +538,10 @@ void GameMapMaker::updateAddRemoveTiles() {
 	}
 }
 
+void GameMapMaker::updateMap(const float& dt) {
+	this->stage->update(dt, this->mainView, true);
+}
+
 void GameMapMaker::updateText() {
 	if(this->windowUI) {
 		this->selectorText.setPosition(Vector2f(this->mousePosWindow.x + 20.f, this->mousePosWindow.y));
@@ -541,12 +563,6 @@ void GameMapMaker::updateText() {
 		"Random pos: " + std::to_string(this->enemyRandomSpawnPos) +
 		"\nType: " + std::to_string(this->enemyType) +
 		"\nLevel Interval: " + std::to_string(this->enemyLevelInterval));
-}
-
-void GameMapMaker::updateButtons() {
-	for (size_t i = 0; i < this->buttons.size(); i++) {
-		this->buttons[i].update(this->mousePosWorld);
-	}
 }
 
 void GameMapMaker::updateUI() {
@@ -584,6 +600,10 @@ void GameMapMaker::updateView(const float &dt) {
 	}
 }
 
+void GameMapMaker::updateConstructorMenu(const float& dt) {
+	this->constructorMenu->update(this->mousePosWorld, dt);
+}
+
 
 
 void GameMapMaker::draw() {
@@ -609,6 +629,9 @@ void GameMapMaker::draw() {
 		this->drawUIView();
 	}
 
+	// View constructor menu
+	this->drawConstructorMenu();
+	
 	// Finish draw
 	this->window->display();
 }
@@ -630,8 +653,10 @@ void GameMapMaker::drawUIWindow() {
 
 void GameMapMaker::drawUIView() {
 	this->window->draw(this->selector);
-	for (size_t i = 0; i < this->buttons.size(); i++) {
-		this->buttons[i].draw(*this->window);
-	}
+}
+
+void GameMapMaker::drawConstructorMenu() {
+	if (this->constructorMenu->viewConstructorMenu())
+		this->constructorMenu->draw(*this->window);
 }
 

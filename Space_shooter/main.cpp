@@ -14,8 +14,6 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!
 
 
-bool MAPMAKER = false;
-
 int main() {
 	srand(time(NULL));
 
@@ -38,16 +36,22 @@ int main() {
 		}
 		dt = clock.restart().asSeconds();
 
-		if (game.getStatConstructor()) {
-			gameMapMaker.update(dt);
-			gameMapMaker.draw();
-		}
-		else {
+		if (game.getStatGame() && !gameMapMaker.getStatConstructor()) {
 			game.update(dt);
 			game.draw();
+			if (!game.getStatGame()) {
+				gameMapMaker.setStatConstructor(true);
+			}
 		}
-
-		if (game.getExit()) {
+		if (gameMapMaker.getStatConstructor() && !game.getStatGame()) {
+			gameMapMaker.update(dt);
+			gameMapMaker.draw();
+			if (!gameMapMaker.getStatConstructor()) {
+				game.setStatGame(true);
+			}
+		}
+		
+		if (game.getExit() || gameMapMaker.getExit()) {
 			// DEBUG - TODO: COMMENT!!!
 			// _CrtDumpMemoryLeaks();
 			///////////////////////////

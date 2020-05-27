@@ -12,10 +12,11 @@ public:
 	// Accessors
 	inline RenderWindow& getWindow() { return *this->window; }
 	inline bool getExit()const { return this->mainMenu->getExit(); }
-	inline bool getStatConstructor()const { return this->mainMenu->getStatConstructor(); }
+	inline bool getStatGame()const { return this->mainMenu->getStatGame(); }
 
 	// Setters
 	void setMode();
+	inline void setStatGame(bool game) { this->mainMenu->setStatGame(game); }
 
 	// Functions
 	void initRT();
@@ -44,13 +45,13 @@ public:
 	void textTagsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
 	void powerupsUpdate(const float& dt);
-	void mapUpdate(const float& dt);
+	void updateMap(const float& dt);
 	void particlesUpdate(const float& dt);
 	void pickupsUpdate(const float& dt);
 	void setEndingScoreboard();
 	void restartUpdate();
 	void updateMousePositions();
-	void updateControls(const float& dt);
+	void updateMainMenu(const float& dt);
 	void updateUIPlayer(int index);
 	void updateUIEnemy(int index);
 

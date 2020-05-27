@@ -12,12 +12,14 @@ public:
 
 	// Accessors
 	inline RenderWindow& getWindow() { return *this->window; }
+	inline bool getExit()const { return this->constructorMenu->getExit(); }
+	inline bool getStatConstructor()const { return this->constructorMenu->getStatConstructor(); }
 
 	// Setters
-
+	void setMode();
+	inline void setStatConstructor(bool constructor) { this->constructorMenu->setStatConstructor(constructor); }
+	
 	// Functions
-	void toggleFullscreen();
-
 	void newStage();
 	void saveStage();
 	void loadStage();
@@ -25,31 +27,36 @@ public:
 	void setEnemySpawner();
 
 	void initView();
-	void initTextures();
 	void initMap();
 	void initText();
-	void initButtons();
+	void initMenu();
 	void initUI();
 	void initialize();
 	
-	void updateMousePositions();
-	void updateView(const float& dt);
-	void updateControls();
-	void updateAddRemoveTiles();
-	void updateText();
-	void updateButtons();
-	void updateUI();
 	void update(const float& dt);
 	void updateTimers(const float& dt);
-	void mapUpdate(const float& dt);
+	void toggleFullscreen(); 
+	void updateMousePositions();
+	void stopConstructor();
+	void updateControls();
+	void updateAddRemoveTiles();
+	void updateMap(const float& dt);
+	void updateText();
+	void updateUI();
+	void updateView(const float& dt);
+	void updateConstructorMenu(const float& dt);
 
 	void draw();
 	void drawText();
 	void drawMap();
-	void drawUIView();
 	void drawUIWindow();
+	void drawUIView();
+	void drawConstructorMenu();
 
 private:
+	// Menu constructor
+	ConstructorMenu* constructorMenu;
+
 	// GameMapMaker
 	RenderWindow* window;
 	View mainView;
@@ -86,9 +93,6 @@ private:
 	int textureY;
 	RectangleShape selector;
 	Sprite textureSelector;
-
-	// Buttons
-	dArr<WButton> buttons;
 
 	// Text
 	Font font;

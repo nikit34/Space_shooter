@@ -247,7 +247,7 @@ void Game::update(const float& dt) {
 		this->updateScore();
 
 		//Map update
-		this->mapUpdate(dt);
+		this->updateMap(dt);
 
 		// Update players, bullets and combat
 		this->playerUpdate(dt);
@@ -279,7 +279,7 @@ void Game::update(const float& dt) {
 	}
 	else if(this->mainMenu->viewMainMenu()) {
 		// General controls
-		this->updateControls(dt);
+		this->updateMainMenu(dt);
 	}
 
 	// Restart if all player dead
@@ -310,6 +310,11 @@ void Game::toggleFullscreen() {
 			this->window->create(sf::VideoMode(1920, 1080), "SpaceGame", Style::Fullscreen);
 		}
 	}
+}
+
+void Game::updateMousePositions() {
+	this->mousePosWindow = Mouse::getPosition(*this->window); // pixel
+	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
 }
 
 void Game::stopGame() {
@@ -1070,7 +1075,7 @@ void Game::powerupsUpdate(const float& dt) {
 	}
 }
 
-void Game::mapUpdate(const float& dt) {
+void Game::updateMap(const float& dt) {
 	this->stage->update(dt, this->mainView, false);
 }
 
@@ -1224,12 +1229,7 @@ void Game::setMode() {
 	}
 }
 
-void Game::updateMousePositions() {
-	this->mousePosWindow = Mouse::getPosition(*this->window); // pixel
-	this->mousePosWorld = this->window->mapPixelToCoords(this->mousePosWindow); // coord
-}
-
-void Game::updateControls(const float& dt) {
+void Game::updateMainMenu(const float& dt) {
 	this->mainMenu->update(this->mousePosWorld, dt);
 }
 
