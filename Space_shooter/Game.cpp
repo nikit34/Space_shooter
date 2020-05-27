@@ -36,16 +36,66 @@ Game::~Game() {
 }
 
 
-void Game::initRT() {
-	this->mainRenderTexture.create(
-		this->window->getSize().x,
-		this->window->getSize().y);
-	this->mainRenderSprite.setTexture(this->mainRenderTexture.getTexture());
-}
 
-void Game::initView() {
-	this->mainView.setSize(Vector2f(this->window->getSize()));
-	this->mainView.setCenter(Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
+
+
+void Game::initialize() {
+	// Init fonts
+	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
+
+	// Init textures
+	this->initTextures();
+
+	// Init main menu
+	this->initMenu();
+
+	// Init view
+	this->initView();
+
+	// Init map
+	this->initMap();
+
+	// Init players
+	this->players.add(Player());
+
+	this->players.add(Player(
+		Keyboard::Numpad8,
+		Keyboard::Numpad5,
+		Keyboard::Numpad4,
+		Keyboard::Numpad6,
+		Keyboard::RControl,
+		Keyboard::RShift,
+		Keyboard::Numpad7,
+		Keyboard::Numpad1,
+		Keyboard::Numpad2,
+		Keyboard::Numpad3,
+		Keyboard::Numpad0
+	));
+
+	//	this->players.add(Player(
+		//	Keyboard::I,
+		//	Keyboard::K,
+		//	Keyboard::J,
+		//	Keyboard::L,
+		//	Keyboard::RAlt,
+		//	Keyboard::Period,
+		//	Keyboard::Comma,
+		//	Keyboard::Num8,
+		//	Keyboard::Num9,
+		//	Keyboard::Num0,
+		//	Keyboard::Add));
+
+	this->playersAlive = this->players.size();
+
+	// Init enemies
+
+	this->enemySpawnTimerMax = 35.f;
+	this->enemySpawnTimer = this->enemySpawnTimerMax;
+
+	// Init bosses
+	this->bossEncounter = false;
+
+	this->initUI();
 }
 
 void Game::initTextures() {
@@ -80,6 +130,11 @@ void Game::initTextures() {
 
 void Game::initMenu() {
 	this->mainMenu = new MainMenu(this->window, this->mode);
+}
+
+void Game::initView() {
+	this->mainView.setSize(Vector2f(this->window->getSize()));
+	this->mainView.setCenter(Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
 }
 
 void Game::initMap() {
@@ -147,68 +202,7 @@ void Game::initUI() {
 	this->playerStatsTextBack.setOutlineColor(Color(255, 255, 255, 200));
 }
 
-void Game::initialize() {
-	// Init fonts
-	this->font.loadFromFile("Fonts/Dosis-Light.ttf");
 
-	// Init textures
-	this->initTextures();
-
-	// Init main menu
-	this->initMenu();
-
-	// Init view
-	this->initView();
-
-	// Init map
-	this->initMap();
-
-	// Init players
-	this->players.add(Player());
-
-	this->players.add(Player(
-		Keyboard::Numpad8,
-		Keyboard::Numpad5,
-		Keyboard::Numpad4,
-		Keyboard::Numpad6,
-		Keyboard::RControl,
-		Keyboard::RShift,
-		Keyboard::Numpad7,
-		Keyboard::Numpad1,
-		Keyboard::Numpad2,
-		Keyboard::Numpad3,
-		Keyboard::Numpad0
-	));
-
-	//	this->players.add(Player(
-		//	Keyboard::I,
-		//	Keyboard::K,
-		//	Keyboard::J,
-		//	Keyboard::L,
-		//	Keyboard::RAlt,
-		//	Keyboard::Period,
-		//	Keyboard::Comma,
-		//	Keyboard::Num8,
-		//	Keyboard::Num9,
-		//	Keyboard::Num0,
-		//	Keyboard::Add));
-
-	this->playersAlive = this->players.size();
-
-	// Init enemies
-
-	this->enemySpawnTimerMax = 35.f;
-	this->enemySpawnTimer = this->enemySpawnTimerMax;
-
-	// Init bosses
-	this->bossEncounter = false;
-
-	this->initUI();
-}
-
-void Game::updateView(const float& dt) {
-	this->mainView.move(this->stage->getScrollSpeed() * dt * this->dtMultiplier, 0.f);
-}
 
 
 
@@ -288,8 +282,6 @@ void Game::update(const float& dt) {
 	}
 }
 
-
-
 void Game::updateTimers(const float& dt) {
 	if (this->keyTime < this->keyTimeMax)
 		this->keyTime += 1.f * dt * this->dtMultiplier;
@@ -347,6 +339,15 @@ void Game::updateWhilePaused(const float& dt) {
 	}
 }
 
+void Game::setMode() {
+	if (this->mainMenu->getMode() == Mode::Survival) {
+		this->mode = Mode::Survival;
+	}
+	else if (this->mainMenu->getMode() == Mode::Regular) {
+		this->mode = Mode::Regular;
+	}
+}
+
 void Game::updateTimersUnpaused(const float& dt) {
 	// Enemy spawn timer
 	if (this->enemySpawnTimer < this->enemySpawnTimerMax)
@@ -366,6 +367,10 @@ void Game::updateTimersUnpaused(const float& dt) {
 	}
 }
 
+void Game::updateView(const float& dt) {
+	this->mainView.move(this->stage->getScrollSpeed() * dt * this->dtMultiplier, 0.f);
+}
+
 void Game::updateDifficulty() {
 	if ((int)this->difficultyTimer % 1000 == 0) {
 		if(this->enemySpawnTimer > 10)
@@ -381,6 +386,10 @@ void Game::updateScore() {
 		this->multiplierAdder = 0;
 		this->scoreMultiplier++;
 	}
+}
+
+void Game::updateMap(const float& dt) {
+	this->stage->update(dt, this->mainView, false);
 }
 
 void Game::playerUpdate(const float& dt) {
@@ -412,6 +421,50 @@ void Game::playerUpdate(const float& dt) {
 				"\nDifficulty: " + std::to_string(this->difficulty) +
 				"\nBest Score/Second: " + std::to_string((int)round(this->bestScoreSecond))
 			);
+		}
+	}
+}
+
+void Game::playerCollisionUpdate(const float& dt, const int i) {
+	// Index calculations
+	if (this->players[i].isAlive()) {
+		this->fromCol = (this->players[i].getPosition().x - Wingman::gridSize * 2) / Wingman::gridSize;
+		if (fromCol <= 0)
+			fromCol = 0;
+		if (fromCol >= this->stage->getSizeX())
+			fromCol = this->stage->getSizeX();
+
+		this->toCol = (this->players[i].getPosition().x + Wingman::gridSize * 2) / Wingman::gridSize + 1;
+		if (toCol <= 0)
+			toCol = 0;
+		if (toCol >= this->stage->getSizeX())
+			toCol = this->stage->getSizeX();
+
+		this->fromRow = (this->players[i].getPosition().y - Wingman::gridSize * 2) / Wingman::gridSize;
+		if (fromRow <= 0)
+			fromRow = 0;
+		if (fromRow >= this->stage->getSizeY())
+			fromRow = this->stage->getSizeY();
+
+		this->toRow = (this->players[i].getPosition().y + Wingman::gridSize * 2) / Wingman::gridSize + 1;
+		if (toRow <= 0)
+			toRow = 0;
+		if (toRow >= this->stage->getSizeY())
+			toRow = this->stage->getSizeY();
+
+		for (size_t j = fromCol; j < toCol; j++) {
+			for (size_t k = fromRow; k < toRow; k++) {
+				// Collision
+				if (!this->stage->getTiles()[j].isNull(k) &&
+					this->stage->getTiles()[j][k].getIsCollider() &&
+					this->players[i].getBounds().intersects(this->stage->getTiles()[j][k].getBounds())
+					) {
+					this->players[i].move(
+						-this->players[i].getNormDir().x * 10.f * dt * this->dtMultiplier,
+						-this->players[i].getNormDir().y * 10.f * dt * this->dtMultiplier);
+					this->players[i].resetVelocity();
+				}
+			}
 		}
 	}
 }
@@ -624,50 +677,6 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 		}
 		if(bulletRemoved)
 			this->players[i].removeBullet(k);
-	}
-}
-
-void Game::playerCollisionUpdate(const float& dt, const int i) {
-	// Index calculations
-	if (this->players[i].isAlive()) {
-		this->fromCol = (this->players[i].getPosition().x - Wingman::gridSize * 2) / Wingman::gridSize;
-		if (fromCol <= 0)
-			fromCol = 0;
-		if (fromCol >= this->stage->getSizeX())
-			fromCol = this->stage->getSizeX();
-
-		this->toCol = (this->players[i].getPosition().x + Wingman::gridSize * 2) / Wingman::gridSize + 1;
-		if (toCol <= 0)
-			toCol = 0;
-		if (toCol >= this->stage->getSizeX())
-			toCol = this->stage->getSizeX();
-
-		this->fromRow = (this->players[i].getPosition().y - Wingman::gridSize * 2) / Wingman::gridSize;
-		if (fromRow <= 0)
-			fromRow = 0;
-		if (fromRow >= this->stage->getSizeY())
-			fromRow = this->stage->getSizeY();
-
-		this->toRow = (this->players[i].getPosition().y + Wingman::gridSize * 2) / Wingman::gridSize + 1;
-		if (toRow <= 0)
-			toRow = 0;
-		if (toRow >= this->stage->getSizeY())
-			toRow = this->stage->getSizeY();
-
-		for (size_t j = fromCol; j < toCol; j++) {
-			for (size_t k = fromRow; k < toRow; k++) {
-				// Collision
-				if (!this->stage->getTiles()[j].isNull(k) &&
-					this->stage->getTiles()[j][k].getIsCollider() &&
-					this->players[i].getBounds().intersects(this->stage->getTiles()[j][k].getBounds())
-					) {
-					this->players[i].move(
-						-this->players[i].getNormDir().x * 10.f * dt * this->dtMultiplier,
-						-this->players[i].getNormDir().y * 10.f * dt * this->dtMultiplier);
-					this->players[i].resetVelocity();
-				}
-			}
-		}
 	}
 }
 
@@ -1046,52 +1055,6 @@ void Game::upgradesUpdate(const float& dt) {
 	}
 }
 
-void Game::powerupsUpdate(const float& dt) {
-	bool powerupRemoved = false;
-	for (size_t i = 0; i < this->powerups.size(); i++) {
-		this->powerups[i].update(dt);
-
-		for (size_t k = 0; k < this->players.size(); k++) {
-			if (this->powerups[i].collide(this->players[k].getBounds())) {
-				switch (this->powerups[i].getType()) {
-				case Powerup::RAPIDFIRE: // RF
-					this->players[k].enablePowerupRF();
-					break;
-				case Powerup::EXPERIENCE_DOUBLE: // XP
-					this->players[k].enablePowerupXP();
-					break;
-				default:
-					break;
-				}
-				powerupRemoved = true;
-			}
-		}
-
-		if (this->powerups[i].canRemove()) {
-			powerupRemoved = true;
-		}
-		if (powerupRemoved)
-			this->powerups.remove(i);
-	}
-}
-
-void Game::updateMap(const float& dt) {
-	this->stage->update(dt, this->mainView, false);
-}
-
-void Game::particlesUpdate(const float& dt) {
-	bool particleRemoved = false;
-	for (size_t i = 0; i < this->particles.size() && !particleRemoved; i++) {
-		this->particles[i].update(dt);
-	
-		if (this->particles[i].readyToDel())
-			particleRemoved = true;
-
-		if(particleRemoved)
-			this->particles.remove(i);
-	}
-}
-
 void Game::pickupsUpdate(const float& dt) {
 	bool pickupRemoved = false;
 	for (size_t i = 0; i < this->pickups.size() && !pickupRemoved; i++) {
@@ -1170,22 +1133,46 @@ void Game::pickupsUpdate(const float& dt) {
 	}
 }
 
-void Game::setEndingScoreboard() {
-	this->scoreTime = (int)this->scoreTimer.getElapsedTime().asSeconds();
+void Game::powerupsUpdate(const float& dt) {
+	bool powerupRemoved = false;
+	for (size_t i = 0; i < this->powerups.size(); i++) {
+		this->powerups[i].update(dt);
 
-	if (this->scoreTime == 0)
-		this->scoreTime = 1;
+		for (size_t k = 0; k < this->players.size(); k++) {
+			if (this->powerups[i].collide(this->players[k].getBounds())) {
+				switch (this->powerups[i].getType()) {
+				case Powerup::RAPIDFIRE: // RF
+					this->players[k].enablePowerupRF();
+					break;
+				case Powerup::EXPERIENCE_DOUBLE: // XP
+					this->players[k].enablePowerupXP();
+					break;
+				default:
+					break;
+				}
+				powerupRemoved = true;
+			}
+		}
 
-	this->gameOverText.setString(std::string(
-		"GAME OVER:\nScore: " +
-		std::to_string(this->score) + "\n" +
-		"Time: " + std::to_string(this->scoreTime) + "\n" +
-		"Score/Second: " + std::to_string((int)round((double)this->score / (double)this->scoreTime)) + "\n" +
-		"F1 to RESTART"
-	));
+		if (this->powerups[i].canRemove()) {
+			powerupRemoved = true;
+		}
+		if (powerupRemoved)
+			this->powerups.remove(i);
+	}
+}
 
-	if ((double)this->score / (double)this->scoreTime > this->bestScoreSecond)
-		this->bestScoreSecond = (double)this->score / (double)this->scoreTime;
+void Game::particlesUpdate(const float& dt) {
+	bool particleRemoved = false;
+	for (size_t i = 0; i < this->particles.size() && !particleRemoved; i++) {
+		this->particles[i].update(dt);
+
+		if (this->particles[i].readyToDel())
+			particleRemoved = true;
+
+		if (particleRemoved)
+			this->particles.remove(i);
+	}
 }
 
 void Game::restartUpdate() {
@@ -1220,95 +1207,27 @@ void Game::restartUpdate() {
 	}
 }
 
-void Game::setMode() {
-	if (this->mainMenu->getMode() == Mode::Survival) {
-		this->mode = Mode::Survival;
-	}
-	else if (this->mainMenu->getMode() == Mode::Regular) {
-		this->mode = Mode::Regular;
-	}
+void Game::setEndingScoreboard() {
+	this->scoreTime = (int)this->scoreTimer.getElapsedTime().asSeconds();
+
+	if (this->scoreTime == 0)
+		this->scoreTime = 1;
+
+	this->gameOverText.setString(std::string(
+		"GAME OVER:\nScore: " +
+		std::to_string(this->score) + "\n" +
+		"Time: " + std::to_string(this->scoreTime) + "\n" +
+		"Score/Second: " + std::to_string((int)round((double)this->score / (double)this->scoreTime)) + "\n" +
+		"F1 to RESTART"
+	));
+
+	if ((double)this->score / (double)this->scoreTime > this->bestScoreSecond)
+		this->bestScoreSecond = (double)this->score / (double)this->scoreTime;
 }
 
 void Game::updateMainMenu(const float& dt) {
 	this->mainMenu->update(this->mousePosWorld, dt);
 }
-
-void Game::updateUIPlayer(int index) {
-	if (index >= 0 && index < this->players.size()) {
-		// Follow text
-		this->followPlayerText.setPosition(
-			this->players[index].getPosition().x - 75.f,
-			this->players[index].getPosition().y - 5.f);
-		this->followPlayerText.setString(
-			std::to_string(this->players[index].getPlayerNr())
-			+ "           " +
-			this->players[index].getHpAsString()
-			+ "\n\n\n\n"
-			+ std::to_string(this->players[index].getLevel()));
-
-		// Bars
-		this->playerExpBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 70.f);
-		this->playerExpBar.setScale(
-			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
-			1.f);
-
-		this->playerShieldBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 80.f);
-		if (this->players[index].getShieldRechargeTimer() < this->players[index].getShieldRechargeTimerMax()) {
-			this->playerShieldBar.setScale((static_cast<float>
-				(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()),
-				1.f);
-			if (static_cast<int>(this->players[index].getShieldRechargeTimer()) % 5 == 0)
-				this->playerShieldBar.setFillColor(Color::Red);
-			else
-				this->playerShieldBar.setFillColor(Color(200.f, 200.f, 200.f, 200.f));
-		}
-		else {
-			this->playerShieldBar.setScale((static_cast<float>
-				(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()),
-				1.f);
-			this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
-		}
-
-		this->playerPowerupBar.setPosition(
-			this->players[index].getPosition().x - 50.f,
-			this->players[index].getPosition().y + 90.f);
-		this->playerPowerupBar.setScale((static_cast<float>
-			(this->players[index].getPowerupTimer()) / this->players[index].getPowerupTimerMax()),
-			1.f);
-
-		// Statics box with text
-		if (this->players[index].playerShowStatsIsPressed()) {
-			this->playerStatsText.setString(this->players[index].getStatsAsString());
-			this->playerStatsTextBack.setPosition(
-				this->players[index].getPosition().x - 80.f,
-				this->players[index].getPosition().y + 110.f
-			);
-			this->playerStatsTextBack.setSize(Vector2f(
-				this->playerStatsText.getGlobalBounds().width,
-				this->playerStatsText.getGlobalBounds().height
-			));
-			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
-		}
-	}
-}
-
-void Game::updateUIEnemy(int index) {
-	this->enemyText.setPosition(
-		this->enemies[index].getPosition().x,
-		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
-	);
-
-	this->enemyText.setString(
-		std::to_string(this->enemies[index].getHp())
-		+ "/" +
-		std::to_string(this->enemies[index].getHpMax())
-	);
-}
-
 
 
 
@@ -1379,6 +1298,69 @@ void Game::drawPlayer() {
 	}
 }
 
+void Game::updateUIPlayer(int index) {
+	if (index >= 0 && index < this->players.size()) {
+		// Follow text
+		this->followPlayerText.setPosition(
+			this->players[index].getPosition().x - 75.f,
+			this->players[index].getPosition().y - 5.f);
+		this->followPlayerText.setString(
+			std::to_string(this->players[index].getPlayerNr())
+			+ "           " +
+			this->players[index].getHpAsString()
+			+ "\n\n\n\n"
+			+ std::to_string(this->players[index].getLevel()));
+
+		// Bars
+		this->playerExpBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 70.f);
+		this->playerExpBar.setScale(
+			(static_cast<float>(this->players[index].getExp()) / this->players[index].getExpNext()),
+			1.f);
+
+		this->playerShieldBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 80.f);
+		if (this->players[index].getShieldRechargeTimer() < this->players[index].getShieldRechargeTimerMax()) {
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldRechargeTimer()) / this->players[index].getShieldRechargeTimerMax()),
+				1.f);
+			if (static_cast<int>(this->players[index].getShieldRechargeTimer()) % 5 == 0)
+				this->playerShieldBar.setFillColor(Color::Red);
+			else
+				this->playerShieldBar.setFillColor(Color(200.f, 200.f, 200.f, 200.f));
+		}
+		else {
+			this->playerShieldBar.setScale((static_cast<float>
+				(this->players[index].getShieldTimer()) / this->players[index].getShieldTimerMax()),
+				1.f);
+			this->playerShieldBar.setFillColor(Color(200.f, 0.f, 100.f, 200.f));
+		}
+
+		this->playerPowerupBar.setPosition(
+			this->players[index].getPosition().x - 50.f,
+			this->players[index].getPosition().y + 90.f);
+		this->playerPowerupBar.setScale((static_cast<float>
+			(this->players[index].getPowerupTimer()) / this->players[index].getPowerupTimerMax()),
+			1.f);
+
+		// Statics box with text
+		if (this->players[index].playerShowStatsIsPressed()) {
+			this->playerStatsText.setString(this->players[index].getStatsAsString());
+			this->playerStatsTextBack.setPosition(
+				this->players[index].getPosition().x - 80.f,
+				this->players[index].getPosition().y + 110.f
+			);
+			this->playerStatsTextBack.setSize(Vector2f(
+				this->playerStatsText.getGlobalBounds().width,
+				this->playerStatsText.getGlobalBounds().height
+			));
+			this->playerStatsText.setPosition(this->playerStatsTextBack.getPosition());
+		}
+	}
+}
+
 void Game::drawEnemies() {
 	for (size_t i = 0; i < this->enemies.size(); i++) {
 		this->enemies[i].draw(*this->window);
@@ -1392,6 +1374,19 @@ void Game::drawEnemies() {
 	for (size_t i = 0; i < Enemy::enemyBullets.size(); i++) {
 		Enemy::enemyBullets[i].draw(*this->window);
 	}
+}
+
+void Game::updateUIEnemy(int index) {
+	this->enemyText.setPosition(
+		this->enemies[index].getPosition().x,
+		this->enemies[index].getPosition().y - this->enemies[index].getGlobalBounds().height
+	);
+
+	this->enemyText.setString(
+		std::to_string(this->enemies[index].getHp())
+		+ "/" +
+		std::to_string(this->enemies[index].getHpMax())
+	);
 }
 
 void Game::drawPickups() {
@@ -1418,6 +1413,13 @@ void Game::drawParticles() {
 	}
 }
 
+void Game::drawTextTags() {
+	// Draw Texttags
+	for (size_t i = 0; i < this->textTags.size(); i++) {
+		this->textTags[i].draw(*this->window);
+	}
+}
+
 void Game::drawUI() {
 	// Game over text
 	if (this->playersAlive <= 0)
@@ -1434,13 +1436,3 @@ void Game::drawUI() {
 	if (this->mainMenu->viewMainMenu())
 		this->mainMenu->draw(*this->window);
 }
-
-void Game::drawTextTags() {
-	// Draw Texttags
-	for (size_t i = 0; i < this->textTags.size(); i++) {
-		this->textTags[i].draw(*this->window);
-	}
-}
-
-
-

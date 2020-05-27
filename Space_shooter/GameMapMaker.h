@@ -16,7 +16,6 @@ public:
 	inline bool getStatConstructor()const { return this->constructorMenu->getStatConstructor(); }
 
 	// Setters
-	void setMode();
 	inline void setStatConstructor(bool constructor) { this->constructorMenu->setStatConstructor(constructor); }
 	
 	// Functions
@@ -26,18 +25,19 @@ public:
 	void setBackground();
 	void setEnemySpawner();
 
+	void initialize();
+	void initMenu();
 	void initView();
 	void initMap();
 	void initText();
-	void initMenu();
 	void initUI();
-	void initialize();
 	
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen(); 
 	void updateMousePositions();
 	void stopConstructor();
+	void setMode();
 	void updateControls();
 	void updateAddRemoveTiles();
 	void updateMap(const float& dt);
@@ -47,8 +47,8 @@ public:
 	void updateConstructorMenu(const float& dt);
 
 	void draw();
-	void drawText();
 	void drawMap();
+	void drawText();
 	void drawUIWindow();
 	void drawUIView();
 	void drawConstructorMenu();

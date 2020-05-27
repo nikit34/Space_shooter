@@ -39,6 +39,8 @@ GameMapMaker::~GameMapMaker() {
 
 
 
+
+
 void GameMapMaker::newStage() {
 	unsigned mapSizeX = 0;
 	unsigned mapSizeY = 0;
@@ -274,6 +276,8 @@ void GameMapMaker::initUI() {
 
 	this->textureSelector.setTexture(Tile::textures);
 }
+
+
 
 
 
@@ -606,6 +610,8 @@ void GameMapMaker::updateConstructorMenu(const float& dt) {
 
 
 
+
+
 void GameMapMaker::draw() {
 	// Clear
 	this->window->clear();
@@ -637,13 +643,13 @@ void GameMapMaker::draw() {
 }
 
 
+void GameMapMaker::drawMap() {
+	this->stage->draw(*this->window, this->mainView, true, this->font);
+}
+
 void GameMapMaker::drawText() {
 	this->window->draw(this->selectorText);
 	this->window->draw(this->enemySpawnerText);
-}
-
-void GameMapMaker::drawMap() {
-	this->stage->draw(*this->window, this->mainView, true, this->font);
 }
 
 void GameMapMaker::drawUIWindow() {

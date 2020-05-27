@@ -15,50 +15,50 @@ public:
 	inline bool getStatGame()const { return this->mainMenu->getStatGame(); }
 
 	// Setters
-	void setMode();
 	inline void setStatGame(bool game) { this->mainMenu->setStatGame(game); }
 
 	// Functions
-	void initRT();
-	void initView();
+	void initialize();
 	void initTextures();
 	void initMenu();
+	void initView();
 	void initMap();
 	void initUI();
-	void initialize();
 
-	void updateView(const float& dt);
 	void update(const float& dt);
 	void updateTimers(const float& dt);
 	void toggleFullscreen();
+	void updateMousePositions();
 	void stopGame();
 	void updateWhilePaused(const float& dt);
+	void setMode();
 	void updateTimersUnpaused(const float& dt);
+	void updateView(const float& dt);
 	void updateDifficulty();
 	void updateScore();
+	void updateMap(const float& dt);
 	void playerUpdate(const float& dt);
-	void playerBulletUpdate(const float& dt, const int i);
 	void playerCollisionUpdate(const float& dt, const int i);
+	void playerBulletUpdate(const float& dt, const int i);
 	void enemyUpdate(const float& dt);
 	void enemySpawnUpdate(const float& dt);
 	void enemyBulletUpdate(const float& dt);
 	void textTagsUpdate(const float& dt);
 	void upgradesUpdate(const float& dt);
-	void powerupsUpdate(const float& dt);
-	void updateMap(const float& dt);
-	void particlesUpdate(const float& dt);
 	void pickupsUpdate(const float& dt);
-	void setEndingScoreboard();
+	void powerupsUpdate(const float& dt);
+	void particlesUpdate(const float& dt);
 	void restartUpdate();
-	void updateMousePositions();
+	void setEndingScoreboard();
 	void updateMainMenu(const float& dt);
-	void updateUIPlayer(int index);
-	void updateUIEnemy(int index);
+
 
 	void draw();
 	void drawMap();
 	void drawPlayer();
+	void updateUIPlayer(int index);
 	void drawEnemies();
+	void updateUIEnemy(int index);
 	void drawPickups();
 	void drawUpgrades();
 	void drawPowerups();
@@ -73,7 +73,6 @@ private:
 	// Game
 	RenderWindow* window;
 	View mainView;
-	RenderTexture mainRenderTexture;
 	Sprite mainRenderSprite;
 	float dtMultiplier;
 	float keyTimeMax;
