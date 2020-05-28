@@ -1452,6 +1452,7 @@ void Game::drawUI() {
 		this->window->draw(this->controlsText);
 
 	// View main menu
-	if (this->mainMenu->viewMainMenu())
+	if (this->mainMenu->viewMainMenu()) {
 		this->mainMenu->draw(*this->window);
+	}
 }

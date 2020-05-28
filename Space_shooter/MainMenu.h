@@ -50,6 +50,7 @@ private:
 	Font font;
 	Texture background;
 	Sprite spriteBackground;
+	Text instructionText;
 
 	bool exitProgram;
 	bool view;

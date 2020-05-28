@@ -32,6 +32,15 @@ void MainMenu::initBackground() {
 	this->spriteBackground.setPosition(
 		-this->spriteBackground.getGlobalBounds().width * 0.25f,
 		-this->spriteBackground.getGlobalBounds().height * 0.25f);
+
+	// Instruction text
+	this->instructionText.setFont(this->font);
+	this->instructionText.setCharacterSize(26);
+	this->instructionText.setOutlineThickness(2.f);
+	this->instructionText.setString(
+		"A: LEFT\nD: RIGHT\nW: UP\nS: DOWN\nSPACE: SHOOT\nRALT: SHIELD\nTAB: Stats window\nP: PAUSE/CONTROLS (START GAME)\nESC: QUIT\n1,2,3 & 4: CUSTOMIZE SHIP (CAN DO WHILE PAUSED!)\nF11: FULLSCREEN\n\nTOP-LEFT SHIP: Player number\nTOP-RIGHT SHIP: Hp/HpMax\nBOTTOM-LEFT SHIP: Level\nBOTTOM-RIGHT SHIP: Exp-bar\nBOTTOM-RIGHT SHIP: Shield-bar\n\nWARNING, SCORE-TIMER DOES NOT STOP WHEN PAUSED!"
+	);
+	this->instructionText.setPosition(50.f, 100.f);
 }
 
 void MainMenu::initButtons() {
@@ -49,7 +58,7 @@ void MainMenu::initButtons() {
 		this->font,
 		"PLAY",
 		20,
-		Vector2f(this->windowBounds.x * 0.25f, this->windowBounds.y * 0.85f),
+		Vector2f(this->windowBounds.x * 0.05f, this->windowBounds.y * 0.85f),
 		Vector2f(0.7f, 0.55f),
 		0
 	));
@@ -155,6 +164,7 @@ void MainMenu::update(Vector2f& mPos, const float& dt) {
 
 void MainMenu::drawBackground(RenderTarget& target) {
 	target.draw(this->spriteBackground);
+	target.draw(this->instructionText);
 }
 
 void MainMenu::drawButtons(RenderTarget& target) {
