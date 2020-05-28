@@ -111,6 +111,7 @@ void Game::initTextures() {
 
 	// Player
 	Player::initTextures();
+	Player::initSounds();
 
 	// Pickup 
 	Pickup::initTextures();

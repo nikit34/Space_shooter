@@ -25,6 +25,12 @@ int main() {
 	Game game(&window);
 	GameMapMaker gameMapMaker(&window);
 
+	Music music;
+	music.openFromFile("Sounds/bgMusic01.wav");
+	music.setLoop(true);
+	music.setVolume(60.f);
+	music.play();
+
 	// Game loop
 	while (window.isOpen()) {
 		Event event;

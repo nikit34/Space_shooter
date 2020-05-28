@@ -114,10 +114,16 @@ public:
 	static dArr<Texture> rWingTextures;
 	static dArr<Texture> cPitTextures;
 	static dArr<Texture> auraTextures;
-	
-	static void initTextures();
 
+	// Static sounds
+	static SoundBuffer shootBuffer;
+	static SoundBuffer hitArmorBuffer;
+	static Sound shootSound;
+	static Sound hitArmorSound;
+	
 	// Static
+	static void initTextures();
+	static void initSounds();
 	static unsigned players;
 
 	enum weapons { LASER_NORMAL = 0, MISSILE_LIGHT, MISSILE_HEAVY };

@@ -12,6 +12,13 @@ dArr<Texture> Player::rWingTextures;
 dArr<Texture> Player::cPitTextures;
 dArr<Texture> Player::auraTextures;
 
+// Sounds
+SoundBuffer Player::shootBuffer;
+SoundBuffer Player::hitArmorBuffer;
+Sound Player::shootSound;
+Sound Player::hitArmorSound;
+
+
 void Player::initTextures() {
 	Texture temp;
 
@@ -83,6 +90,12 @@ void Player::initTextures() {
 	}
 
 	in.close();
+}
+
+void Player::initSounds() {
+	//Shoot
+	Player::shootBuffer.loadFromFile("Sounds/player.wav");
+	Player::shootSound.setBuffer(Player::shootBuffer);
 }
 
 Player::Player(
@@ -517,6 +530,7 @@ void Player::movement(View& view, const float& dt, const float scrollSpeed) {
 void Player::combat(const float& dt) {
 	if (Keyboard::isKeyPressed(Keyboard::Key(this->controls[controls::SHOOT])) &&
 		this->shootTimer >= this->shootTimerMax) {
+
 		if (this->currentWeapon == Player::LASER_NORMAL) {
 			if (this->mainGunLevel == 0) {
 				// Create bullet
@@ -530,6 +544,9 @@ void Player::combat(const float& dt) {
 					2.f,
 					this->getDamage()
 				));
+
+
+				Player::shootSound.play();
 			}
 			else if (this->mainGunLevel == 1) {
 				this->bullets.add(Bullet(
@@ -552,6 +569,10 @@ void Player::combat(const float& dt) {
 					2.f,
 					this->getDamage()
 				));
+
+
+				Player::shootSound.play();
+				Player::shootSound.play();
 			}
 			else if (this->mainGunLevel == 2) {
 				this->bullets.add(Bullet(
@@ -584,6 +605,11 @@ void Player::combat(const float& dt) {
 					2.f,
 					this->getDamage()
 				));
+
+
+				Player::shootSound.play();
+				Player::shootSound.play();
+				Player::shootSound.play();
 			}
 			// Animate gun
 			this->mainGunSprite.move(-30.f, 0.f);
