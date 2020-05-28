@@ -124,6 +124,7 @@ void Game::initTextures() {
 
 	// Enemies
 	Enemy::initTextures();
+	Enemy::initSounds();
 
 	// Particles
 	Particle::initTextures();

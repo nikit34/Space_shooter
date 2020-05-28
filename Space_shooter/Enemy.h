@@ -62,8 +62,15 @@ public:
 	static dArr<Texture> textures;
 	static int nrOfTextures;
 	static void initTextures();
+	static void initSounds();
 
-	static int nrOfTypes;
+	// Static sounds
+	static SoundBuffer shootBuffer;
+	static SoundBuffer hitArmorBuffer;
+	static Sound shootSound;
+	static Sound hitArmorSound;
+
+	static unsigned nrOfTypes;
 
 private:
 	float dtMultiplier;

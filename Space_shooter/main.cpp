@@ -28,7 +28,7 @@ int main() {
 	Music music;
 	music.openFromFile("Sounds/bgMusic01.wav");
 	music.setLoop(true);
-	music.setVolume(60.f);
+	music.setVolume(50.f);
 	music.play();
 
 	// Game loop

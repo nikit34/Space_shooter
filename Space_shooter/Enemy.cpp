@@ -1,10 +1,13 @@
 #include"Enemy.h"
 
 
+unsigned Enemy::nrOfTypes = 4;
+
 // Static define
 dArr<Bullet> Enemy::enemyBullets;
 dArr<Texture> Enemy::textures;
 int Enemy::nrOfTextures;
+
 void Enemy::initTextures() {
 	Texture temp;
 	temp.loadFromFile("Textures/enemyMoveLeft.png");
@@ -19,7 +22,16 @@ void Enemy::initTextures() {
 	Enemy::nrOfTextures = Enemy::textures.size();
 }
 
-int Enemy::nrOfTypes = 4;
+// Sounds
+SoundBuffer Enemy::shootBuffer;
+SoundBuffer Enemy::hitArmorBuffer;
+Sound Enemy::shootSound;
+Sound Enemy::hitArmorSound;
+
+void Enemy::initSounds() {
+	Enemy::shootBuffer.loadFromFile("Sounds/shoot_enemy.wav");
+	Enemy::shootSound.setBuffer(Enemy::shootBuffer);
+}
 
 Enemy::Enemy(
 	View& view,
@@ -197,6 +209,7 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 				5.f,
 				this->getDamage()
 			));
+			Enemy::shootSound.play();
 			this->shootTimer = 0.f;
 			this->nrOfBullets--;
 		}
@@ -228,6 +241,7 @@ void Enemy::update(const float& dt, Vector2f playerPosition) {
 				0.5f,
 				this->getDamage()
 			));
+			Enemy::shootSound.play();
 			this->shootTimer = 0.f;
 		}
 		break;

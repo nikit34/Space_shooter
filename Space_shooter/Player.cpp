@@ -12,13 +12,6 @@ dArr<Texture> Player::rWingTextures;
 dArr<Texture> Player::cPitTextures;
 dArr<Texture> Player::auraTextures;
 
-// Sounds
-SoundBuffer Player::shootBuffer;
-SoundBuffer Player::hitArmorBuffer;
-Sound Player::shootSound;
-Sound Player::hitArmorSound;
-
-
 void Player::initTextures() {
 	Texture temp;
 
@@ -92,9 +85,15 @@ void Player::initTextures() {
 	in.close();
 }
 
+// Sounds
+SoundBuffer Player::shootBuffer;
+SoundBuffer Player::hitArmorBuffer;
+Sound Player::shootSound;
+Sound Player::hitArmorSound;
+
 void Player::initSounds() {
 	//Shoot
-	Player::shootBuffer.loadFromFile("Sounds/player.wav");
+	Player::shootBuffer.loadFromFile("Sounds/shoot_player.wav");
 	Player::shootSound.setBuffer(Player::shootBuffer);
 }
 
