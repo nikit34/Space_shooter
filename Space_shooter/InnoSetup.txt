@@ -1,0 +1,42 @@
+#define Name "Space_shooter"
+#define Version "0.0.1"
+#define Publisher "Leshy"
+#define URL "https://nikit34.github.io"
+#define ExeName "Space_shooter.exe"
+
+
+[Setup]
+
+AppId={{1EA195D7-E5C7-44CF-ABA2-A0F885E8066D}
+AppName={#Name}
+AppVersion={#Version}
+AppPublisher={#Publisher}
+AppPublisherURL={#URL}
+AppSupportURL={#URL}
+AppUpdatesURL={#URL}
+
+DefaultDirName={pf}\{#Name}
+DefaultGroupName={#Name}
+OutputDir=C:\Users\permi\source\repos\draft\3\Space_shooter
+OutputBaseFileName=Space_shooter
+
+SetupIconFile=C:\Users\permi\source\repos\draft\2\Space_shooter\Space_shooter\icon.ico
+
+Compression=lzma
+SolidCompression=yes
+
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"; LicenseFile: "License_ENG.txt"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"; LicenseFile: "License_RUS.txt"
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+
+[Files]
+Source: "C:\Users\permi\source\repos\draft\2\Space_shooter\x64\Release\Space_shooter.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\permi\source\repos\draft\2\Space_shooter\Space_shooter\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\permi\source\repos\draft\2\Space_shooter\x64\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{group}\{#Name}"; Filename: "{app}\{#ExeName}"
+Name: "{commondesktop}\{#Name}"; Filename: "{app}\{#ExeName}"; Tasks: desktopicon
