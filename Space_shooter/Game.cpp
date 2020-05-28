@@ -223,7 +223,9 @@ void Game::update(const float& dt) {
 	this->updateWhilePaused(dt);
 
 	// Start game
-	if (this->playersAlive > 0 && !this->paused && !this->mainMenu->viewMainMenu()) {
+	if (this->playersAlive > 0 && 
+		!this->paused && 
+		!this->mainMenu->viewMainMenu()) {
 		
 		// Set Mode
 		this->setMode();
@@ -315,7 +317,6 @@ void Game::stopGame() {
 			this->paused = false;
 		else
 			this->paused = true;
-
 		this->keyTime = 0.f;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::M) && this->keyTime >= this->keyTimeMax) {
@@ -323,7 +324,6 @@ void Game::stopGame() {
 			this->mainMenu->setViewMainMenu(false);
 		else 
 			this->mainMenu->setViewMainMenu(true);
-
 		this->keyTime = 0.f;
 	}
 }

@@ -371,7 +371,6 @@ void GameMapMaker::stopConstructor() {
 			this->constructorMenu->setViewConstructorMenu(false);
 		else
 			this->constructorMenu->setViewConstructorMenu(true);
-
 		this->keyTime = 0.f;
 	}
 }

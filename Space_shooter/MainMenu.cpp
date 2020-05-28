@@ -10,8 +10,8 @@ MainMenu::MainMenu(
 	this->window->setFramerateLimit(200);
 	this->windowBounds = this->window->getSize();
 	this->dtMultiplier = 60.f;
-	this->keyTimeMax = 10.f;
-	this->keyTime = this->keyTimeMax;
+	this->keyTimeMax = 20.f;
+	this->keyTime = 0;
 
 	this->initialize();
 
