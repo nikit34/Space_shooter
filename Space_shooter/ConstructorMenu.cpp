@@ -13,7 +13,11 @@ ConstructorMenu::ConstructorMenu(RenderWindow* window) {
 
 	this->exitProgram = false;
 	this->view = true;
-	this->constructor = true;
+	
+	this->followPressKey = -1;
+	
+	this->constructor = false;
+
 }
 
 ConstructorMenu::~ConstructorMenu() {}
@@ -37,34 +41,43 @@ void ConstructorMenu::initButtons() {
 		"GAME",
 		18,
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.1f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(0.6f, 0.5f),
 		0
 	));
 	this->buttons.add(WButton(
-		SAVE_BTN,
+		BACKGROUND_TILES_BTN,
 		this->font,
-		"SAVE",
+		"Back tiles",
 		18,
-		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f - 100.f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(this->windowBounds.x * 0.25f - 300.f, this->windowBounds.y * 0.85f),
+		Vector2f(0.8f, 0.6f),
 		0
 	));
 	this->buttons.add(WButton(
-		BACKGROUNDS_BTN,
+		SELECT_BACKGROUNDS_BTN,
 		this->font,
 		"Backgrounds",
 		18,
-		Vector2f(this->windowBounds.x * 0.25f - 300.f, this->windowBounds.y * 0.85f),
-		Vector2f(0.7f, 0.4f),
+		Vector2f(this->windowBounds.x * 0.25f - 300.f, this->windowBounds.y * 0.85f - 100.f),
+		Vector2f(0.8f, 0.6f),
 		0
 	));
 	this->buttons.add(WButton(
 		TILES_BTN,
 		this->font,
-		"Reg. tails",
+		"Reg. tiles",
 		18,
 		Vector2f(this->windowBounds.x * 0.25f, this->windowBounds.y * 0.85f),
-		Vector2f(0.7f, 0.4f),
+		Vector2f(0.8f, 0.6f),
+		0
+	));
+	this->buttons.add(WButton(
+		TOGGLE_TILE_COLLIDE_BTN,
+		this->font,
+		"Collide tiles",
+		18,
+		Vector2f(this->windowBounds.x * 0.25f, this->windowBounds.y * 0.85f - 100.f),
+		Vector2f(0.8f, 0.6f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -73,7 +86,43 @@ void ConstructorMenu::initButtons() {
 		"Enemies",
 		18,
 		Vector2f(this->windowBounds.x * 0.25f + 300.f, this->windowBounds.y * 0.85f),
-		Vector2f(0.7f, 0.4f),
+		Vector2f(0.8f, 0.6f),
+		0
+	));
+	this->buttons.add(WButton(
+		FEATURE_ENEMIES_BTN,
+		this->font,
+		"Feature enemy",
+		18,
+		Vector2f(this->windowBounds.x * 0.25f + 300.f, this->windowBounds.y * 0.85f - 100.f),
+		Vector2f(0.8f, 0.6f),
+		0
+	));
+	this->buttons.add(WButton(
+		NEW_STAGE_BTN,
+		this->font,
+		"NEW STAGE",
+		18,
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f - 300.f),
+		Vector2f(0.6f, 0.5f),
+		0
+	));
+	this->buttons.add(WButton(
+		SAVE_BTN,
+		this->font,
+		"SAVE",
+		18,
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f - 100.f),
+		Vector2f(0.6f, 0.5f),
+		0
+	));
+	this->buttons.add(WButton(
+		LOAD_BTN,
+		this->font,
+		"LOAD",
+		18,
+		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f - 200.f),
+		Vector2f(0.6f, 0.5f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -82,7 +131,7 @@ void ConstructorMenu::initButtons() {
 		"EXIT -->",
 		18,
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(0.6f, 0.6f),
 		0
 	));
 }
@@ -121,7 +170,42 @@ void ConstructorMenu::updateButtons(Vector2f& mPos) {
 			if (this->buttons[i].getId() == buttons::GAME_BTN) {
 				this->constructor = false;
 			}
-
+			// Set back tiles
+			if (this->buttons[i].getId() == buttons::BACKGROUND_TILES_BTN) {
+				this->followPressKey = buttons::BACKGROUND_TILES_BTN;
+			}
+			// Select backgrounds
+			if (this->buttons[i].getId() == buttons::SELECT_BACKGROUNDS_BTN) {
+				this->followPressKey = buttons::SELECT_BACKGROUNDS_BTN;
+			}
+			// Set tiles
+			if (this->buttons[i].getId() == buttons::TILES_BTN) {
+				this->followPressKey = buttons::TILES_BTN;
+			}
+			// Toggle collide tiles
+			if (this->buttons[i].getId() == buttons::TOGGLE_TILE_COLLIDE_BTN) {
+				this->followPressKey = buttons::TOGGLE_TILE_COLLIDE_BTN;
+			}
+			// Set enemies
+			if (this->buttons[i].getId() == buttons::ENEMIES_BTN) {
+				this->followPressKey = buttons::ENEMIES_BTN;
+			}
+			// Set feature enemies
+			if (this->buttons[i].getId() == buttons::FEATURE_ENEMIES_BTN) {
+				this->followPressKey = buttons::FEATURE_ENEMIES_BTN;
+			}
+			// New stage
+			if (this->buttons[i].getId() == buttons::NEW_STAGE_BTN) {
+				this->followPressKey = buttons::NEW_STAGE_BTN;
+			}
+			// Save
+			if (this->buttons[i].getId() == buttons::SAVE_BTN) {
+				this->followPressKey = buttons::SAVE_BTN;
+			}
+			// Load
+			if (this->buttons[i].getId() == buttons::LOAD_BTN) {
+				this->followPressKey = buttons::LOAD_BTN;
+			}
 			// Exit event
 			if (this->buttons[i].getId() == buttons::EXIT_BTN) {
 				this->exitProgram = true;

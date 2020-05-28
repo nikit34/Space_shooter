@@ -41,7 +41,7 @@ void MainMenu::initButtons() {
 		"MAP MAKER",
 		18,
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.1f),
-		Vector2f(0.6f, 0.4f),
+		Vector2f(0.7f, 0.55f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -50,7 +50,7 @@ void MainMenu::initButtons() {
 		"NORMAL", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f - 200.f, this->windowBounds.y * 0.85f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(0.6f, 0.5f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -59,7 +59,7 @@ void MainMenu::initButtons() {
 		"SURVIVAL", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f, this->windowBounds.y * 0.85f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(0.6f, 0.5f),
 		0
 	));
 	this->buttons.add(WButton(
@@ -68,7 +68,7 @@ void MainMenu::initButtons() {
 		"EXIT -->", 
 		18, 
 		Vector2f(this->windowBounds.x * 0.75f + 200.f, this->windowBounds.y * 0.85f),
-		Vector2f(0.5f, 0.4f),
+		Vector2f(0.6f, 0.5f),
 		0
 	));
 }

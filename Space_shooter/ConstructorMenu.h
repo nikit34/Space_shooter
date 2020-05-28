@@ -19,10 +19,12 @@ public:
 	inline bool getExit()const { return this->exitProgram; }
 	inline bool viewConstructorMenu()const { return this->view; }
 	inline bool getStatConstructor()const { return this->constructor; }
+	inline int getFollowKeyCode()const { return this->followPressKey; }
 
 	// Setters
 	inline void setViewConstructorMenu(bool view) { this->view = view; }
 	inline void setStatConstructor(bool constructor) { this->constructor = constructor; }
+	inline void setKeyCode(int keyCode) { this->followPressKey = keyCode; }
 
 	// Update
 	void updateTimers(const float& dt);
@@ -36,6 +38,20 @@ public:
 	void draw(RenderTarget& target);
 
 	dArr<WButton> buttons;
+
+	enum buttons { 
+		GAME_BTN = 0,  
+		BACKGROUND_TILES_BTN,
+		SELECT_BACKGROUNDS_BTN,
+		TILES_BTN, 
+		TOGGLE_TILE_COLLIDE_BTN,
+		ENEMIES_BTN, 
+		FEATURE_ENEMIES_BTN,
+		NEW_STAGE_BTN,
+		SAVE_BTN,
+		LOAD_BTN,
+		EXIT_BTN 
+	};
 
 private:
 	RenderWindow* window;
@@ -51,7 +67,7 @@ private:
 	bool exitProgram;
 	bool view;
 
-	bool constructor;
+	int followPressKey;
 
-	enum buttons { GAME_BTN = 0, SAVE_BTN, BACKGROUNDS_BTN, TILES_BTN, ENEMIES_BTN, EXIT_BTN };
+	bool constructor;
 };

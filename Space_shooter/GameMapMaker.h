@@ -14,9 +14,11 @@ public:
 	inline RenderWindow& getWindow() { return *this->window; }
 	inline bool getExit()const { return this->constructorMenu->getExit(); }
 	inline bool getStatConstructor()const { return this->constructorMenu->getStatConstructor(); }
+	inline int getPressKey()const { return this->constructorMenu->getFollowKeyCode(); }
 
 	// Setters
 	inline void setStatConstructor(bool constructor) { this->constructorMenu->setStatConstructor(constructor); }
+	inline void setPressKey(int keyCode) { this->constructorMenu->setKeyCode(keyCode); }
 	
 	// Functions
 	void newStage();

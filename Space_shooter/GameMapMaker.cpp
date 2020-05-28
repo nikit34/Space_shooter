@@ -404,8 +404,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// New stage
-	if (Keyboard::isKeyPressed(Keyboard::N) && 
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::N) && 
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::NEW_STAGE_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->newStage();
@@ -413,8 +414,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Enabled regular tile drawing
-	if (Keyboard::isKeyPressed(Keyboard::T) &&
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::T) &&
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::TILES_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 			
 		this->toolSelect = Stage::tileType::regularTile;
@@ -422,9 +424,10 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Toggle tile collider
-	if (Keyboard::isKeyPressed(Keyboard::C) &&
+	if (((Keyboard::isKeyPressed(Keyboard::C) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
-		Keyboard::isKeyPressed(Keyboard::LShift) &&
+		Keyboard::isKeyPressed(Keyboard::LShift)) ||
+		this->getPressKey() == this->constructorMenu->buttons::TOGGLE_TILE_COLLIDE_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		if (this->tileCollider) {
@@ -439,8 +442,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Enabled background tile drawing
-	if (Keyboard::isKeyPressed(Keyboard::B) && 
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::B) && 
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::BACKGROUND_TILES_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 		
 		this->toolSelect = Stage::tileType::backgroundTile;
@@ -448,8 +452,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Select background
-	if (Keyboard::isKeyPressed(Keyboard::G) &&
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::G) &&
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::SELECT_BACKGROUNDS_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->setBackground();
@@ -457,9 +462,10 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Set enemyspawner
-	if (Keyboard::isKeyPressed(Keyboard::E) &&
+	if (((Keyboard::isKeyPressed(Keyboard::E) &&
 		Keyboard::isKeyPressed(Keyboard::LControl) &&
-		Keyboard::isKeyPressed(Keyboard::LShift) &&
+		Keyboard::isKeyPressed(Keyboard::LShift)) ||
+		this->getPressKey() == this->constructorMenu->buttons::FEATURE_ENEMIES_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->setEnemySpawner();
@@ -467,8 +473,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Select enemyspawner
-	if (Keyboard::isKeyPressed(Keyboard::E) &&
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::E) &&
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::ENEMIES_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->toolSelect = Stage::tileType::enemySpawner;
@@ -476,8 +483,9 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Save stage
-	if (Keyboard::isKeyPressed(Keyboard::S) && 
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::S) && 
+		Keyboard::isKeyPressed(Keyboard::LControl)) || 
+		this->getPressKey() == this->constructorMenu->buttons::SAVE_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->saveStage();
@@ -485,13 +493,15 @@ void GameMapMaker::updateControls() {
 	}
 
 	// Load stage
-	if (Keyboard::isKeyPressed(Keyboard::L) && 
-		Keyboard::isKeyPressed(Keyboard::LControl) &&
+	if (((Keyboard::isKeyPressed(Keyboard::L) && 
+		Keyboard::isKeyPressed(Keyboard::LControl)) ||
+		this->getPressKey() == this->constructorMenu->buttons::LOAD_BTN) &&
 		this->keyTime >= this->keyTimeMax) {
 
 		this->loadStage();
 		this->keyTime = 0.f;
 	}
+	this->setPressKey(-1);
 }
 
 void GameMapMaker::updateAddRemoveTiles() {
