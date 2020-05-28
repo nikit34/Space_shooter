@@ -45,6 +45,15 @@ void MainMenu::initButtons() {
 		0
 	));
 	this->buttons.add(WButton(
+		PLAY_BTN,
+		this->font,
+		"PLAY",
+		20,
+		Vector2f(this->windowBounds.x * 0.25f, this->windowBounds.y * 0.85f),
+		Vector2f(0.7f, 0.55f),
+		0
+	));
+	this->buttons.add(WButton(
 		NORMAL_MODE_BTN, 
 		this->font, 
 		"NORMAL", 
@@ -106,6 +115,11 @@ void MainMenu::updateButtons(Vector2f &mPos) {
 			// Constructor
 			if (this->buttons[i].getId() == buttons::CONSTRUCTOR_BTN) {
 				this->game = false;
+			}
+
+			// Play
+			if (this->buttons[i].getId() == buttons::PLAY_BTN) {
+				this->view = false;
 			}
 
 			// Set normal mode

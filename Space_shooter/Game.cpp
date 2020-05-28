@@ -46,6 +46,9 @@ void Game::initialize() {
 	// Init textures
 	this->initTextures();
 
+	// Init sounds
+	this->initSounds();
+
 	// Init main menu
 	this->initMenu();
 
@@ -128,6 +131,14 @@ void Game::initTextures() {
 
 	// Particles
 	Particle::initTextures();
+}
+
+SoundBuffer Game::impactRattleBuffer;
+Sound Game::impactRattleSound;
+
+void Game::initSounds() {
+	Game::impactRattleBuffer.loadFromFile("Sounds/impactRattle.wav");
+	Game::impactRattleSound.setBuffer(Game::impactRattleBuffer);
 }
 
 void Game::initMenu() {
@@ -707,6 +718,8 @@ void Game::enemyUpdate(const float& dt) {
 
 					// player take collision damage
 					this->players[k].takeDamage(damage);
+
+					Game::impactRattleSound.play();
 
 					this->enemies[i].collision();
 

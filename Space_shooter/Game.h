@@ -20,6 +20,7 @@ public:
 	// Functions
 	void initialize();
 	void initTextures();
+	void initSounds();
 	void initMenu();
 	void initView();
 	void initMap();
@@ -65,6 +66,10 @@ public:
 	void drawParticles();
 	void drawTextTags();
 	void drawUI();
+
+	// Static
+	static SoundBuffer impactRattleBuffer;
+	static Sound impactRattleSound;
 
 private:
 	// Menu game

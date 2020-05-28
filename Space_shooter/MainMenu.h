@@ -57,6 +57,6 @@ private:
 	bool game;
 	int mode;
  
-	enum buttons { CONSTRUCTOR_BTN = 0, NORMAL_MODE_BTN, SURVIVAL_MODE_BTN, EXIT_BTN };
+	enum buttons { CONSTRUCTOR_BTN = 0, PLAY_BTN, NORMAL_MODE_BTN, SURVIVAL_MODE_BTN, EXIT_BTN };
 };
 
