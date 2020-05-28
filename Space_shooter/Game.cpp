@@ -502,6 +502,8 @@ void Game::playerBulletUpdate(const float& dt, const int i) {
 						));
 					}
 
+					Enemy::hitArmorSound.play();
+
 					// Create text tag
 					this->textTags.add(TextTag(
 						&this->font,
@@ -855,6 +857,8 @@ void Game::enemyBulletUpdate(const float& dt) {
 						true
 					));
 
+					Player::hitArmorSound.play();
+					
 					// Player death
 					if (!this->players[k].isAlive())
 						playerKilled = true;

@@ -31,6 +31,12 @@ Sound Enemy::hitArmorSound;
 void Enemy::initSounds() {
 	Enemy::shootBuffer.loadFromFile("Sounds/shoot_enemy.wav");
 	Enemy::shootSound.setBuffer(Enemy::shootBuffer);
+	Enemy::shootSound.setVolume(70.f);
+
+	// Hit armor
+	Enemy::hitArmorBuffer.loadFromFile("Sounds/hitArmorEnemy.wav");
+	Enemy::hitArmorSound.setBuffer(Enemy::hitArmorBuffer);
+	Enemy::hitArmorSound.setVolume(100.f);
 }
 
 Enemy::Enemy(

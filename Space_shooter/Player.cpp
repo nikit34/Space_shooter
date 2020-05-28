@@ -95,6 +95,12 @@ void Player::initSounds() {
 	//Shoot
 	Player::shootBuffer.loadFromFile("Sounds/shoot_player.wav");
 	Player::shootSound.setBuffer(Player::shootBuffer);
+	Player::shootSound.setVolume(90.f);
+
+	// Hit armor
+	Player::hitArmorBuffer.loadFromFile("Sounds/hitArmorPlayer.wav");
+	Player::hitArmorSound.setBuffer(Player::hitArmorBuffer);
+	Player::hitArmorSound.setVolume(80.f);
 }
 
 Player::Player(
