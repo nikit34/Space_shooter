@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tankette</title>
+  <style>
+    #background-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+    }
+    .description {
+      position: fixed;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: whitesmoke;
+      width: 100%;
+      padding: 20px;
+    }
+    #play-video {
+      width: 100px;
+      height: 100px;
+      border-radius: 5%;
+      padding: 10px;
+      border: none;
+      background-color: black;
+      color: rgb(125, 175, 150);
+    }
+    #play-video:active {
+        color: red;
+      }
+  </style>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap-grid.min.css" rel="stylesheet">
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="bg.mp4" type="video/mp4">
+    </video>
+    <div class="row description">
+        <div class="col-1 d-flex justify-content-center align-items-center">
+            <a href="https://github.com/nikit34/Space_shooter"><i class="fa fa-4x fa-github"></i></a>
+        </div>
+        <div class="col-1 d-flex justify-content-center align-items-center">
+            <button id="play-video" onclick="playVideo()"><i class="fa fa-4x fa-pause" aria-hidden="true"></i></button>
+        </div>
+        <div class="col">
+            <h1>Tankette</h1>
+            <h2>
+                2D the game in development uses C++ and the library SFML.
+                Written at the course "SFML / C++ Game Development".
+                Watch how you do logical blocks, you try to repeat them, you fix them and you check them.
+            </h2>
+        </div>
+        <div class="col-2 d-flex justify-content-center align-items-center">
+            <a href="https://drive.google.com/file/d/1Q77fIEEjsXZHapIISF6scES7aougB4tO/view" download><i class="fa fa-4x fa-download"></i></a>
+        </div>
+    </div>
+
+  <script>
+    var video = document.getElementById("background-video");
+    var play_btn = document.getElementById("play-video");
+    function playVideo() {
+        if (video.paused) {
+            video.play();
+            play_btn.innerHTML = '<i class="fa fa-4x fa-pause" aria-hidden="true"></i>';
+        } else {
+            video.pause();
+            play_btn.innerHTML = '<i class="fa fa-4x fa-play" aria-hidden="true"></i>';
+        }
+    }
+</script>
+</body>
+</html>
